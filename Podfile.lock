@@ -1,0 +1,18 @@
+PODS:
+  - Alamofire (4.5.1)
+  - Cache (4.0.2):
+    - SwiftHash (~> 2.0.0)
+  - SwiftHash (2.0.0)
+
+DEPENDENCIES:
+  - Alamofire (~> 4.5.1)
+  - Cache (~> 4.0.2)
+
+SPEC CHECKSUMS:
+  Alamofire: 2d95912bf4c34f164fdfc335872e8c312acaea4a
+  Cache: 363b6899cee63c82ccbd291e64a6c202abc17a88
+  SwiftHash: d2e09b13495447178cdfb8e46e54a5c46f15f5a9
+
+PODFILE CHECKSUM: 2e28322d200a723e8853aa1a031aa4047e687bbc
+
+COCOAPODS: 1.4.0.beta.1
