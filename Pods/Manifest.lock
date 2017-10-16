@@ -1,18 +1,21 @@
 PODS:
   - Alamofire (4.5.1)
-  - Cache (4.0.2):
+  - Cache (4.0.4):
     - SwiftHash (~> 2.0.0)
+  - Kingfisher (4.1.0)
   - SwiftHash (2.0.0)
 
 DEPENDENCIES:
   - Alamofire (~> 4.5.1)
-  - Cache (~> 4.0.2)
+  - Cache (~> 4.0.4)
+  - Kingfisher
 
 SPEC CHECKSUMS:
   Alamofire: 2d95912bf4c34f164fdfc335872e8c312acaea4a
-  Cache: 363b6899cee63c82ccbd291e64a6c202abc17a88
+  Cache: 1b3907ee2f5a457e7cfe9ac0be22dc9207f55a09
+  Kingfisher: f14df8cbe576bf55f211fa589e9869bceb4ea87d
   SwiftHash: d2e09b13495447178cdfb8e46e54a5c46f15f5a9
 
-PODFILE CHECKSUM: 2e28322d200a723e8853aa1a031aa4047e687bbc
+PODFILE CHECKSUM: f257012eb7d574516744ca2524a83723982551d2
 
 COCOAPODS: 1.4.0.beta.1

@@ -279,12 +279,12 @@ Most of the time, our use case is to fetch some json from backend, display it wh
 
 While `Storage` can persist `String` or `Data`, we recommend persisting the strong typed objects, since those are the objects that you will use to display in UI. Furthermore, if the json data can't be converted to strongly typed objects, what's the point of saving it ? 😉
 
-You can use `ObjectConverter` to convert json dictionary, string or data to objects.
+You can use `JSONDecoder` to decode json dictionary, string or data to objects.
 
 ```swift
-let user = ObjectConverter.convert(jsonString, to: User.self)
-let cities = Object.Converter.convert(jsonDictionary, to: [City].self)
-let dragons = ObjectConverter.convert(jsonData, to: [Dragon].self)
+let user = JSONDecoder.decode(jsonString, to: User.self)
+let cities = JSONDecoder.decode(jsonDictionary, to: [City].self)
+let dragons = JSONDecoder.decode(jsonData, to: [Dragon].self)
 ```
 
 This is how you perform object converting and saving with `Alamofire`
@@ -292,7 +292,7 @@ This is how you perform object converting and saving with `Alamofire`
 ```swift
 Alamofire.request("https://gameofthrones.org/mostFavoriteCharacter").responseString { response in
   do {
-    let user = try ObjectConverter.convert(response.result.value, to: User.self)
+    let user = try JSONDecoder.decode(response.result.value, to: User.self)
     try storage.setObject(user, forKey: "most favorite character")
   } catch {
     print(error)
@@ -302,6 +302,8 @@ Alamofire.request("https://gameofthrones.org/mostFavoriteCharacter").responseStr
 
 ## Installation
 
+### Cocoapods
+
 **Cache** is available through [CocoaPods](http://cocoapods.org). To install
 it, simply add the following line to your Podfile:
 
@@ -309,12 +311,16 @@ it, simply add the following line to your Podfile:
 pod 'Cache'
 ```
 
+### Carthage
+
 **Cache** is also available through [Carthage](https://github.com/Carthage/Carthage).
 To install just write into your Cartfile:
 
 ```ruby
 github "hyperoslo/Cache"
 ```
+
+You also need to add `SwiftHash.framework` in your [copy-frameworks](https://github.com/Carthage/Carthage#if-youre-building-for-ios-tvos-or-watchos) script.
 
 ## Author
 
