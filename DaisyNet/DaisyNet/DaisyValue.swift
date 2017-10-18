@@ -1,5 +1,5 @@
 //
-//  Result.swift
+//  DaisyValue.swift
 //  DaisyNet
 //
 //  Created by mengqingzheng on 2017/10/12.
@@ -10,7 +10,7 @@ import Foundation
 import Alamofire
 
 //// MARK: - Result
-public struct Result<Value> {
+public struct DaisyValue<Value> {
     public let isCacheData: Bool
     public let result: Alamofire.Result<Value>
     init(isCacheData: Bool, result: Alamofire.Result<Value>) {

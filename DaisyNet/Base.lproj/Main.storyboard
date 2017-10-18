@@ -40,28 +40,8 @@
                                             <segue destination="BYZ-38-t0r" kind="show" id="yOA-yO-rEC"/>
                                         </connections>
                                     </tableViewCell>
-                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" accessoryType="disclosureIndicator" indentationWidth="10" textLabel="Yc8-HA-gW3" rowHeight="47" style="IBUITableViewCellStyleDefault" id="Kct-oy-Sa2">
-                                        <rect key="frame" x="0.0" y="47" width="320" height="47"/>
-                                        <autoresizingMask key="autoresizingMask"/>
-                                        <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="Kct-oy-Sa2" id="Q1T-lL-GB6">
-                                            <rect key="frame" x="0.0" y="0.0" width="287" height="46.5"/>
-                                            <autoresizingMask key="autoresizingMask"/>
-                                            <subviews>
-                                                <label opaque="NO" multipleTouchEnabled="YES" contentMode="left" insetsLayoutMarginsFromSafeArea="NO" text="上传" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="Yc8-HA-gW3">
-                                                    <rect key="frame" x="16" y="0.0" width="269" height="46.5"/>
-                                                    <autoresizingMask key="autoresizingMask"/>
-                                                    <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                                                    <nil key="textColor"/>
-                                                    <nil key="highlightedColor"/>
-                                                </label>
-                                            </subviews>
-                                        </tableViewCellContentView>
-                                        <connections>
-                                            <segue destination="fUq-Zv-yHT" kind="show" id="1O1-Gm-UAi"/>
-                                        </connections>
-                                    </tableViewCell>
                                     <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" accessoryType="disclosureIndicator" indentationWidth="10" textLabel="0Lf-Qs-5MQ" style="IBUITableViewCellStyleDefault" id="2Ec-p3-x32">
-                                        <rect key="frame" x="0.0" y="94" width="320" height="44"/>
+                                        <rect key="frame" x="0.0" y="47" width="320" height="44"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="2Ec-p3-x32" id="UGe-Sd-ODm">
                                             <rect key="frame" x="0.0" y="0.0" width="287" height="43.5"/>
@@ -100,7 +80,7 @@
             </objects>
             <point key="canvasLocation" x="-391.19999999999999" y="99.400299850074973"/>
         </scene>
-        <!--网络请求-->
+        <!--Title-->
         <scene sceneID="tne-QT-ifu">
             <objects>
                 <viewController id="BYZ-38-t0r" customClass="GetViewController" customModule="DaisyNet" customModuleProvider="target" sceneMemberID="viewController">
@@ -154,7 +134,13 @@
                             <constraint firstItem="jBl-jr-32w" firstAttribute="centerY" secondItem="8bC-Xf-vdC" secondAttribute="centerY" constant="10" id="zSt-1Q-Avj"/>
                         </constraints>
                     </view>
-                    <navigationItem key="navigationItem" title="网络请求" id="5Me-0K-YO3"/>
+                    <navigationItem key="navigationItem" title="Title" id="NAU-qh-aD2">
+                        <barButtonItem key="rightBarButtonItem" title="清除缓存" id="0UC-8T-cVQ">
+                            <connections>
+                                <action selector="clearCache:" destination="BYZ-38-t0r" id="0Nk-Dn-YeQ"/>
+                            </connections>
+                        </barButtonItem>
+                    </navigationItem>
                     <connections>
                         <outlet property="cacheTextView" destination="03x-Mw-pQQ" id="ImL-Ey-aUo"/>
                         <outlet property="textView" destination="qV8-sL-gZ1" id="c4l-Ia-hoe"/>
@@ -182,25 +168,6 @@
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Vkm-L8-oG7" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="-1094" y="882"/>
-        </scene>
-        <!--上传-->
-        <scene sceneID="O3e-zP-bbo">
-            <objects>
-                <viewController id="fUq-Zv-yHT" customClass="UploadViewController" customModule="DaisyNet" customModuleProvider="target" sceneMemberID="viewController">
-                    <layoutGuides>
-                        <viewControllerLayoutGuide type="top" id="1XN-26-h8x"/>
-                        <viewControllerLayoutGuide type="bottom" id="VY3-Sn-daz"/>
-                    </layoutGuides>
-                    <view key="view" contentMode="scaleToFill" id="tGG-OS-1aJ">
-                        <rect key="frame" x="0.0" y="0.0" width="320" height="480"/>
-                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                    </view>
-                    <navigationItem key="navigationItem" title="上传" id="6ef-C1-c4j"/>
-                </viewController>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="Ep3-Wl-MpR" userLabel="First Responder" sceneMemberID="firstResponder"/>
-            </objects>
-            <point key="canvasLocation" x="-391" y="883"/>
         </scene>
         <!--Navigation Controller-->
         <scene sceneID="DhP-EV-wSS">

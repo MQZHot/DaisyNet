@@ -10,58 +10,44 @@ import UIKit
 import Alamofire
 import Cache
 
-// MARK: - request
+// MARK: - 网络请求
 
-/// request
-///
-/// - Parameters:
-///   - url: url
-///   - method: 默认.get
-///   - params: 参数[String: Any]
-///   - cache: 是否缓存,默认false
-///   - encoding: encoding
-///   - headers: headers
-/// - Returns: RequestManager
-func requestJson(
+func request(
     _ url: String,
     method: HTTPMethod = .get,
     params: Parameters? = nil,
-    cache: Bool = false,
     encoding: ParameterEncoding = URLEncoding.default,
-    headers: HTTPHeaders? = nil,
-    completion: @escaping (Result<Any>)->())
+    headers: HTTPHeaders? = nil)
+    -> RequestTaskManager
 {
-    RequestManager.default.requestJson(url, method: method, params: params, cache: cache, encoding: encoding, headers: headers, completion: completion
-    )
+    return RequestManager.default.request(url, method: method, params: params, encoding: encoding, headers: headers)
 }
 
-/// 清除缓存
-///
-/// - Parameter completion: 是否成功
+/// 取消请求
+func cancel(_ url: String, params: Parameters? = nil) {
+    RequestManager.default.cancel(url, params: params)
+}
+
+/// 清除所有缓存
 func removeAllCache(completion: @escaping (Bool)->()) {
-    RequestManager.default.removeAllCache { result in
-        completion(result)
-    }
+    RequestManager.default.removeAllCache(completion: completion)
+}
+
+/// 根据url和params清除缓存
+func removeObjectCache(_ url: String, params: [String: Any]? = nil, completion: @escaping (Bool)->()) {
+    RequestManager.default.removeObjectCache(url, params: params, completion: completion)
 }
 
 // MARK: - 下载
 
-/// download
-///
-/// - Parameters:
-///   - url: url
-///   - method: method
-///   - parameters: parameters
-///   - encoding: encoding
-///   - headers: headers
-/// - Returns: DownloadManager
+/// 下载
 func download(
     _ url: String,
     method: HTTPMethod = .get,
     parameters: Parameters? = nil,
     encoding: ParameterEncoding = URLEncoding.default,
     headers: HTTPHeaders? = nil)
-    -> TaskManager
+    -> DownloadTaskManager
 {
     return DownloadManager.default.download(url, method: method, parameters: parameters, encoding: encoding, headers: headers)
 }
@@ -81,7 +67,7 @@ func downloadPercent(_ url: String) -> Double {
     return DownloadManager.default.downloadPercent(url)
 }
 
-/// 删除下载
+/// 删除某个下载
 ///
 /// - Parameters:
 ///   - url: url
@@ -106,13 +92,13 @@ func downloadFilePath(_ url: String) -> URL? {
     return DownloadManager.default.downloadFilePath(url)
 }
 
-/// 下载中的进度
+/// 下载中的进度,任务下载中时，退出当前页面,再次进入时继续下载
 ///
 /// - Parameters:
 ///   - url: url
 ///   - progress: 进度
 /// - Returns: taskManager
 @discardableResult
-func downloadProgress(_ url: String, progress: @escaping ((Double)->())) -> TaskManager? {
+func downloadProgress(_ url: String, progress: @escaping ((Double)->())) -> DownloadTaskManager? {
     return DownloadManager.default.downloadProgress(url, progress: progress)
 }

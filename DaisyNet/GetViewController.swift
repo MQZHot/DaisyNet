@@ -7,47 +7,51 @@
 //
 
 import UIKit
+import Alamofire
+
 class GetViewController: UIViewController {
 
     @IBOutlet weak var textView: UITextView!
     @IBOutlet weak var cacheTextView: UITextView!
     
+    let url = "http://api.travels.app887.com/api/Articles.action"
+    let params = ["keyword" : "", "npc" : "0", "opc" : "20", "type" : "热门视频", "uid" : "2321"]
+    
     override func viewDidLoad() {
         super.viewDidLoad()
+
         
-        let url = "http://api.travels.app887.com/api/Articles.action"
-        let params = ["keyword" : "", "npc" : "0", "opc" : "20", "type" : "热门视频", "uid" : "2321"]
+//        DaisyNet.request(url, params: params).cache(true).cacheJson { json in
+//            /// 缓存数据
+//            }.responseJson { response in
+//                /// response
+//        }
         
-        DaisyNet.requestJson(url, params: params, cache: true) { response in
-            
-            switch response.result {
-            case .success(let value):
+        DaisyNet.request(url, params: params).cache(true).responseCacheAndString { value in
+            switch value.result {
+            case .success(let string):
                 
-                if response.isCacheData {
-                    self.cacheTextView.text = "\(value)"
+                if value.isCacheData {
+                    self.cacheTextView.text = string
                 } else {
-                    DispatchQueue.main.asyncAfter(deadline: DispatchTime.now()+0.5, execute: {
-                        self.textView.text = "\(value)"
-                    })
+                    self.textView.text = string
                 }
                 
             case .failure(let error):
                 print(error)
             }
         }
-        
-        /*
-         DaisyNet.requestJson(url, method: .post, cache: true) { response in
-         
-             switch response.result {
-         
-                 case .success(let value):
-         
-                 case .failure(let error):
-         
-             }
-         }
-         */
+    }
+    
+    @IBAction func clearCache(_ sender: UIBarButtonItem) {
+        DaisyNet.removeObjectCache(url, params: params) { success in
+            switch success {
+            case true:
+                self.cacheTextView.text = ""
+            case false:
+                print("false")
+            }
+        }
     }
     deinit {
         print("dealloc")
