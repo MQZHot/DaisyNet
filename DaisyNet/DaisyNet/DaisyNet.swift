@@ -38,6 +38,44 @@ func removeObjectCache(_ url: String, params: [String: Any]? = nil, completion: 
     RequestManager.default.removeObjectCache(url, params: params, completion: completion)
 }
 
+protocol RequestProtocol {
+    /// 是否缓存数据
+    func cache(_ cache: Bool) -> RequestTaskManager
+    /// 获取缓存Data
+    @discardableResult
+    func cacheData(completion: @escaping (Data)->()) -> DaisyDataResponse
+    /// 响应Data
+    func responseData(completion: @escaping (Alamofire.Result<Data>)->())
+    /// 先获取Data缓存，再响应Data
+    func responseCacheAndData(completion: @escaping (DaisyValue<Data>)->())
+    /// 获取缓存String
+    @discardableResult
+    func cacheString(completion: @escaping (String)->()) -> DaisyStringResponse
+    /// 响应String
+    func responseString(completion: @escaping (Alamofire.Result<String>)->())
+    /// 先获取缓存String,再响应String
+    func responseCacheAndString(completion: @escaping (DaisyValue<String>)->())
+    /// 获取缓存JSON
+    @discardableResult
+    func cacheJson(completion: @escaping (Any)->()) -> DaisyJsonResponse
+    /// 响应JSON
+    func responseJson(completion: @escaping (Alamofire.Result<Any>)->())
+    /// 先获取缓存JSON，再响应JSON
+    func responseCacheAndJson(completion: @escaping (DaisyValue<Any>)->())
+}
+protocol DaisyJsonResponseProtocol {
+    /// 响应JSON
+    func responseJson(completion: @escaping (Alamofire.Result<Any>)->())
+}
+protocol DaisyDataResponseProtocol {
+    /// 响应Data
+    func responseData(completion: @escaping (Alamofire.Result<Data>)->())
+}
+protocol DaisyStringResponseProtocol {
+    /// 响应String
+    func responseString(completion: @escaping (Alamofire.Result<String>)->())
+}
+
 // MARK: - 下载
 
 /// 下载

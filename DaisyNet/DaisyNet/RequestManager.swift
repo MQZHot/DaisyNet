@@ -69,7 +69,7 @@ class RequestManager {
 }
 
 // MARK: - 请求任务
-public class RequestTaskManager {
+public class RequestTaskManager: RequestProtocol {
     fileprivate var dataRequest: DataRequest?
     fileprivate var cache: Bool = false
     fileprivate var cacheKey: String!
@@ -178,7 +178,7 @@ class DaisyResponse {
     }
 }
 // MARK: - DaisyJsonResponse
-class DaisyJsonResponse: DaisyResponse {
+class DaisyJsonResponse: DaisyResponse , DaisyJsonResponseProtocol {
     /// 响应JSON
     func responseJson(completion: @escaping (Alamofire.Result<Any>)->()) {
         dataRequest.responseJSON(completionHandler: { response in
@@ -216,7 +216,7 @@ class DaisyJsonResponse: DaisyResponse {
     }
 }
 // MARK: - DaisyStringResponse
-class DaisyStringResponse: DaisyResponse {
+class DaisyStringResponse: DaisyResponse, DaisyStringResponseProtocol {
     /// 响应String
     func responseString(completion: @escaping (Alamofire.Result<String>)->()) {
         dataRequest.responseString(completionHandler: { response in
@@ -250,7 +250,7 @@ class DaisyStringResponse: DaisyResponse {
     }
 }
 // MARK: - DaisyDataResponse
-class DaisyDataResponse: DaisyResponse {
+class DaisyDataResponse: DaisyResponse, DaisyDataResponseProtocol {
     /// 响应Data
     func responseData(completion: @escaping (Alamofire.Result<Data>)->()) {
         dataRequest.responseData(completionHandler: { response in
