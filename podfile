@@ -9,5 +9,4 @@ target 'DaisyNet' do
 pod 'Alamofire', '~> 4.5.1'
 pod 'Cache', '~> 4.0.4'
 
-pod 'Kingfisher'
 end

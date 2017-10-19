@@ -18,7 +18,7 @@
 
 ## 使用
 
-### 1. request
+### 1. 网络请求
 
 * 缓存数据只需要调用`.cache(true)`，不调用或者`.cache(false)`则不缓存
 * 调用`responseCacheAndString`可以先读取缓存数据，再读取网络数据

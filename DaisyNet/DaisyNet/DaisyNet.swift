@@ -12,7 +12,17 @@ import Cache
 
 // MARK: - 网络请求
 
-func request(
+/// 网络请求
+///
+/// - Parameters:
+///   - url: url
+///   - method: .get .post ... 默认.get
+///   - params: 参数字典
+///   - encoding: 编码方式
+///   - headers: 请求头
+/// - Returns:
+@discardableResult
+public func request(
     _ url: String,
     method: HTTPMethod = .get,
     params: Parameters? = nil,
@@ -24,17 +34,17 @@ func request(
 }
 
 /// 取消请求
-func cancel(_ url: String, params: Parameters? = nil) {
+public func cancel(_ url: String, params: Parameters? = nil) {
     RequestManager.default.cancel(url, params: params)
 }
 
 /// 清除所有缓存
-func removeAllCache(completion: @escaping (Bool)->()) {
+public func removeAllCache(completion: @escaping (Bool)->()) {
     RequestManager.default.removeAllCache(completion: completion)
 }
 
 /// 根据url和params清除缓存
-func removeObjectCache(_ url: String, params: [String: Any]? = nil, completion: @escaping (Bool)->()) {
+public func removeObjectCache(_ url: String, params: [String: Any]? = nil, completion: @escaping (Bool)->()) {
     RequestManager.default.removeObjectCache(url, params: params, completion: completion)
 }
 
@@ -79,6 +89,7 @@ protocol DaisyStringResponseProtocol {
 // MARK: - 下载
 
 /// 下载
+@discardableResult
 func download(
     _ url: String,
     method: HTTPMethod = .get,
