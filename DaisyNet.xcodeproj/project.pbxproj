@@ -7,7 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		62349183FFD5D4DF39E127E7 /* Pods_DaisyNet.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8E10FA4C9B5B6E2DBC256090 /* Pods_DaisyNet.framework */; };
+		583DA142C7E1A6211680552C /* Pods_DaisyNet.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 95AE222D40B557CF71C08FA8 /* Pods_DaisyNet.framework */; };
 		D64291191F8CD40900B1CB61 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = D64291181F8CD40900B1CB61 /* AppDelegate.swift */; };
 		D642911B1F8CD40900B1CB61 /* GetViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D642911A1F8CD40900B1CB61 /* GetViewController.swift */; };
 		D642911E1F8CD40900B1CB61 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = D642911C1F8CD40900B1CB61 /* Main.storyboard */; };
@@ -26,9 +26,9 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
-		0371A568914DD61AA5ECDED4 /* Pods-DaisyNet.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-DaisyNet.debug.xcconfig"; path = "Pods/Target Support Files/Pods-DaisyNet/Pods-DaisyNet.debug.xcconfig"; sourceTree = "<group>"; };
-		5ED380C46249EF075A3E5128 /* Pods-DaisyNet.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-DaisyNet.release.xcconfig"; path = "Pods/Target Support Files/Pods-DaisyNet/Pods-DaisyNet.release.xcconfig"; sourceTree = "<group>"; };
-		8E10FA4C9B5B6E2DBC256090 /* Pods_DaisyNet.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_DaisyNet.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		95AE222D40B557CF71C08FA8 /* Pods_DaisyNet.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_DaisyNet.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		AB132C52F7E42BD59513690F /* Pods-DaisyNet.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-DaisyNet.debug.xcconfig"; path = "Pods/Target Support Files/Pods-DaisyNet/Pods-DaisyNet.debug.xcconfig"; sourceTree = "<group>"; };
+		BF89DB87AE60AFDEF9F9016A /* Pods-DaisyNet.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-DaisyNet.release.xcconfig"; path = "Pods/Target Support Files/Pods-DaisyNet/Pods-DaisyNet.release.xcconfig"; sourceTree = "<group>"; };
 		D64291151F8CD40900B1CB61 /* DaisyNet.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = DaisyNet.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		D64291181F8CD40900B1CB61 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		D642911A1F8CD40900B1CB61 /* GetViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GetViewController.swift; sourceTree = "<group>"; };
@@ -53,26 +53,17 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				62349183FFD5D4DF39E127E7 /* Pods_DaisyNet.framework in Frameworks */,
+				583DA142C7E1A6211680552C /* Pods_DaisyNet.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
-		AECFB921B18F643D17FDEE1D /* Pods */ = {
-			isa = PBXGroup;
-			children = (
-				0371A568914DD61AA5ECDED4 /* Pods-DaisyNet.debug.xcconfig */,
-				5ED380C46249EF075A3E5128 /* Pods-DaisyNet.release.xcconfig */,
-			);
-			name = Pods;
-			sourceTree = "<group>";
-		};
 		D0A2EEAD7CB63D99256A02DC /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
-				8E10FA4C9B5B6E2DBC256090 /* Pods_DaisyNet.framework */,
+				95AE222D40B557CF71C08FA8 /* Pods_DaisyNet.framework */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -82,8 +73,8 @@
 			children = (
 				D64291171F8CD40900B1CB61 /* DaisyNet */,
 				D64291161F8CD40900B1CB61 /* Products */,
-				AECFB921B18F643D17FDEE1D /* Pods */,
 				D0A2EEAD7CB63D99256A02DC /* Frameworks */,
+				F62C7E39B3177F28CD86C7C8 /* Pods */,
 			);
 			sourceTree = "<group>";
 		};
@@ -126,6 +117,15 @@
 			path = DaisyNet;
 			sourceTree = "<group>";
 		};
+		F62C7E39B3177F28CD86C7C8 /* Pods */ = {
+			isa = PBXGroup;
+			children = (
+				AB132C52F7E42BD59513690F /* Pods-DaisyNet.debug.xcconfig */,
+				BF89DB87AE60AFDEF9F9016A /* Pods-DaisyNet.release.xcconfig */,
+			);
+			name = Pods;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -133,12 +133,12 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = D64291271F8CD40900B1CB61 /* Build configuration list for PBXNativeTarget "DaisyNet" */;
 			buildPhases = (
-				7ED619B40F51F64BEE2CCF6F /* [CP] Check Pods Manifest.lock */,
+				26D8E86C729C8A4C866014E9 /* [CP] Check Pods Manifest.lock */,
 				D64291111F8CD40900B1CB61 /* Sources */,
 				D64291121F8CD40900B1CB61 /* Frameworks */,
 				D64291131F8CD40900B1CB61 /* Resources */,
-				8F7F75CF6822B67A0D363310 /* [CP] Embed Pods Frameworks */,
-				8F014C4D0CD90C3F20E635BA /* [CP] Copy Pods Resources */,
+				55CB6B018E244431EFDD3B2C /* [CP] Embed Pods Frameworks */,
+				80FAB37A92521C5550AC06C3 /* [CP] Copy Pods Resources */,
 			);
 			buildRules = (
 			);
@@ -199,7 +199,7 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXShellScriptBuildPhase section */
-		7ED619B40F51F64BEE2CCF6F /* [CP] Check Pods Manifest.lock */ = {
+		26D8E86C729C8A4C866014E9 /* [CP] Check Pods Manifest.lock */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -217,22 +217,7 @@
 			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
 			showEnvVarsInLog = 0;
 		};
-		8F014C4D0CD90C3F20E635BA /* [CP] Copy Pods Resources */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputPaths = (
-			);
-			name = "[CP] Copy Pods Resources";
-			outputPaths = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-DaisyNet/Pods-DaisyNet-resources.sh\"\n";
-			showEnvVarsInLog = 0;
-		};
-		8F7F75CF6822B67A0D363310 /* [CP] Embed Pods Frameworks */ = {
+		55CB6B018E244431EFDD3B2C /* [CP] Embed Pods Frameworks */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -252,6 +237,21 @@
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
 			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-DaisyNet/Pods-DaisyNet-frameworks.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		80FAB37A92521C5550AC06C3 /* [CP] Copy Pods Resources */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "[CP] Copy Pods Resources";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-DaisyNet/Pods-DaisyNet-resources.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
 /* End PBXShellScriptBuildPhase section */
@@ -351,6 +351,7 @@
 				SDKROOT = iphoneos;
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_VERSION = "";
 			};
 			name = Debug;
 		};
@@ -400,13 +401,14 @@
 				MTL_ENABLE_DEBUG_INFO = NO;
 				SDKROOT = iphoneos;
 				SWIFT_OPTIMIZATION_LEVEL = "-Owholemodule";
+				SWIFT_VERSION = "";
 				VALIDATE_PRODUCT = YES;
 			};
 			name = Release;
 		};
 		D64291281F8CD40900B1CB61 /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 0371A568914DD61AA5ECDED4 /* Pods-DaisyNet.debug.xcconfig */;
+			baseConfigurationReference = AB132C52F7E42BD59513690F /* Pods-DaisyNet.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
@@ -425,7 +427,7 @@
 		};
 		D64291291F8CD40900B1CB61 /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 5ED380C46249EF075A3E5128 /* Pods-DaisyNet.release.xcconfig */;
+			baseConfigurationReference = BF89DB87AE60AFDEF9F9016A /* Pods-DaisyNet.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;

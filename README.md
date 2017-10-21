@@ -8,6 +8,7 @@
 <img src="https://img.shields.io/badge/support-swift%204%2B-green.svg">
 <img src="https://img.shields.io/badge/support-iOS%208%2B-blue.svg">
 <img src="https://img.shields.io/badge/license-MIT%20License-brightgreen.svg">
+<img src="https://img.shields.io/cocoapods/v/DaisyNet.svg?style=flat">
 </p>
 
 * 对Alamofire与Cache的封装实现对网络数据的缓存，可以存储JSON，String，Data，接口简单明了.
@@ -125,6 +126,13 @@ DaisyNet.downloadDelete(url)
 * 取消某个下载
 ```swift
 DaisyNet.downloadCancel(url)
+```
+
+## Install
+```
+1.pod 'DaisyNet'
+
+2.pod install / pod update
 ```
 
 ## Author
