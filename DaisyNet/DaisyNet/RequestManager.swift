@@ -8,7 +8,6 @@
 
 import Foundation
 import Alamofire
-
 // MARK: - RequestManager
 
 class RequestManager {
@@ -23,7 +22,7 @@ class RequestManager {
         headers: HTTPHeaders? = nil)
         -> RequestTaskManager
     {
-        let key = cacheKey(url: url, params: params)
+        let key = cacheKey(url, params)
         var taskManager : RequestTaskManager?
         if requestTasks[key] == nil {
             taskManager = RequestTaskManager()
@@ -40,7 +39,7 @@ class RequestManager {
     
     /// 取消请求
     func cancel(_ url: String, params: Parameters? = nil) {
-        let key = cacheKey(url: url, params: params)
+        let key = cacheKey(url, params)
         let taskManager = requestTasks[key]
         taskManager?.dataRequest?.cancel()
     }
@@ -52,19 +51,8 @@ class RequestManager {
     
     /// 根据key值清除缓存
     func removeObjectCache(_ url: String, params: [String: Any]? = nil,  completion: @escaping (Bool)->()) {
-        let cacheKey = self.cacheKey(url: url, params: params)
-        CacheManager.default.removeObjectCache(cacheKey, completion: completion)
-    }
-    
-    /// 将参数字典转换成字符串
-    private func cacheKey(url: String, params: Dictionary<String, Any>?) -> String {
-        guard let params = params,
-            let stringData = try? JSONSerialization.data(withJSONObject: params, options: []),
-            let paramString = String(data: stringData, encoding: String.Encoding.utf8) else {
-                return url
-        }
-        let str = "\(url)" + "\(paramString)"
-        return str
+        let key = cacheKey(url, params)
+        CacheManager.default.removeObjectCache(key, completion: completion)
     }
 }
 

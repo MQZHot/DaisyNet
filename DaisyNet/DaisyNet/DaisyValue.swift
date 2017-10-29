@@ -9,6 +9,7 @@
 import Foundation
 import Alamofire
 
+
 //// MARK: - Result
 public struct DaisyValue<Value> {
     public let isCacheData: Bool

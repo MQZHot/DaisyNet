@@ -2,7 +2,7 @@
 Pod::Spec.new do |s|
 
   s.name         = "DaisyNet"
-  s.version      = "0.0.3"
+  s.version      = "0.0.4"
   s.summary      = "Alamofire与Cache封装, 更容易存储请求数据"
   s.homepage     = "https://github.com/MQZHot/DaisyNet"
   s.license      = "MIT"
@@ -14,7 +14,7 @@ Pod::Spec.new do |s|
   s.requires_arc = true
   s.dependency 'Cache', '~> 4.1.2'
   s.dependency 'Alamofire', '~> 4.5.1'
-
+  s.public_header_files = "DaisyNet/*.h"
   s.pod_target_xcconfig = { "SWIFT_VERSION" => "4.0" }
 
 end

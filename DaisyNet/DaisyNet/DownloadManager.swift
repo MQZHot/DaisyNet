@@ -24,35 +24,38 @@ class DownloadManager {
         headers: HTTPHeaders? = nil)
         -> DownloadTaskManager
     {
+        let key = cacheKey(url, parameters)
         let taskManager = DownloadTaskManager()
         taskManager.download(url, method: method, parameters: parameters, encoding: encoding, headers: headers)
-        downloadTasks[url] = taskManager
+        downloadTasks[key] = taskManager
         taskManager.cancelCompletion = {
             self.downloadTasks.removeValue(forKey: url)
         }
         return taskManager
     }
     /// 暂停下载
-    func cancel(_ url: String) {
-        let task = downloadTasks[url]
+    func cancel(_ url: String, parameters: Parameters?) {
+        let key = cacheKey(url, parameters)
+        let task = downloadTasks[key]
         task?.downloadRequest?.cancel()
         task?.cancelCompletion = {
-            self.downloadTasks.removeValue(forKey: url)
+            self.downloadTasks.removeValue(forKey: key)
         }
     }
     /// 删除单个下载
-    func delete(_ url: String) {
-        let task = downloadTasks[url]
+    func delete(_ url: String, parameters: Parameters?) {
+        let key = cacheKey(url, parameters)
+        let task = downloadTasks[key]
         task?.downloadStatus = .suspend
         task?.downloadRequest?.cancel()
-        delete(task: task, url: url)
+        delete(task: task, key: key)
         task?.cancelCompletion = {
-            self.delete(task: task, url: url)
+            self.delete(task: task, key: key)
         }
     }
     
-    private func delete(task: DownloadTaskManager?, url: String) {
-        if let path = downloadPlist[url] as? String {
+    private func delete(task: DownloadTaskManager?, key: String) {
+        if let path = downloadPlist[key] as? String {
             let fileURL = cacheDirectory().appendingPathComponent("Download/\(path)")
             do {
                 try FileManager.default.removeItem(at: fileURL)
@@ -61,46 +64,50 @@ class DownloadManager {
                 DaisyLog("删除失败")
             }
         }
-        downloadTasks.removeValue(forKey: url)
-        dataPlist.removeObject(forKey: url)
-        downloadPlist.removeObject(forKey: url)
-        progressPlist.removeObject(forKey: url)
+        downloadTasks.removeValue(forKey: key)
+        dataPlist.removeObject(forKey: key)
+        downloadPlist.removeObject(forKey: key)
+        progressPlist.removeObject(forKey: key)
         dataPlist.write(to: dataPath, atomically: true)
         progressPlist.write(to: progressPath, atomically: true)
         downloadPlist.write(to: downloadPath, atomically: true)
     }
     /// 下载完成路径
-    func downloadFilePath(_ url: String) -> URL? {
-        if let path = downloadPlist[url] as? String,
+    func downloadFilePath(_ url: String, parameters: Parameters?) -> URL? {
+        let key = cacheKey(url, parameters)
+        if let path = downloadPlist[key] as? String,
             let pathUrl = URL(string: path) {
             return pathUrl
         }
         return nil
     }
     /// 下载百分比
-    func downloadPercent(_ url: String) -> Double {
-        let percent = progressPlist[url] as? Double ?? 0
-        if percent == 1 && downloadPlist[url] == nil {
+    func downloadPercent(_ url: String, parameters: Parameters?) -> Double {
+        let key = cacheKey(url, parameters)
+        let percent = progressPlist[key] as? Double ?? 0
+        if percent == 1 && downloadPlist[key] == nil {
             return 0
         }
         return percent
     }
     /// 下载状态
-    func downloadStatus(_ url: String) -> DownloadStatus {
-        let task = downloadTasks[url]
-        if downloadPercent(url) == 1 { return .complete }
+    func downloadStatus(_ url: String, parameters: Parameters?) -> DownloadStatus {
+        let key = cacheKey(url, parameters)
+        let task = downloadTasks[key]
+        if downloadPercent(url, parameters: parameters) == 1 { return .complete }
         return task?.downloadStatus ?? .suspend
     }
     /// 下载进度
     @discardableResult
-    func downloadProgress(_ url: String, progress: @escaping ((Double)->())) -> DownloadTaskManager? {
-        if let task = downloadTasks[url], downloadPercent(url) < 1 {
+    func downloadProgress(_ url: String, parameters: Parameters?, progress: @escaping ((Double)->())) -> DownloadTaskManager? {
+        let key = cacheKey(url, parameters)
+        if let task = downloadTasks[key], downloadPercent(url, parameters: parameters) < 1 {
             task.downloadProgress(progress: { pro in
                 progress(pro)
             })
             return task
         } else {
-            let pro = downloadPercent(url)
+            let pro = downloadPercent(url, parameters: parameters)
             progress(pro)
             return nil
         }
@@ -120,7 +127,7 @@ public class DownloadTaskManager {
     fileprivate var downloadStatus: DownloadStatus = .suspend
     fileprivate var cancelCompletion: (()->())?
     
-    var url: String?
+    private var key: String?
     @discardableResult
     fileprivate func download(
         _ url: String,
@@ -131,7 +138,7 @@ public class DownloadTaskManager {
         -> DownloadTaskManager
     {
         
-        self.url = url
+        self.key = cacheKey(url, parameters)
         let destination = downloadDestination()
         let resumeData = dataPlist[url] as? Data
         if let resumeData = resumeData {
@@ -147,7 +154,7 @@ public class DownloadTaskManager {
     @discardableResult
     public func downloadProgress(progress: @escaping ((Double) -> Void)) -> DownloadTaskManager {
         downloadRequest?.downloadProgress(closure: { (pro) in
-            progressPlist[self.url!] = pro.fractionCompleted
+            progressPlist[self.key!] = pro.fractionCompleted
             progressPlist.write(to: progressPath, atomically: true)
             progress(pro.fractionCompleted)
         })
@@ -164,7 +171,7 @@ public class DownloadTaskManager {
                 completion(Alamofire.Result.success(str!))
             case .failure(let error):
                 self.downloadStatus = .suspend
-                dataPlist[self.url!] = response.resumeData
+                dataPlist[self.key!] = response.resumeData
                 dataPlist.write(to: dataPath, atomically: true)
                 if self.cancelCompletion != nil { self.cancelCompletion!() }
                 completion(Alamofire.Result.failure(error))
@@ -175,8 +182,9 @@ public class DownloadTaskManager {
     private func downloadDestination() -> DownloadRequest.DownloadFileDestination {
         let destination: DownloadRequest.DownloadFileDestination = { _, response in
             let fileURL = cacheDirectory().appendingPathComponent("Download/\(response.suggestedFilename!)")
-            downloadPlist[self.url!] = response.suggestedFilename!
+            downloadPlist[self.key!] = response.suggestedFilename!
             downloadPlist.write(to: downloadPath, atomically: true)
+//            CacheManager.default.setObject(response.suggestedFilename!, forKey: self.url!)
             return (fileURL, [.removePreviousFile, .createIntermediateDirectories])
         }
         return destination

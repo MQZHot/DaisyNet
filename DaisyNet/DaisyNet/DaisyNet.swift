@@ -104,16 +104,16 @@ public func download(
 /// 取消下载
 ///
 /// - Parameter url: url
-public func downloadCancel(_ url: String) {
-    DownloadManager.default.cancel(url)
+public func downloadCancel(_ url: String, parameters: Parameters? = nil) {
+    DownloadManager.default.cancel(url, parameters: parameters)
 }
 
 /// 下载百分比
 ///
 /// - Parameter url: url
 /// - Returns: percent
-public func downloadPercent(_ url: String) -> Double {
-    return DownloadManager.default.downloadPercent(url)
+public func downloadPercent(_ url: String, parameters: Parameters? = nil) -> Double {
+    return DownloadManager.default.downloadPercent(url, parameters: parameters)
 }
 
 /// 删除某个下载
@@ -121,24 +121,24 @@ public func downloadPercent(_ url: String) -> Double {
 /// - Parameters:
 ///   - url: url
 ///   - completion: download success/failure
-public func downloadDelete(_ url: String) {
-    DownloadManager.default.delete(url)
+public func downloadDelete(_ url: String, parameters: Parameters? = nil) {
+    DownloadManager.default.delete(url,parameters: parameters)
 }
 
 /// 下载状态
 ///
 /// - Parameter url: url
 /// - Returns: status
-public func downloadStatus(_ url: String) -> DownloadStatus {
-    return DownloadManager.default.downloadStatus(url)
+public func downloadStatus(_ url: String, parameters: Parameters? = nil) -> DownloadStatus {
+    return DownloadManager.default.downloadStatus(url, parameters: parameters)
 }
 
 /// 下载完成后，文件所在位置
 ///
 /// - Parameter url: url
 /// - Returns: file URL
-public func downloadFilePath(_ url: String) -> URL? {
-    return DownloadManager.default.downloadFilePath(url)
+public func downloadFilePath(_ url: String, parameters: Parameters? = nil) -> URL? {
+    return DownloadManager.default.downloadFilePath(url, parameters: parameters)
 }
 
 /// 下载中的进度,任务下载中时，退出当前页面,再次进入时继续下载
@@ -148,6 +148,6 @@ public func downloadFilePath(_ url: String) -> URL? {
 ///   - progress: 进度
 /// - Returns: taskManager
 @discardableResult
-public func downloadProgress(_ url: String, progress: @escaping ((Double)->())) -> DownloadTaskManager? {
-    return DownloadManager.default.downloadProgress(url, progress: progress)
+public func downloadProgress(_ url: String, parameters: Parameters? = nil, progress: @escaping ((Double)->())) -> DownloadTaskManager? {
+    return DownloadManager.default.downloadProgress(url, parameters: parameters, progress: progress)
 }
