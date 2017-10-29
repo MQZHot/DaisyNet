@@ -90,7 +90,7 @@ protocol DaisyStringResponseProtocol {
 
 /// 下载
 @discardableResult
-func download(
+public func download(
     _ url: String,
     method: HTTPMethod = .get,
     parameters: Parameters? = nil,
@@ -104,7 +104,7 @@ func download(
 /// 取消下载
 ///
 /// - Parameter url: url
-func downloadCancel(_ url: String) {
+public func downloadCancel(_ url: String) {
     DownloadManager.default.cancel(url)
 }
 
@@ -112,7 +112,7 @@ func downloadCancel(_ url: String) {
 ///
 /// - Parameter url: url
 /// - Returns: percent
-func downloadPercent(_ url: String) -> Double {
+public func downloadPercent(_ url: String) -> Double {
     return DownloadManager.default.downloadPercent(url)
 }
 
@@ -121,7 +121,7 @@ func downloadPercent(_ url: String) -> Double {
 /// - Parameters:
 ///   - url: url
 ///   - completion: download success/failure
-func downloadDelete(_ url: String) {
+public func downloadDelete(_ url: String) {
     DownloadManager.default.delete(url)
 }
 
@@ -129,7 +129,7 @@ func downloadDelete(_ url: String) {
 ///
 /// - Parameter url: url
 /// - Returns: status
-func downloadStatus(_ url: String) -> DownloadStatus {
+public func downloadStatus(_ url: String) -> DownloadStatus {
     return DownloadManager.default.downloadStatus(url)
 }
 
@@ -137,7 +137,7 @@ func downloadStatus(_ url: String) -> DownloadStatus {
 ///
 /// - Parameter url: url
 /// - Returns: file URL
-func downloadFilePath(_ url: String) -> URL? {
+public func downloadFilePath(_ url: String) -> URL? {
     return DownloadManager.default.downloadFilePath(url)
 }
 
@@ -148,6 +148,6 @@ func downloadFilePath(_ url: String) -> URL? {
 ///   - progress: 进度
 /// - Returns: taskManager
 @discardableResult
-func downloadProgress(_ url: String, progress: @escaping ((Double)->())) -> DownloadTaskManager? {
+public func downloadProgress(_ url: String, progress: @escaping ((Double)->())) -> DownloadTaskManager? {
     return DownloadManager.default.downloadProgress(url, progress: progress)
 }

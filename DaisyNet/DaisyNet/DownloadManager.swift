@@ -115,7 +115,7 @@ public enum DownloadStatus {
 }
 
 // MARK: - taskManager
-class DownloadTaskManager {
+public class DownloadTaskManager {
     fileprivate var downloadRequest: DownloadRequest?
     fileprivate var downloadStatus: DownloadStatus = .suspend
     fileprivate var cancelCompletion: (()->())?
@@ -145,7 +145,7 @@ class DownloadTaskManager {
     
     /// 下载进度
     @discardableResult
-    open func downloadProgress(progress: @escaping ((Double) -> Void)) -> DownloadTaskManager {
+    public func downloadProgress(progress: @escaping ((Double) -> Void)) -> DownloadTaskManager {
         downloadRequest?.downloadProgress(closure: { (pro) in
             progressPlist[self.url!] = pro.fractionCompleted
             progressPlist.write(to: progressPath, atomically: true)
@@ -154,7 +154,7 @@ class DownloadTaskManager {
         return self
     }
     /// 响应
-    open func response(completion: @escaping (Alamofire.Result<String>)->()) {
+    public func response(completion: @escaping (Alamofire.Result<String>)->()) {
         downloadRequest?.responseData(completionHandler: { (response) in
             switch response.result {
             case .success:

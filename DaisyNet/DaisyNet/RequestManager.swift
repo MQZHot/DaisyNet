@@ -90,62 +90,62 @@ public class RequestTaskManager: RequestProtocol {
         return self
     }
     /// 是否缓存数据
-    func cache(_ cache: Bool) -> RequestTaskManager {
+    public func cache(_ cache: Bool) -> RequestTaskManager {
         self.cache = cache
         return self
     }
     
     /// 获取缓存Data
     @discardableResult
-    func cacheData(completion: @escaping (Data)->()) -> DaisyDataResponse {
+    public func cacheData(completion: @escaping (Data)->()) -> DaisyDataResponse {
         let dataResponse = DaisyDataResponse(dataRequest: dataRequest!, cache: cache, cacheKey: cacheKey, completionClosure: completionClosure)
         return dataResponse.cacheData(completion: completion)
     }
     /// 响应Data
-    func responseData(completion: @escaping (Alamofire.Result<Data>)->()) {
+    public func responseData(completion: @escaping (Alamofire.Result<Data>)->()) {
         let dataResponse = DaisyDataResponse(dataRequest: dataRequest!, cache: cache, cacheKey: cacheKey, completionClosure: completionClosure)
         dataResponse.responseData(completion: completion)
     }
     /// 先获取Data缓存，再响应Data
-    func responseCacheAndData(completion: @escaping (DaisyValue<Data>)->()) {
+    public func responseCacheAndData(completion: @escaping (DaisyValue<Data>)->()) {
         let dataResponse = DaisyDataResponse(dataRequest: dataRequest!, cache: cache, cacheKey: cacheKey, completionClosure: completionClosure)
         dataResponse.responseCacheAndData(completion: completion)
     }
     /// 获取缓存String
     @discardableResult
-    func cacheString(completion: @escaping (String)->()) -> DaisyStringResponse {
+    public func cacheString(completion: @escaping (String)->()) -> DaisyStringResponse {
         let stringResponse = DaisyStringResponse(dataRequest: dataRequest!, cache: cache, cacheKey: cacheKey, completionClosure: completionClosure)
         return stringResponse.cacheString(completion:completion)
     }
     /// 响应String
-    func responseString(completion: @escaping (Alamofire.Result<String>)->()) {
+    public func responseString(completion: @escaping (Alamofire.Result<String>)->()) {
         let stringResponse = DaisyStringResponse(dataRequest: dataRequest!, cache: cache, cacheKey: cacheKey, completionClosure: completionClosure)
         stringResponse.responseString(completion: completion)
     }
     /// 先获取缓存String,再响应String
-    func responseCacheAndString(completion: @escaping (DaisyValue<String>)->()) {
+    public func responseCacheAndString(completion: @escaping (DaisyValue<String>)->()) {
         let stringResponse = DaisyStringResponse(dataRequest: dataRequest!, cache: cache, cacheKey: cacheKey, completionClosure: completionClosure)
         stringResponse.responseCacheAndString(completion: completion)
     }
     /// 获取缓存JSON
     @discardableResult
-    func cacheJson(completion: @escaping (Any)->()) -> DaisyJsonResponse {
+    public func cacheJson(completion: @escaping (Any)->()) -> DaisyJsonResponse {
         let jsonResponse = DaisyJsonResponse(dataRequest: dataRequest!, cache: cache, cacheKey: cacheKey, completionClosure: completionClosure)
         return jsonResponse.cacheJson(completion:completion)
     }
     /// 响应JSON
-    func responseJson(completion: @escaping (Alamofire.Result<Any>)->()) {
+    public func responseJson(completion: @escaping (Alamofire.Result<Any>)->()) {
         let jsonResponse = DaisyJsonResponse(dataRequest: dataRequest!, cache: cache, cacheKey: cacheKey, completionClosure: completionClosure)
         jsonResponse.responseJson(completion: completion)
     }
     /// 先获取缓存JSON，再响应JSON
-    func responseCacheAndJson(completion: @escaping (DaisyValue<Any>)->()) {
+    public func responseCacheAndJson(completion: @escaping (DaisyValue<Any>)->()) {
         let jsonResponse = DaisyJsonResponse(dataRequest: dataRequest!, cache: cache, cacheKey: cacheKey, completionClosure: completionClosure)
         jsonResponse.responseCacheAndJson(completion: completion)
     }
 }
 // MARK: - DaisyBaseResponse
-class DaisyResponse {
+public class DaisyResponse {
     fileprivate var dataRequest: DataRequest
     fileprivate var cache: Bool
     fileprivate var cacheKey: String
@@ -178,7 +178,7 @@ class DaisyResponse {
     }
 }
 // MARK: - DaisyJsonResponse
-class DaisyJsonResponse: DaisyResponse , DaisyJsonResponseProtocol {
+public class DaisyJsonResponse: DaisyResponse , DaisyJsonResponseProtocol {
     /// 响应JSON
     func responseJson(completion: @escaping (Alamofire.Result<Any>)->()) {
         dataRequest.responseJSON(completionHandler: { response in
@@ -216,7 +216,7 @@ class DaisyJsonResponse: DaisyResponse , DaisyJsonResponseProtocol {
     }
 }
 // MARK: - DaisyStringResponse
-class DaisyStringResponse: DaisyResponse, DaisyStringResponseProtocol {
+public class DaisyStringResponse: DaisyResponse, DaisyStringResponseProtocol {
     /// 响应String
     func responseString(completion: @escaping (Alamofire.Result<String>)->()) {
         dataRequest.responseString(completionHandler: { response in
@@ -250,7 +250,7 @@ class DaisyStringResponse: DaisyResponse, DaisyStringResponseProtocol {
     }
 }
 // MARK: - DaisyDataResponse
-class DaisyDataResponse: DaisyResponse, DaisyDataResponseProtocol {
+public class DaisyDataResponse: DaisyResponse, DaisyDataResponseProtocol {
     /// 响应Data
     func responseData(completion: @escaping (Alamofire.Result<Data>)->()) {
         dataRequest.responseData(completionHandler: { response in

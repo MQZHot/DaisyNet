@@ -13,6 +13,7 @@
 
 * 对Alamofire与Cache的封装实现对网络数据的缓存，可以存储JSON，String，Data，接口简单明了.
 * 封装Alamofire下载，使用更方便.
+* 依赖[Alamofire](https://github.com/Alamofire/Alamofire)和[Cache](https://github.com/hyperoslo/Cache)
 * 如有问题，欢迎提出，不足之处，欢迎纠正，欢迎star ✨✨✨✨✨✨✨✨✨✨✨✨✨✨✨✨✨✨✨✨
 
 ![image](https://github.com/MQZHot/DaisyNet/raw/master/Picture/get.gif) ![image](https://github.com/MQZHot/DaisyNet/raw/master/Picture/download.gif)

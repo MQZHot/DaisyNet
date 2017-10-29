@@ -8,27 +8,33 @@
 
 /* Begin PBXBuildFile section */
 		583DA142C7E1A6211680552C /* Pods_DaisyNet.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 95AE222D40B557CF71C08FA8 /* Pods_DaisyNet.framework */; };
+		D63F099D1FA605FF00D15881 /* CacheManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = D63F099A1FA605E300D15881 /* CacheManager.swift */; };
+		D63F099E1FA605FF00D15881 /* DaisyLog.swift in Sources */ = {isa = PBXBuildFile; fileRef = D63F09971FA605E300D15881 /* DaisyLog.swift */; };
+		D63F099F1FA605FF00D15881 /* DaisyNet.swift in Sources */ = {isa = PBXBuildFile; fileRef = D63F09981FA605E300D15881 /* DaisyNet.swift */; };
+		D63F09A01FA605FF00D15881 /* DaisyValue.swift in Sources */ = {isa = PBXBuildFile; fileRef = D63F09991FA605E300D15881 /* DaisyValue.swift */; };
+		D63F09A11FA605FF00D15881 /* DownloadManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = D63F099B1FA605E400D15881 /* DownloadManager.swift */; };
+		D63F09A21FA605FF00D15881 /* RequestManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = D63F099C1FA605E400D15881 /* RequestManager.swift */; };
 		D64291191F8CD40900B1CB61 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = D64291181F8CD40900B1CB61 /* AppDelegate.swift */; };
 		D642911B1F8CD40900B1CB61 /* GetViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D642911A1F8CD40900B1CB61 /* GetViewController.swift */; };
 		D642911E1F8CD40900B1CB61 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = D642911C1F8CD40900B1CB61 /* Main.storyboard */; };
 		D64291201F8CD40900B1CB61 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = D642911F1F8CD40900B1CB61 /* Assets.xcassets */; };
 		D64291231F8CD40900B1CB61 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = D64291211F8CD40900B1CB61 /* LaunchScreen.storyboard */; };
-		D642912C1F8CD5AC00B1CB61 /* DaisyNet.swift in Sources */ = {isa = PBXBuildFile; fileRef = D642912B1F8CD56D00B1CB61 /* DaisyNet.swift */; };
 		D66459BA1F8E0232005D20AE /* MainTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D66459B91F8E0232005D20AE /* MainTableViewController.swift */; };
-		D6F1C4791F8F66A200C0F079 /* DaisyValue.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6F1C4781F8F66A200C0F079 /* DaisyValue.swift */; };
-		D6F1C47B1F8F676300C0F079 /* DownloadManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6F1C47A1F8F676300C0F079 /* DownloadManager.swift */; };
-		D6F1C47D1F8F679300C0F079 /* RequestManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6F1C47C1F8F679300C0F079 /* RequestManager.swift */; };
-		D6F1C47F1F8F67D900C0F079 /* DaisyLog.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6F1C47E1F8F67D900C0F079 /* DaisyLog.swift */; };
 		D6F1C4AA1F924D0200C0F079 /* DownloadCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6F1C4A81F924D0200C0F079 /* DownloadCell.swift */; };
 		D6F1C4AB1F924D0200C0F079 /* DownloadCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = D6F1C4A91F924D0200C0F079 /* DownloadCell.xib */; };
 		D6F1C4AD1F9250C600C0F079 /* DownloadTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6F1C4AC1F9250C600C0F079 /* DownloadTableViewController.swift */; };
-		D6F1C4B71F95B61700C0F079 /* CacheManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6F1C4B61F95B61700C0F079 /* CacheManager.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
 		95AE222D40B557CF71C08FA8 /* Pods_DaisyNet.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_DaisyNet.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		AB132C52F7E42BD59513690F /* Pods-DaisyNet.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-DaisyNet.debug.xcconfig"; path = "Pods/Target Support Files/Pods-DaisyNet/Pods-DaisyNet.debug.xcconfig"; sourceTree = "<group>"; };
 		BF89DB87AE60AFDEF9F9016A /* Pods-DaisyNet.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-DaisyNet.release.xcconfig"; path = "Pods/Target Support Files/Pods-DaisyNet/Pods-DaisyNet.release.xcconfig"; sourceTree = "<group>"; };
+		D63F09971FA605E300D15881 /* DaisyLog.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DaisyLog.swift; sourceTree = "<group>"; };
+		D63F09981FA605E300D15881 /* DaisyNet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DaisyNet.swift; sourceTree = "<group>"; };
+		D63F09991FA605E300D15881 /* DaisyValue.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DaisyValue.swift; sourceTree = "<group>"; };
+		D63F099A1FA605E300D15881 /* CacheManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CacheManager.swift; sourceTree = "<group>"; };
+		D63F099B1FA605E400D15881 /* DownloadManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DownloadManager.swift; sourceTree = "<group>"; };
+		D63F099C1FA605E400D15881 /* RequestManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RequestManager.swift; sourceTree = "<group>"; };
 		D64291151F8CD40900B1CB61 /* DaisyNet.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = DaisyNet.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		D64291181F8CD40900B1CB61 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		D642911A1F8CD40900B1CB61 /* GetViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GetViewController.swift; sourceTree = "<group>"; };
@@ -36,16 +42,10 @@
 		D642911F1F8CD40900B1CB61 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		D64291221F8CD40900B1CB61 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		D64291241F8CD40900B1CB61 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		D642912B1F8CD56D00B1CB61 /* DaisyNet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DaisyNet.swift; sourceTree = "<group>"; };
 		D66459B91F8E0232005D20AE /* MainTableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainTableViewController.swift; sourceTree = "<group>"; };
-		D6F1C4781F8F66A200C0F079 /* DaisyValue.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DaisyValue.swift; sourceTree = "<group>"; };
-		D6F1C47A1F8F676300C0F079 /* DownloadManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DownloadManager.swift; sourceTree = "<group>"; };
-		D6F1C47C1F8F679300C0F079 /* RequestManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RequestManager.swift; sourceTree = "<group>"; };
-		D6F1C47E1F8F67D900C0F079 /* DaisyLog.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DaisyLog.swift; sourceTree = "<group>"; };
 		D6F1C4A81F924D0200C0F079 /* DownloadCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DownloadCell.swift; sourceTree = "<group>"; };
 		D6F1C4A91F924D0200C0F079 /* DownloadCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = DownloadCell.xib; sourceTree = "<group>"; };
 		D6F1C4AC1F9250C600C0F079 /* DownloadTableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DownloadTableViewController.swift; sourceTree = "<group>"; };
-		D6F1C4B61F95B61700C0F079 /* CacheManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CacheManager.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -107,12 +107,12 @@
 		D642912A1F8CD56500B1CB61 /* DaisyNet */ = {
 			isa = PBXGroup;
 			children = (
-				D642912B1F8CD56D00B1CB61 /* DaisyNet.swift */,
-				D6F1C4781F8F66A200C0F079 /* DaisyValue.swift */,
-				D6F1C4B61F95B61700C0F079 /* CacheManager.swift */,
-				D6F1C47C1F8F679300C0F079 /* RequestManager.swift */,
-				D6F1C47A1F8F676300C0F079 /* DownloadManager.swift */,
-				D6F1C47E1F8F67D900C0F079 /* DaisyLog.swift */,
+				D63F099A1FA605E300D15881 /* CacheManager.swift */,
+				D63F09971FA605E300D15881 /* DaisyLog.swift */,
+				D63F09981FA605E300D15881 /* DaisyNet.swift */,
+				D63F09991FA605E300D15881 /* DaisyValue.swift */,
+				D63F099B1FA605E400D15881 /* DownloadManager.swift */,
+				D63F099C1FA605E400D15881 /* RequestManager.swift */,
 			);
 			path = DaisyNet;
 			sourceTree = "<group>";
@@ -226,13 +226,11 @@
 				"${SRCROOT}/Pods/Target Support Files/Pods-DaisyNet/Pods-DaisyNet-frameworks.sh",
 				"${BUILT_PRODUCTS_DIR}/Alamofire/Alamofire.framework",
 				"${BUILT_PRODUCTS_DIR}/Cache/Cache.framework",
-				"${BUILT_PRODUCTS_DIR}/SwiftHash/SwiftHash.framework",
 			);
 			name = "[CP] Embed Pods Frameworks";
 			outputPaths = (
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Alamofire.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Cache.framework",
-				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/SwiftHash.framework",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
@@ -261,17 +259,17 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				D63F099D1FA605FF00D15881 /* CacheManager.swift in Sources */,
+				D63F099E1FA605FF00D15881 /* DaisyLog.swift in Sources */,
+				D63F099F1FA605FF00D15881 /* DaisyNet.swift in Sources */,
+				D63F09A01FA605FF00D15881 /* DaisyValue.swift in Sources */,
+				D63F09A11FA605FF00D15881 /* DownloadManager.swift in Sources */,
+				D63F09A21FA605FF00D15881 /* RequestManager.swift in Sources */,
 				D66459BA1F8E0232005D20AE /* MainTableViewController.swift in Sources */,
 				D6F1C4AD1F9250C600C0F079 /* DownloadTableViewController.swift in Sources */,
 				D642911B1F8CD40900B1CB61 /* GetViewController.swift in Sources */,
 				D64291191F8CD40900B1CB61 /* AppDelegate.swift in Sources */,
-				D6F1C47D1F8F679300C0F079 /* RequestManager.swift in Sources */,
-				D6F1C4791F8F66A200C0F079 /* DaisyValue.swift in Sources */,
-				D6F1C4B71F95B61700C0F079 /* CacheManager.swift in Sources */,
-				D6F1C47B1F8F676300C0F079 /* DownloadManager.swift in Sources */,
 				D6F1C4AA1F924D0200C0F079 /* DownloadCell.swift in Sources */,
-				D6F1C47F1F8F67D900C0F079 /* DaisyLog.swift in Sources */,
-				D642912C1F8CD5AC00B1CB61 /* DaisyNet.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

@@ -1,3 +1,7 @@
+// swiftlint:disable comma function_parameter_count variable_name syntactic_sugar function_body_length vertical_whitespace
+
+// https://github.com/onmyway133/SwiftHash/blob/master/Sources/MD5.swift
+
 /*
  * A JavaScript implementation of the RSA Data Security, Inc. MD5 Message
  * Digest Algorithm, as defined in RFC 1321.
