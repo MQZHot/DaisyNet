@@ -8,6 +8,7 @@
 
 import Foundation
 import Cache
+
 /// 将参数字典转换成字符串后md5
 func cacheKey(_ url: String, _ params: Dictionary<String, Any>?) -> String {
     guard let params = params,

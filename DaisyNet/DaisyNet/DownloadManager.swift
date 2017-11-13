@@ -15,21 +15,20 @@ class DownloadManager {
     /// 下载任务管理
     fileprivate var downloadTasks = [String: DownloadTaskManager]()
     
-    @discardableResult
     func download(
         _ url: String,
         method: HTTPMethod = .get,
         parameters: Parameters? = nil,
         encoding: ParameterEncoding = URLEncoding.default,
         headers: HTTPHeaders? = nil)
-        -> DownloadTaskManager
+        ->DownloadTaskManager
     {
         let key = cacheKey(url, parameters)
-        let taskManager = DownloadTaskManager()
+        let taskManager = DownloadTaskManager(url, parameters: parameters)
         taskManager.download(url, method: method, parameters: parameters, encoding: encoding, headers: headers)
-        downloadTasks[key] = taskManager
+        self.downloadTasks[key] = taskManager
         taskManager.cancelCompletion = {
-            self.downloadTasks.removeValue(forKey: url)
+            self.downloadTasks.removeValue(forKey: key)
         }
         return taskManager
     }
@@ -43,39 +42,33 @@ class DownloadManager {
         }
     }
     /// 删除单个下载
-    func delete(_ url: String, parameters: Parameters?) {
+    func delete(_ url: String, parameters: Parameters?, completion: @escaping (Bool)->()) {
         let key = cacheKey(url, parameters)
-        let task = downloadTasks[key]
-        task?.downloadStatus = .suspend
-        task?.downloadRequest?.cancel()
-        delete(task: task, key: key)
-        task?.cancelCompletion = {
-            self.delete(task: task, key: key)
-        }
-    }
-    
-    private func delete(task: DownloadTaskManager?, key: String) {
-        if let path = downloadPlist[key] as? String {
-            let fileURL = cacheDirectory().appendingPathComponent("Download/\(path)")
-            do {
-                try FileManager.default.removeItem(at: fileURL)
-                DaisyLog("删除成功")
-            } catch {
-                DaisyLog("删除失败")
+        if let task = downloadTasks[key] {
+            task.downloadRequest?.cancel()
+            task.cancelCompletion = {
+                self.downloadTasks.removeValue(forKey: key)
+                CacheManager.default.removeObjectCache(key, completion: completion)
             }
+        } else {
+            if let path = getFilePath(key)
+            { /// 下载完成了
+                do {
+                    let arr = path.components(separatedBy: "/")
+                    let cachesURL = FileManager.default.urls(for: .cachesDirectory, in: .userDomainMask)[0]
+                    let fileURL = cachesURL.appendingPathComponent(arr.last!)
+                    try FileManager.default.removeItem(at: fileURL)
+                } catch {
+                    DaisyLog(error)
+                }
+            }
+            CacheManager.default.removeObjectCache(key, completion: completion)
         }
-        downloadTasks.removeValue(forKey: key)
-        dataPlist.removeObject(forKey: key)
-        downloadPlist.removeObject(forKey: key)
-        progressPlist.removeObject(forKey: key)
-        dataPlist.write(to: dataPath, atomically: true)
-        progressPlist.write(to: progressPath, atomically: true)
-        downloadPlist.write(to: downloadPath, atomically: true)
     }
     /// 下载完成路径
     func downloadFilePath(_ url: String, parameters: Parameters?) -> URL? {
         let key = cacheKey(url, parameters)
-        if let path = downloadPlist[key] as? String,
+        if let path = getFilePath(key),
             let pathUrl = URL(string: path) {
             return pathUrl
         }
@@ -84,10 +77,7 @@ class DownloadManager {
     /// 下载百分比
     func downloadPercent(_ url: String, parameters: Parameters?) -> Double {
         let key = cacheKey(url, parameters)
-        let percent = progressPlist[key] as? Double ?? 0
-        if percent == 1 && downloadPlist[key] == nil {
-            return 0
-        }
+        let percent = getProgress(key)
         return percent
     }
     /// 下载状态
@@ -126,8 +116,14 @@ public class DownloadTaskManager {
     fileprivate var downloadRequest: DownloadRequest?
     fileprivate var downloadStatus: DownloadStatus = .suspend
     fileprivate var cancelCompletion: (()->())?
+    fileprivate var cccompletion: (()->())?
+    var cacheDictionary = [String: Data]()
+    private var key: String
     
-    private var key: String?
+    init(_ url: String,
+         parameters: Parameters? = nil) {
+        key = cacheKey(url, parameters)
+    }
     @discardableResult
     fileprivate func download(
         _ url: String,
@@ -137,25 +133,28 @@ public class DownloadTaskManager {
         headers: HTTPHeaders? = nil)
         -> DownloadTaskManager
     {
-        
-        self.key = cacheKey(url, parameters)
         let destination = downloadDestination()
-        let resumeData = dataPlist[url] as? Data
+        let resumeData = getResumeData(key)
         if let resumeData = resumeData {
-            downloadRequest = Alamofire.download(resumingWith: resumeData, to: destination)
+            downloadRequest = manager.download(resumingWith: resumeData, to: destination)
         } else {
-            downloadRequest = Alamofire.download(url, method: method, parameters: parameters, encoding: encoding, headers: headers, to: destination)
+            downloadRequest = manager.download(url, method: method, parameters: parameters, encoding: encoding, headers: headers, to: destination)
         }
         downloadStatus = .downloading
         return self
     }
     
+    lazy var manager: SessionManager = {
+//        let configuration = URLSessionConfiguration.background(withIdentifier: "com.\(key).app.background")
+        let configuration = URLSessionConfiguration.default
+        configuration.httpAdditionalHeaders = SessionManager.defaultHTTPHeaders
+        return SessionManager(configuration: configuration)
+    }()
     /// 下载进度
     @discardableResult
     public func downloadProgress(progress: @escaping ((Double) -> Void)) -> DownloadTaskManager {
         downloadRequest?.downloadProgress(closure: { (pro) in
-            progressPlist[self.key!] = pro.fractionCompleted
-            progressPlist.write(to: progressPath, atomically: true)
+            self.saveProgress(pro.fractionCompleted)
             progress(pro.fractionCompleted)
         })
         return self
@@ -171,8 +170,7 @@ public class DownloadTaskManager {
                 completion(Alamofire.Result.success(str!))
             case .failure(let error):
                 self.downloadStatus = .suspend
-                dataPlist[self.key!] = response.resumeData
-                dataPlist.write(to: dataPath, atomically: true)
+                self.saveResumeData(response.resumeData)
                 if self.cancelCompletion != nil { self.cancelCompletion!() }
                 completion(Alamofire.Result.failure(error))
             }
@@ -181,37 +179,67 @@ public class DownloadTaskManager {
     /// 下载文件位置
     private func downloadDestination() -> DownloadRequest.DownloadFileDestination {
         let destination: DownloadRequest.DownloadFileDestination = { _, response in
-            let fileURL = cacheDirectory().appendingPathComponent("Download/\(response.suggestedFilename!)")
-            downloadPlist[self.key!] = response.suggestedFilename!
-            downloadPlist.write(to: downloadPath, atomically: true)
-//            CacheManager.default.setObject(response.suggestedFilename!, forKey: self.url!)
+            let cachesURL = FileManager.default.urls(for: .cachesDirectory, in: .userDomainMask)[0]
+            let fileURL = cachesURL.appendingPathComponent(response.suggestedFilename ?? "")
+            self.saveFilePath(fileURL.absoluteString)
             return (fileURL, [.removePreviousFile, .createIntermediateDirectories])
         }
         return destination
     }
-}
-
-// MARK: - filePath
-fileprivate let dataPlist = dictionaryOfData("DaisyData.plist")
-fileprivate let progressPlist = dictionaryOfData("DaisyProgress.plist")
-fileprivate let downloadPlist = dictionaryOfData("downloadPath.plist")
-fileprivate let progressPath = cacheDirectory().appendingPathComponent("DaisyProgress.plist")
-fileprivate let dataPath = cacheDirectory().appendingPathComponent("DaisyData.plist")
-fileprivate let downloadPath = cacheDirectory().appendingPathComponent("downloadPath.plist")
-
-fileprivate func cacheDirectory() -> URL {
-    let cachesURL = FileManager.default.urls(for: .cachesDirectory, in: .userDomainMask)[0]
-    let fileURL = cachesURL.appendingPathComponent("Download")
-    return fileURL
-}
-fileprivate func dictionaryOfData(_ fileName: String) -> NSMutableDictionary {
-    let path = cacheDirectory()
-    let filePath = path.appendingPathComponent(fileName)
-    var dic: NSMutableDictionary?
-    if let dict = NSMutableDictionary(contentsOf: filePath) {
-        dic = dict
-    } else {
-        dic = NSMutableDictionary()
+    
+    func saveProgress(_ progress: Double) {
+        if let progressData = "\(progress)".data(using: .utf8) {
+            cacheDictionary["progress"] = progressData
+            CacheManager.default.setObject(cacheDictionary, forKey: key)
+        }
     }
-    return dic!
+    
+    func saveResumeData(_ data: Data?) {
+        cacheDictionary["resumeData"] = data
+        CacheManager.default.setObject(cacheDictionary, forKey: key)
+    }
+    
+    func saveFilePath(_ filePath: String?) {
+        if let filePathData = filePath?.data(using: .utf8) {
+            cacheDictionary["filePath"] = filePathData
+            CacheManager.default.setObject(cacheDictionary, forKey: key)
+        }
+    }
 }
+
+
+
+func getResumeData(_ url: String) -> Data? {
+    let dic = getDictionary(url)
+    if let data = dic["resumeData"] {
+        return data
+    }
+    return nil
+}
+
+func getProgress(_ url: String) -> Double {
+    let dic = getDictionary(url)
+    if let progressData = dic["progress"],
+        let progressString = String(data: progressData, encoding: .utf8),
+        let progress = Double(progressString) {
+        return progress
+    }
+    return 0
+}
+
+func getFilePath(_ url: String) -> String? {
+    let dic = getDictionary(url)
+    if let filePathData = dic["filePath"],
+        let filePath = String(data: filePathData, encoding: .utf8) {
+        return filePath
+    }
+    return nil
+}
+
+func getDictionary(_ url: String) -> Dictionary<String, Data> {
+    if let dic = CacheManager.default.objectSync(ofType: Dictionary<String, Data>.self, forKey: url) {
+        return dic
+    }
+    return [:]
+}
+

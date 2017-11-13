@@ -31,6 +31,7 @@ class DownloadTableViewController: UITableViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         tableView.register(UINib(nibName: "DownloadCell", bundle: nil), forCellReuseIdentifier: "downloadCell")
+        
     }
     
     // MARK: - Table view data source
@@ -41,6 +42,7 @@ class DownloadTableViewController: UITableViewController {
         let url = downloadUrls[indexPath.row]
         let status = DaisyNet.downloadStatus(url)
         let progress = DaisyNet.downloadPercent(url)
+        print(progress)
         let cell = tableView.dequeueReusableCell(withIdentifier: "downloadCell", for: indexPath) as! DownloadCell
         cell.indexPath = indexPath
         cell.updateCell(status, progress: progress)
@@ -56,7 +58,6 @@ class DownloadTableViewController: UITableViewController {
             }?.response(completion: { [weak self] _ in
                 self?.update(indexPath)
             })
-        
         return cell
     }
     // MARK: - 点击事件
@@ -93,8 +94,14 @@ class DownloadTableViewController: UITableViewController {
     // MARK: - 删除
     func deleteAction(_ indexPath: IndexPath) {
         let url = downloadUrls[indexPath.row]
-        DaisyNet.downloadDelete(url)
-        update(indexPath)
+        DaisyNet.downloadDelete(url) { [weak self] (result) in
+            if result {
+                self?.update(indexPath)
+            } else {
+                print("删除失败")
+            }
+        }
+        
     }
     
     override func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {

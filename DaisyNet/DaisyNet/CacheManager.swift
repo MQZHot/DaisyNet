@@ -47,18 +47,21 @@ class CacheManager {
             }
         })
     }
-    /// 读取缓存
+    /// 异步读取缓存
     func object<T: Codable>(ofType type: T.Type, forKey key: String, completion: @escaping (Cache.Result<T>)->Void) {
         storage?.async.object(ofType: type, forKey: key, completion: completion)
     }
-    
+    /// 读取缓存
+    func objectSync<T: Codable>(ofType type: T.Type, forKey key: String) -> T? {
+        do {
+            return (try storage?.object(ofType: type, forKey: key)) ?? nil
+        } catch {
+            return nil
+        }
+    }
     /// 异步存储
     func setObject<T: Codable>(_ object: T, forKey: String) {
-        storage?.async.setObject(object, forKey: forKey, completion: { result in
-            switch result {
-            case .value: DaisyLog("saved successfully")
-            case .error(let error): DaisyLog(error)
-            }
+        storage?.async.setObject(object, forKey: forKey, completion: { _ in
         })
     }
 }

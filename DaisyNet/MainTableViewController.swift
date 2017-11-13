@@ -14,7 +14,11 @@ class MainTableViewController: UITableViewController {
         super.viewDidLoad()
 
         print(NSHomeDirectory())
-        
+        Alamofire.upload(Data(), to: "").uploadProgress { (pro) in
+            
+            }.responseJSON { (response) in
+                
+        }
     }
     
     @IBAction func clearCache(_ sender: UIBarButtonItem) {

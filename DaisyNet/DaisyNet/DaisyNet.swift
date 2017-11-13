@@ -89,14 +89,13 @@ protocol DaisyStringResponseProtocol {
 // MARK: - 下载
 
 /// 下载
-@discardableResult
 public func download(
     _ url: String,
     method: HTTPMethod = .get,
     parameters: Parameters? = nil,
     encoding: ParameterEncoding = URLEncoding.default,
     headers: HTTPHeaders? = nil)
-    -> DownloadTaskManager
+    ->DownloadTaskManager
 {
     return DownloadManager.default.download(url, method: method, parameters: parameters, encoding: encoding, headers: headers)
 }
@@ -121,8 +120,8 @@ public func downloadPercent(_ url: String, parameters: Parameters? = nil) -> Dou
 /// - Parameters:
 ///   - url: url
 ///   - completion: download success/failure
-public func downloadDelete(_ url: String, parameters: Parameters? = nil) {
-    DownloadManager.default.delete(url,parameters: parameters)
+public func downloadDelete(_ url: String, parameters: Parameters? = nil, completion: @escaping (Bool)->()) {
+    DownloadManager.default.delete(url,parameters: parameters, completion: completion)
 }
 
 /// 下载状态

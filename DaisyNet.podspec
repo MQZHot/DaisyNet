@@ -14,7 +14,6 @@ Pod::Spec.new do |s|
   s.requires_arc = true
   s.dependency 'Cache', '~> 4.1.2'
   s.dependency 'Alamofire', '~> 4.5.1'
-  s.public_header_files = "DaisyNet/*.h"
   s.pod_target_xcconfig = { "SWIFT_VERSION" => "4.0" }
 
 end
