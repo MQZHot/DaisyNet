@@ -16,6 +16,7 @@ class GetViewController: UIViewController {
     
     let url = "http://api.travels.app887.com/api/Articles.action"
     let params = ["keyword" : "", "npc" : "0", "opc" : "20", "type" : "热门视频", "uid" : "2321"]
+    let dynamicParams = ["timestamp": "xxxx"]
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -27,7 +28,7 @@ class GetViewController: UIViewController {
 //                /// response
 //        }
         
-        DaisyNet.request(url, params: params).cache(true).responseCacheAndString { value in
+        DaisyNet.request(url, params: params, dynamicParams: dynamicParams).cache(true).responseCacheAndString { value in
             switch value.result {
             case .success(let string):
                 
