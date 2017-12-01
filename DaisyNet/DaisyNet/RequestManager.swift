@@ -18,11 +18,12 @@ class RequestManager {
         _ url: String,
         method: HTTPMethod = .get,
         params: Parameters? = nil,
+        dynamicParams: Parameters? = nil,
         encoding: ParameterEncoding = URLEncoding.default,
         headers: HTTPHeaders? = nil)
         -> RequestTaskManager
     {
-        let key = cacheKey(url, params)
+        let key = cacheKey(url, params, dynamicParams)
         var taskManager : RequestTaskManager?
         if requestTasks[key] == nil {
             taskManager = RequestTaskManager()
@@ -38,8 +39,8 @@ class RequestManager {
     }
     
     /// 取消请求
-    func cancel(_ url: String, params: Parameters? = nil) {
-        let key = cacheKey(url, params)
+    func cancel(_ url: String, params: Parameters? = nil, dynamicParams: Parameters? = nil) {
+        let key = cacheKey(url, params, dynamicParams)
         let taskManager = requestTasks[key]
         taskManager?.dataRequest?.cancel()
     }
@@ -50,8 +51,8 @@ class RequestManager {
     }
     
     /// 根据key值清除缓存
-    func removeObjectCache(_ url: String, params: [String: Any]? = nil,  completion: @escaping (Bool)->()) {
-        let key = cacheKey(url, params)
+    func removeObjectCache(_ url: String, params: [String: Any]? = nil, dynamicParams: Parameters? = nil,  completion: @escaping (Bool)->()) {
+        let key = cacheKey(url, params, dynamicParams)
         CacheManager.default.removeObjectCache(key, completion: completion)
     }
 }

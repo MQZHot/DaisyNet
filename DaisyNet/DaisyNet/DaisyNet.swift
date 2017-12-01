@@ -18,6 +18,7 @@ import Cache
 ///   - url: url
 ///   - method: .get .post ... 默认.get
 ///   - params: 参数字典
+///   - dynamicParams: 变化的参数，例如 时间戳-token 等
 ///   - encoding: 编码方式
 ///   - headers: 请求头
 /// - Returns:
@@ -26,16 +27,17 @@ public func request(
     _ url: String,
     method: HTTPMethod = .get,
     params: Parameters? = nil,
+    dynamicParams: Parameters? = nil,
     encoding: ParameterEncoding = URLEncoding.default,
     headers: HTTPHeaders? = nil)
     -> RequestTaskManager
 {
-    return RequestManager.default.request(url, method: method, params: params, encoding: encoding, headers: headers)
+    return RequestManager.default.request(url, method: method, params: params, dynamicParams: dynamicParams, encoding: encoding, headers: headers)
 }
 
 /// 取消请求
-public func cancel(_ url: String, params: Parameters? = nil) {
-    RequestManager.default.cancel(url, params: params)
+public func cancel(_ url: String, params: Parameters? = nil, dynamicParams: Parameters? = nil) {
+    RequestManager.default.cancel(url, params: params, dynamicParams: dynamicParams)
 }
 
 /// 清除所有缓存
@@ -44,8 +46,8 @@ public func removeAllCache(completion: @escaping (Bool)->()) {
 }
 
 /// 根据url和params清除缓存
-public func removeObjectCache(_ url: String, params: [String: Any]? = nil, completion: @escaping (Bool)->()) {
-    RequestManager.default.removeObjectCache(url, params: params, completion: completion)
+public func removeObjectCache(_ url: String, params: [String: Any]? = nil, dynamicParams: Parameters? = nil, completion: @escaping (Bool)->()) {
+    RequestManager.default.removeObjectCache(url, params: params,dynamicParams: dynamicParams, completion: completion)
 }
 
 protocol RequestProtocol {
@@ -93,26 +95,27 @@ public func download(
     _ url: String,
     method: HTTPMethod = .get,
     parameters: Parameters? = nil,
+    dynamicParams: Parameters? = nil,
     encoding: ParameterEncoding = URLEncoding.default,
     headers: HTTPHeaders? = nil)
     ->DownloadTaskManager
 {
-    return DownloadManager.default.download(url, method: method, parameters: parameters, encoding: encoding, headers: headers)
+    return DownloadManager.default.download(url, method: method, parameters: parameters, dynamicParams: dynamicParams, encoding: encoding, headers: headers)
 }
 
 /// 取消下载
 ///
 /// - Parameter url: url
-public func downloadCancel(_ url: String, parameters: Parameters? = nil) {
-    DownloadManager.default.cancel(url, parameters: parameters)
+public func downloadCancel(_ url: String, parameters: Parameters? = nil, dynamicParams: Parameters? = nil) {
+    DownloadManager.default.cancel(url, parameters: parameters, dynamicParams: dynamicParams)
 }
 
 /// 下载百分比
 ///
 /// - Parameter url: url
 /// - Returns: percent
-public func downloadPercent(_ url: String, parameters: Parameters? = nil) -> Double {
-    return DownloadManager.default.downloadPercent(url, parameters: parameters)
+public func downloadPercent(_ url: String, parameters: Parameters? = nil, dynamicParams: Parameters? = nil) -> Double {
+    return DownloadManager.default.downloadPercent(url, parameters: parameters, dynamicParams: dynamicParams)
 }
 
 /// 删除某个下载
@@ -120,24 +123,24 @@ public func downloadPercent(_ url: String, parameters: Parameters? = nil) -> Dou
 /// - Parameters:
 ///   - url: url
 ///   - completion: download success/failure
-public func downloadDelete(_ url: String, parameters: Parameters? = nil, completion: @escaping (Bool)->()) {
-    DownloadManager.default.delete(url,parameters: parameters, completion: completion)
+public func downloadDelete(_ url: String, parameters: Parameters? = nil,dynamicParams: Parameters? = nil, completion: @escaping (Bool)->()) {
+    DownloadManager.default.delete(url,parameters: parameters,dynamicParams: dynamicParams, completion: completion)
 }
 
 /// 下载状态
 ///
 /// - Parameter url: url
 /// - Returns: status
-public func downloadStatus(_ url: String, parameters: Parameters? = nil) -> DownloadStatus {
-    return DownloadManager.default.downloadStatus(url, parameters: parameters)
+public func downloadStatus(_ url: String, parameters: Parameters? = nil,dynamicParams: Parameters? = nil) -> DownloadStatus {
+    return DownloadManager.default.downloadStatus(url, parameters: parameters,dynamicParams: dynamicParams)
 }
 
 /// 下载完成后，文件所在位置
 ///
 /// - Parameter url: url
 /// - Returns: file URL
-public func downloadFilePath(_ url: String, parameters: Parameters? = nil) -> URL? {
-    return DownloadManager.default.downloadFilePath(url, parameters: parameters)
+public func downloadFilePath(_ url: String, parameters: Parameters? = nil,dynamicParams: Parameters? = nil) -> URL? {
+    return DownloadManager.default.downloadFilePath(url, parameters: parameters,dynamicParams: dynamicParams)
 }
 
 /// 下载中的进度,任务下载中时，退出当前页面,再次进入时继续下载
@@ -147,6 +150,6 @@ public func downloadFilePath(_ url: String, parameters: Parameters? = nil) -> UR
 ///   - progress: 进度
 /// - Returns: taskManager
 @discardableResult
-public func downloadProgress(_ url: String, parameters: Parameters? = nil, progress: @escaping ((Double)->())) -> DownloadTaskManager? {
-    return DownloadManager.default.downloadProgress(url, parameters: parameters, progress: progress)
+public func downloadProgress(_ url: String, parameters: Parameters? = nil,dynamicParams: Parameters? = nil, progress: @escaping ((Double)->())) -> DownloadTaskManager? {
+    return DownloadManager.default.downloadProgress(url, parameters: parameters,dynamicParams: dynamicParams, progress: progress)
 }

@@ -19,12 +19,13 @@ class DownloadManager {
         _ url: String,
         method: HTTPMethod = .get,
         parameters: Parameters? = nil,
+        dynamicParams: Parameters? = nil,
         encoding: ParameterEncoding = URLEncoding.default,
         headers: HTTPHeaders? = nil)
         ->DownloadTaskManager
     {
-        let key = cacheKey(url, parameters)
-        let taskManager = DownloadTaskManager(url, parameters: parameters)
+        let key = cacheKey(url, parameters, dynamicParams)
+        let taskManager = DownloadTaskManager(url, parameters: parameters, dynamicParams: dynamicParams)
         taskManager.download(url, method: method, parameters: parameters, encoding: encoding, headers: headers)
         self.downloadTasks[key] = taskManager
         taskManager.cancelCompletion = {
@@ -33,8 +34,8 @@ class DownloadManager {
         return taskManager
     }
     /// 暂停下载
-    func cancel(_ url: String, parameters: Parameters?) {
-        let key = cacheKey(url, parameters)
+    func cancel(_ url: String, parameters: Parameters?, dynamicParams: Parameters? = nil) {
+        let key = cacheKey(url, parameters, dynamicParams)
         let task = downloadTasks[key]
         task?.downloadRequest?.cancel()
         task?.cancelCompletion = {
@@ -42,8 +43,8 @@ class DownloadManager {
         }
     }
     /// 删除单个下载
-    func delete(_ url: String, parameters: Parameters?, completion: @escaping (Bool)->()) {
-        let key = cacheKey(url, parameters)
+    func delete(_ url: String, parameters: Parameters? , dynamicParams: Parameters? = nil, completion: @escaping (Bool)->()) {
+        let key = cacheKey(url, parameters, dynamicParams)
         if let task = downloadTasks[key] {
             task.downloadRequest?.cancel()
             task.cancelCompletion = {
@@ -66,8 +67,8 @@ class DownloadManager {
         }
     }
     /// 下载完成路径
-    func downloadFilePath(_ url: String, parameters: Parameters?) -> URL? {
-        let key = cacheKey(url, parameters)
+    func downloadFilePath(_ url: String, parameters: Parameters?, dynamicParams: Parameters? = nil) -> URL? {
+        let key = cacheKey(url, parameters, dynamicParams)
         if let path = getFilePath(key),
             let pathUrl = URL(string: path) {
             return pathUrl
@@ -75,22 +76,22 @@ class DownloadManager {
         return nil
     }
     /// 下载百分比
-    func downloadPercent(_ url: String, parameters: Parameters?) -> Double {
-        let key = cacheKey(url, parameters)
+    func downloadPercent(_ url: String, parameters: Parameters?, dynamicParams: Parameters? = nil) -> Double {
+        let key = cacheKey(url, parameters, dynamicParams)
         let percent = getProgress(key)
         return percent
     }
     /// 下载状态
-    func downloadStatus(_ url: String, parameters: Parameters?) -> DownloadStatus {
-        let key = cacheKey(url, parameters)
+    func downloadStatus(_ url: String, parameters: Parameters?, dynamicParams: Parameters? = nil) -> DownloadStatus {
+        let key = cacheKey(url, parameters, dynamicParams)
         let task = downloadTasks[key]
         if downloadPercent(url, parameters: parameters) == 1 { return .complete }
         return task?.downloadStatus ?? .suspend
     }
     /// 下载进度
     @discardableResult
-    func downloadProgress(_ url: String, parameters: Parameters?, progress: @escaping ((Double)->())) -> DownloadTaskManager? {
-        let key = cacheKey(url, parameters)
+    func downloadProgress(_ url: String, parameters: Parameters?, dynamicParams: Parameters? = nil, progress: @escaping ((Double)->())) -> DownloadTaskManager? {
+        let key = cacheKey(url, parameters, dynamicParams)
         if let task = downloadTasks[key], downloadPercent(url, parameters: parameters) < 1 {
             task.downloadProgress(progress: { pro in
                 progress(pro)
@@ -121,8 +122,9 @@ public class DownloadTaskManager {
     private var key: String
     
     init(_ url: String,
-         parameters: Parameters? = nil) {
-        key = cacheKey(url, parameters)
+         parameters: Parameters? = nil,
+         dynamicParams: Parameters? = nil) {
+        key = cacheKey(url, parameters, dynamicParams)
     }
     @discardableResult
     fileprivate func download(

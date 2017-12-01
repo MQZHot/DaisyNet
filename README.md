@@ -1,20 +1,10 @@
-<p align="center">
-<img src="https://github.com/MQZHot/DaisyNet/raw/master/Picture/logo.png" alt="DaisyNet" title="DaisyNet" width="408"/>
-</p>
 
-<p align="center">
-<img src="https://img.shields.io/badge/platform-iOS-yellow.svg">
-<img src="https://img.shields.io/badge/language-swift-red.svg">
-<img src="https://img.shields.io/badge/support-swift%204%2B-green.svg">
-<img src="https://img.shields.io/badge/support-iOS%208%2B-blue.svg">
-<img src="https://img.shields.io/badge/license-MIT%20License-brightgreen.svg">
-<img src="https://img.shields.io/cocoapods/v/DaisyNet.svg?style=flat">
-</p>
+## DaisyNet
 
 * 对Alamofire与Cache的封装实现对网络数据的缓存，可以存储JSON，String，Data，接口简单明了.
 * 依赖[Alamofire](https://github.com/Alamofire/Alamofire)和[Cache](https://github.com/hyperoslo/Cache)
 * 如有问题，欢迎提出，不足之处，欢迎纠正，欢迎star ✨✨✨✨✨✨✨✨✨✨✨✨✨✨✨✨✨✨✨✨
-
+![](https://img.shields.io/badge/support-swift%204%2B-green.svg)   ![](https://img.shields.io/cocoapods/v/DaisyNet.svg?style=flat)
 
 <p align="center">
 <img src="https://github.com/MQZHot/DaisyNet/raw/master/Picture/get.gif">
@@ -24,6 +14,18 @@
 ## 使用
 
 ### 1. 网络请求
+
+***注意： 如果你的参数中带有时间戳、token等变化的参数，这些参数需要写在`dynamicParams`参数中，避免无法读取缓存***
+```swift
+func request(
+    _ url: String,
+    method: HTTPMethod = .get,
+    params: Parameters? = nil,
+    dynamicParams: Parameters? = nil,
+    encoding: ParameterEncoding = URLEncoding.default,
+    headers: HTTPHeaders? = nil)
+    -> RequestTaskManager
+```
 
 * 缓存数据只需要调用`.cache(true)`，不调用或者`.cache(false)`则不缓存
 * 调用`responseCacheAndString`可以先读取缓存数据，再读取网络数据
