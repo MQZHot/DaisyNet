@@ -20,7 +20,6 @@ class GetViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-
         
 //        DaisyNet.request(url, params: params).cache(true).cacheJson { json in
 //            /// 缓存数据

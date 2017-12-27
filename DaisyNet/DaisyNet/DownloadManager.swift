@@ -26,7 +26,12 @@ class DownloadManager {
     {
         let key = cacheKey(url, parameters, dynamicParams)
         let taskManager = DownloadTaskManager(url, parameters: parameters, dynamicParams: dynamicParams)
-        taskManager.download(url, method: method, parameters: parameters, encoding: encoding, headers: headers)
+        var tempParam = parameters==nil ? [:] : parameters!
+        let dynamicTempParam = dynamicParams==nil ? [:] : dynamicParams!
+        dynamicTempParam.forEach { (arg) in
+            tempParam[arg.key] = arg.value
+        }
+        taskManager.download(url, method: method, parameters: tempParam, encoding: encoding, headers: headers)
         self.downloadTasks[key] = taskManager
         taskManager.cancelCompletion = {
             self.downloadTasks.removeValue(forKey: key)
