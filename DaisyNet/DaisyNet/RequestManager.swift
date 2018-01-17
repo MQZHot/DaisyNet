@@ -96,7 +96,7 @@ public class RequestTaskManager: RequestProtocol {
         return dataResponse.cacheData(completion: completion)
     }
     /// 响应Data
-    public func responseData(completion: @escaping (Alamofire.Result<Data>)->()) {
+    public func responseData(completion: @escaping (DaisyValue<Data>)->()) {
         let dataResponse = DaisyDataResponse(dataRequest: dataRequest!, cache: cache, cacheKey: cacheKey, completionClosure: completionClosure)
         dataResponse.responseData(completion: completion)
     }
@@ -112,7 +112,7 @@ public class RequestTaskManager: RequestProtocol {
         return stringResponse.cacheString(completion:completion)
     }
     /// 响应String
-    public func responseString(completion: @escaping (Alamofire.Result<String>)->()) {
+    public func responseString(completion: @escaping (DaisyValue<String>)->()) {
         let stringResponse = DaisyStringResponse(dataRequest: dataRequest!, cache: cache, cacheKey: cacheKey, completionClosure: completionClosure)
         stringResponse.responseString(completion: completion)
     }
@@ -128,7 +128,7 @@ public class RequestTaskManager: RequestProtocol {
         return jsonResponse.cacheJson(completion:completion)
     }
     /// 响应JSON
-    public func responseJson(completion: @escaping (Alamofire.Result<Any>)->()) {
+    public func responseJson(completion: @escaping (DaisyValue<Any>)->()) {
         let jsonResponse = DaisyJsonResponse(dataRequest: dataRequest!, cache: cache, cacheKey: cacheKey, completionClosure: completionClosure)
         jsonResponse.responseJson(completion: completion)
     }
@@ -140,7 +140,6 @@ public class RequestTaskManager: RequestProtocol {
 }
 // MARK: - DaisyBaseResponse
 public class DaisyResponse {
-    
     fileprivate var dataRequest: DataRequest
     fileprivate var cache: Bool
     fileprivate var cacheKey: String
@@ -152,16 +151,15 @@ public class DaisyResponse {
         self.completionClosure = completionClosure
     }
     ///
-    fileprivate func response<T>(response: DataResponse<T>, completion: @escaping (Alamofire.Result<T>)->()) {
-        print(response.response?.allHeaderFields)
+    fileprivate func response<T>(response: DataResponse<T>, completion: @escaping (DaisyValue<T>)->()) {
         responseCache(response: response) { (result) in
-            completion(result.result)
+            completion(result)
         }
     }
     /// isCacheData
     fileprivate func responseCache<T>(response: DataResponse<T>, completion: @escaping (DaisyValue<T>)->()) {
         if completionClosure != nil { completionClosure!() }
-        let result = DaisyValue(isCacheData: false, result: response.result)
+        let result = DaisyValue(isCacheData: false, result: response.result, response: response.response)
         DaisyLog("========================================")
         switch response.result {
         case .success(let value): DaisyLog(value)
@@ -174,16 +172,16 @@ public class DaisyResponse {
     }
 }
 // MARK: - DaisyJsonResponse
-public class DaisyJsonResponse: DaisyResponse, DaisyJsonResponseProtocol {
+public class DaisyJsonResponse: DaisyResponse , DaisyJsonResponseProtocol {
     /// 响应JSON
-    func responseJson(completion: @escaping (Alamofire.Result<Any>)->()) {
+    func responseJson(completion: @escaping (DaisyValue<Any>)->()) {
         dataRequest.responseJSON(completionHandler: { response in
             self.response(response: response, completion: completion)
         })
     }
     fileprivate func responseCacheAndJson(completion: @escaping (DaisyValue<Any>)->()) {
         if cache { cacheJson(completion: { (json) in
-            let res = DaisyValue(isCacheData: true, result: Alamofire.Result.success(json))
+            let res = DaisyValue(isCacheData: true, result: Alamofire.Result.success(json), response: nil)
             completion(res)
         }) }
         dataRequest.responseJSON { (response) in
@@ -214,7 +212,7 @@ public class DaisyJsonResponse: DaisyResponse, DaisyJsonResponseProtocol {
 // MARK: - DaisyStringResponse
 public class DaisyStringResponse: DaisyResponse, DaisyStringResponseProtocol {
     /// 响应String
-    func responseString(completion: @escaping (Alamofire.Result<String>)->()) {
+    func responseString(completion: @escaping (DaisyValue<String>)->()) {
         dataRequest.responseString(completionHandler: { response in
             self.response(response: response, completion: completion)
         })
@@ -237,7 +235,7 @@ public class DaisyStringResponse: DaisyResponse, DaisyStringResponseProtocol {
     }
     fileprivate func responseCacheAndString(completion: @escaping (DaisyValue<String>)->()) {
         if cache { cacheString(completion: { str in
-            let res = DaisyValue(isCacheData: true, result: Alamofire.Result.success(str))
+            let res = DaisyValue(isCacheData: true, result: Alamofire.Result.success(str), response: nil)
             completion(res)
         })}
         dataRequest.responseString { (response) in
@@ -248,7 +246,7 @@ public class DaisyStringResponse: DaisyResponse, DaisyStringResponseProtocol {
 // MARK: - DaisyDataResponse
 public class DaisyDataResponse: DaisyResponse, DaisyDataResponseProtocol {
     /// 响应Data
-    func responseData(completion: @escaping (Alamofire.Result<Data>)->()) {
+    func responseData(completion: @escaping (DaisyValue<Data>)->()) {
         dataRequest.responseData(completionHandler: { response in
             self.response(response: response, completion: completion)
         })
@@ -269,7 +267,7 @@ public class DaisyDataResponse: DaisyResponse, DaisyDataResponseProtocol {
     }
     fileprivate func responseCacheAndData(completion: @escaping (DaisyValue<Data>)->()) {
         if cache { cacheData(completion: { (data) in
-            let res = DaisyValue(isCacheData: true, result: Alamofire.Result.success(data))
+            let res = DaisyValue(isCacheData: true, result: Alamofire.Result.success(data), response: nil)
             completion(res)
         }) }
         dataRequest.responseData { (response) in

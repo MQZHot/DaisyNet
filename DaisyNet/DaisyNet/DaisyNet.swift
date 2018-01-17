@@ -57,35 +57,35 @@ protocol RequestProtocol {
     @discardableResult
     func cacheData(completion: @escaping (Data)->()) -> DaisyDataResponse
     /// 响应Data
-    func responseData(completion: @escaping (Alamofire.Result<Data>)->())
+    func responseData(completion: @escaping (DaisyValue<Data>)->())
     /// 先获取Data缓存，再响应Data
     func responseCacheAndData(completion: @escaping (DaisyValue<Data>)->())
     /// 获取缓存String
     @discardableResult
     func cacheString(completion: @escaping (String)->()) -> DaisyStringResponse
     /// 响应String
-    func responseString(completion: @escaping (Alamofire.Result<String>)->())
+    func responseString(completion: @escaping (DaisyValue<String>)->())
     /// 先获取缓存String,再响应String
     func responseCacheAndString(completion: @escaping (DaisyValue<String>)->())
     /// 获取缓存JSON
     @discardableResult
     func cacheJson(completion: @escaping (Any)->()) -> DaisyJsonResponse
     /// 响应JSON
-    func responseJson(completion: @escaping (Alamofire.Result<Any>)->())
+    func responseJson(completion: @escaping (DaisyValue<Any>)->())
     /// 先获取缓存JSON，再响应JSON
     func responseCacheAndJson(completion: @escaping (DaisyValue<Any>)->())
 }
 protocol DaisyJsonResponseProtocol {
     /// 响应JSON
-    func responseJson(completion: @escaping (Alamofire.Result<Any>)->())
+//    func responseJson(completion: @escaping (Alamofire.Result<Any>)->())
 }
 protocol DaisyDataResponseProtocol {
     /// 响应Data
-    func responseData(completion: @escaping (Alamofire.Result<Data>)->())
+//    func responseData(completion: @escaping (Alamofire.Result<Data>)->())
 }
 protocol DaisyStringResponseProtocol {
     /// 响应String
-    func responseString(completion: @escaping (Alamofire.Result<String>)->())
+//    func responseString(completion: @escaping (Alamofire.Result<String>)->())
 }
 
 // MARK: - 下载
