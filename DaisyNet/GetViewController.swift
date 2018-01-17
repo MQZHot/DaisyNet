@@ -44,7 +44,7 @@ class GetViewController: UIViewController {
     }
     
     @IBAction func clearCache(_ sender: UIBarButtonItem) {
-        DaisyNet.removeObjectCache(url, params: params) { success in
+        DaisyNet.removeObjectCache(url, params: params, dynamicParams: dynamicParams) { success in
             switch success {
             case true:
                 self.cacheTextView.text = ""
