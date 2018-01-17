@@ -1,6 +1,5 @@
 
 Pod::Spec.new do |s|
-
   s.name         = "DaisyNet"
   s.version      = "0.0.7"
   s.summary      = "Alamofire与Cache封装, 更容易存储请求数据"
