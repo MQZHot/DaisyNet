@@ -19,4 +19,3 @@ public struct DaisyValue<Value> {
         self.result = result
     }
 }
-

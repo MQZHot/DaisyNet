@@ -21,7 +21,6 @@
 		D64291201F8CD40900B1CB61 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = D642911F1F8CD40900B1CB61 /* Assets.xcassets */; };
 		D64291231F8CD40900B1CB61 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = D64291211F8CD40900B1CB61 /* LaunchScreen.storyboard */; };
 		D66459BA1F8E0232005D20AE /* MainTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D66459B91F8E0232005D20AE /* MainTableViewController.swift */; };
-		D6BF12FF1FE69C8C00067D39 /* UploadViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6BF12FE1FE69C8C00067D39 /* UploadViewController.swift */; };
 		D6F1C4AA1F924D0200C0F079 /* DownloadCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6F1C4A81F924D0200C0F079 /* DownloadCell.swift */; };
 		D6F1C4AB1F924D0200C0F079 /* DownloadCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = D6F1C4A91F924D0200C0F079 /* DownloadCell.xib */; };
 		D6F1C4AD1F9250C600C0F079 /* DownloadTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6F1C4AC1F9250C600C0F079 /* DownloadTableViewController.swift */; };
@@ -46,7 +45,6 @@
 		D64291221F8CD40900B1CB61 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		D64291241F8CD40900B1CB61 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		D66459B91F8E0232005D20AE /* MainTableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainTableViewController.swift; sourceTree = "<group>"; };
-		D6BF12FE1FE69C8C00067D39 /* UploadViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UploadViewController.swift; sourceTree = "<group>"; };
 		D6F1C4A81F924D0200C0F079 /* DownloadCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DownloadCell.swift; sourceTree = "<group>"; };
 		D6F1C4A91F924D0200C0F079 /* DownloadCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = DownloadCell.xib; sourceTree = "<group>"; };
 		D6F1C4AC1F9250C600C0F079 /* DownloadTableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DownloadTableViewController.swift; sourceTree = "<group>"; };
@@ -100,7 +98,6 @@
 				D6F1C4AC1F9250C600C0F079 /* DownloadTableViewController.swift */,
 				D6F1C4A81F924D0200C0F079 /* DownloadCell.swift */,
 				D6F1C4A91F924D0200C0F079 /* DownloadCell.xib */,
-				D6BF12FE1FE69C8C00067D39 /* UploadViewController.swift */,
 				D642911C1F8CD40900B1CB61 /* Main.storyboard */,
 				D642911F1F8CD40900B1CB61 /* Assets.xcassets */,
 				D64291211F8CD40900B1CB61 /* LaunchScreen.storyboard */,
@@ -265,7 +262,6 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				D6BF12FF1FE69C8C00067D39 /* UploadViewController.swift in Sources */,
 				D63F099D1FA605FF00D15881 /* CacheManager.swift in Sources */,
 				D63F099E1FA605FF00D15881 /* DaisyLog.swift in Sources */,
 				D63F09AA1FA6131000D15881 /* CacheKey.swift in Sources */,

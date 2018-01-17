@@ -26,21 +26,23 @@ class GetViewController: UIViewController {
 //            }.responseJson { response in
 //                /// response
 //        }
-        
-        DaisyNet.request(url, params: params, dynamicParams: dynamicParams).cache(true).responseCacheAndString { value in
-            switch value.result {
-            case .success(let string):
-                
-                if value.isCacheData {
-                    self.cacheTextView.text = string
-                } else {
-                    self.textView.text = string
-                }
-                
-            case .failure(let error):
-                print(error)
-            }
+        DaisyNet.request(url, params: params, dynamicParams: dynamicParams).responseData { (result) in
+            
         }
+//        DaisyNet.request(url, params: params, dynamicParams: dynamicParams).cache(true).responseCacheAndString { value in
+//            switch value.result {
+//            case .success(let string):
+//
+//                if value.isCacheData {
+//                    self.cacheTextView.text = string
+//                } else {
+//                    self.textView.text = string
+//                }
+//
+//            case .failure(let error):
+//                print(error)
+//            }
+//        }
     }
     
     @IBAction func clearCache(_ sender: UIBarButtonItem) {
