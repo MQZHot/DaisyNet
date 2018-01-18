@@ -2,7 +2,7 @@
 //  RequestManager.swift
 //  DaisyNet
 //
-//  Created by mengqingzheng on 2017/10/12.
+//  Created by MQZHot on 2017/10/12.
 //  Copyright © 2017年 MQZHot. All rights reserved.
 //
 

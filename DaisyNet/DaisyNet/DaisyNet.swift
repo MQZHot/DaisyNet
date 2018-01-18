@@ -2,7 +2,7 @@
 //  DaisyNet.swift
 //  ZoneHot
 //
-//  Created by mengqingzheng on 2017/10/10.
+//  Created by MQZHot on 2017/10/10.
 //  Copyright © 2017年 MQZHot. All rights reserved.
 //
 
@@ -77,15 +77,15 @@ protocol RequestProtocol {
 }
 protocol DaisyJsonResponseProtocol {
     /// 响应JSON
-//    func responseJson(completion: @escaping (Alamofire.Result<Any>)->())
+    func responseJson(completion: @escaping (DaisyValue<Any>)->())
 }
 protocol DaisyDataResponseProtocol {
     /// 响应Data
-//    func responseData(completion: @escaping (Alamofire.Result<Data>)->())
+    func responseData(completion: @escaping (DaisyValue<Data>)->())
 }
 protocol DaisyStringResponseProtocol {
     /// 响应String
-//    func responseString(completion: @escaping (Alamofire.Result<String>)->())
+    func responseString(completion: @escaping (DaisyValue<String>)->())
 }
 
 // MARK: - 下载
