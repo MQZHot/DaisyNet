@@ -110,6 +110,11 @@ public func downloadCancel(_ url: String, parameters: Parameters? = nil, dynamic
     DownloadManager.default.cancel(url, parameters: parameters, dynamicParams: dynamicParams)
 }
 
+/// Cancel all download tasks
+public func downloadCancelAll() {
+    DownloadManager.default.cancelAll();
+}
+
 /// 下载百分比
 ///
 /// - Parameter url: url
