@@ -83,6 +83,10 @@ class DownloadTableViewController: UITableViewController {
         }
     }
     
+  
+    @IBAction func cancelAll(_ sender: UIBarButtonItem) {
+        DaisyNet.downloadCancelAll()
+    }
     func update(_ indexPath: IndexPath) {
         let url = downloadUrls[indexPath.row]
         let cell = self.tableView.cellForRow(at: indexPath) as? DownloadCell

@@ -50,9 +50,9 @@ class DownloadManager {
 
     // Cancel all tasks
     func cancelAll() {
-        for tasks in downloadTasks {
-            task?.downloadRequest?.cancel()
-            task?.cancelCompletion = {
+        for (key, task) in downloadTasks {
+            task.downloadRequest?.cancel()
+            task.cancelCompletion = {
                 self.downloadTasks.removeValue(forKey: key)
             }
         }

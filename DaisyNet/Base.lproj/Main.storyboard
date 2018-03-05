@@ -163,7 +163,13 @@
                             <outlet property="delegate" destination="dKp-jH-Om0" id="MGN-Y5-5Tj"/>
                         </connections>
                     </tableView>
-                    <navigationItem key="navigationItem" title="下载" id="Wqn-fA-Z98"/>
+                    <navigationItem key="navigationItem" title="下载" id="Wqn-fA-Z98">
+                        <barButtonItem key="rightBarButtonItem" title="cancel all" id="eBM-Ny-2zp">
+                            <connections>
+                                <action selector="cancelAll:" destination="dKp-jH-Om0" id="apT-n7-oMB"/>
+                            </connections>
+                        </barButtonItem>
+                    </navigationItem>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Vkm-L8-oG7" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
