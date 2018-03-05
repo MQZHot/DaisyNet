@@ -137,6 +137,11 @@ DaisyNet.downloadDelete(url)
 DaisyNet.downloadCancel(url)
 ```
 
+* 取消所有下载
+```swift
+DaisyNet.downloadCancelAll()
+```
+
 ## Install
 ```
 1.pod 'DaisyNet'
