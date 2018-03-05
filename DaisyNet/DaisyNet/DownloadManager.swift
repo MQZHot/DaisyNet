@@ -47,6 +47,17 @@ class DownloadManager {
             self.downloadTasks.removeValue(forKey: key)
         }
     }
+
+    // Cancel all tasks
+    func cancelAll() {
+        for tasks in downloadTasks {
+            task?.downloadRequest?.cancel()
+            task?.cancelCompletion = {
+                self.downloadTasks.removeValue(forKey: key)
+            }
+        }
+    }
+
     /// 删除单个下载
     func delete(_ url: String, parameters: Parameters? , dynamicParams: Parameters? = nil, completion: @escaping (Bool)->()) {
         let key = cacheKey(url, parameters, dynamicParams)
