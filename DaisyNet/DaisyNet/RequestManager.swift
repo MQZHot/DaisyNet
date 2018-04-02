@@ -13,6 +13,11 @@ import Alamofire
 class RequestManager {
     static let `default` = RequestManager()
     private var requestTasks = [String: RequestTaskManager]()
+    private var timeoutIntervalForRequest: TimeInterval? /// 过期时间
+    
+    func timeoutIntervalForRequest(_ timeInterval :TimeInterval) {
+        RequestManager.default.timeoutIntervalForRequest = timeoutIntervalForRequest
+    }
     
     func request(
         _ url: String,
@@ -26,11 +31,16 @@ class RequestManager {
         let key = cacheKey(url, params, dynamicParams)
         var taskManager : RequestTaskManager?
         if requestTasks[key] == nil {
-            taskManager = RequestTaskManager()
+            if timeoutIntervalForRequest != nil {
+                taskManager = RequestTaskManager().timeoutIntervalForRequest(timeoutIntervalForRequest!)
+            } else {
+                taskManager = RequestTaskManager()
+            }
             requestTasks[key] = taskManager
         } else {
             taskManager = requestTasks[key]
         }
+        
         taskManager?.completionClosure = {
             self.requestTasks.removeValue(forKey: key)
         }
@@ -67,7 +77,17 @@ public class RequestTaskManager: RequestProtocol {
     fileprivate var dataRequest: DataRequest?
     fileprivate var cache: Bool = false
     fileprivate var cacheKey: String!
+    fileprivate var sessionManager: SessionManager?
     fileprivate var completionClosure: (()->())?
+    
+    @discardableResult
+    fileprivate func timeoutIntervalForRequest(_ timeInterval :TimeInterval) -> RequestTaskManager {
+        let configuration = URLSessionConfiguration.default
+        configuration.timeoutIntervalForRequest = 10
+        let sessionManager = Alamofire.SessionManager(configuration: configuration)
+        self.sessionManager = sessionManager
+        return self
+    }
     
     @discardableResult
     fileprivate func request(
@@ -80,7 +100,11 @@ public class RequestTaskManager: RequestProtocol {
         -> RequestTaskManager
     {
         self.cacheKey = cacheKey
-        dataRequest = Alamofire.request(url, method: method, parameters: params, encoding: encoding, headers: headers)
+        if sessionManager == nil {
+            sessionManager?.request(url, method: method, parameters: params, encoding: encoding, headers: headers)
+        } else {
+            dataRequest = Alamofire.request(url, method: method, parameters: params, encoding: encoding, headers: headers)
+        }
         return self
     }
     /// 是否缓存数据

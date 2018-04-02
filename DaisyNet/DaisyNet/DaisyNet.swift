@@ -12,6 +12,14 @@ import Cache
 
 // MARK: - 网络请求
 
+
+/// 超时时间
+///
+/// - Parameter timeInterval: 超时时间
+func timeoutIntervalForRequest(_ timeInterval :TimeInterval) {
+    RequestManager.default.timeoutIntervalForRequest(timeInterval)
+}
+
 /// 网络请求
 ///
 /// - Parameters:

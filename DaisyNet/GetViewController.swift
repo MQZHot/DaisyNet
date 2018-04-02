@@ -26,7 +26,7 @@ class GetViewController: UIViewController {
 //            }.responseJson { response in
 //                /// response
 //        }
-       
+        
         DaisyNet.request(url, params: params, dynamicParams: dynamicParams).cache(true).responseCacheAndString { value in
             switch value.result {
             case .success(let string):
