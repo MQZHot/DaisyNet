@@ -16,6 +16,7 @@ class RequestManager {
     private var timeoutIntervalForRequest: TimeInterval? /// 过期时间
     
     func timeoutIntervalForRequest(_ timeInterval :TimeInterval) {
+        self.timeoutIntervalForRequest = timeInterval
         RequestManager.default.timeoutIntervalForRequest = timeoutIntervalForRequest
     }
     
@@ -105,6 +106,7 @@ public class RequestTaskManager: RequestProtocol {
         } else {
             dataRequest = Alamofire.request(url, method: method, parameters: params, encoding: encoding, headers: headers)
         }
+        
         return self
     }
     /// 是否缓存数据
