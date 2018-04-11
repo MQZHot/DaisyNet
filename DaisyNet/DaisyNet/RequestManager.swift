@@ -13,7 +13,7 @@ import Alamofire
 class RequestManager {
     static let `default` = RequestManager()
     private var requestTasks = [String: RequestTaskManager]()
-    private var timeoutIntervalForRequest: TimeInterval? /// 过期时间
+    private var timeoutIntervalForRequest: TimeInterval? /// 超时时间
     
     func timeoutIntervalForRequest(_ timeInterval :TimeInterval) {
         self.timeoutIntervalForRequest = timeInterval
