@@ -5,6 +5,8 @@
 //  Created by MQZHot on 2017/10/10.
 //  Copyright © 2017年 MQZHot. All rights reserved.
 //
+//  https://github.com/MQZHot/DaisyNet
+//
 
 import UIKit
 import Alamofire
