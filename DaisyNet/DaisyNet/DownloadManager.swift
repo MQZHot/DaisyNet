@@ -22,7 +22,8 @@ class DownloadManager {
         parameters: Parameters? = nil,
         dynamicParams: Parameters? = nil,
         encoding: ParameterEncoding = URLEncoding.default,
-        headers: HTTPHeaders? = nil)
+        headers: HTTPHeaders? = nil,
+        fileName: String? = nil)
         ->DownloadTaskManager
     {
         let key = cacheKey(url, parameters, dynamicParams)
@@ -32,7 +33,7 @@ class DownloadManager {
         dynamicTempParam.forEach { (arg) in
             tempParam[arg.key] = arg.value
         }
-        taskManager.download(url, method: method, parameters: tempParam, encoding: encoding, headers: headers)
+        taskManager.download(url, method: method, parameters: tempParam, encoding: encoding, headers: headers, fileName: fileName)
         self.downloadTasks[key] = taskManager
         taskManager.cancelCompletion = {
             self.downloadTasks.removeValue(forKey: key)
@@ -137,7 +138,6 @@ public class DownloadTaskManager {
     fileprivate var cccompletion: (()->())?
     var cacheDictionary = [String: Data]()
     private var key: String
-    
     init(_ url: String,
          parameters: Parameters? = nil,
          dynamicParams: Parameters? = nil) {
@@ -149,10 +149,11 @@ public class DownloadTaskManager {
         method: HTTPMethod = .get,
         parameters: Parameters? = nil,
         encoding: ParameterEncoding = URLEncoding.default,
-        headers: HTTPHeaders? = nil)
+        headers: HTTPHeaders? = nil,
+        fileName: String?)
         -> DownloadTaskManager
     {
-        let destination = downloadDestination()
+        let destination = downloadDestination(fileName)
         let resumeData = getResumeData(key)
         if let resumeData = resumeData {
             downloadRequest = manager.download(resumingWith: resumeData, to: destination)
@@ -169,6 +170,7 @@ public class DownloadTaskManager {
         configuration.httpAdditionalHeaders = SessionManager.defaultHTTPHeaders
         return SessionManager(configuration: configuration)
     }()
+    
     /// 下载进度
     @discardableResult
     public func downloadProgress(progress: @escaping ((Double) -> Void)) -> DownloadTaskManager {
@@ -196,12 +198,21 @@ public class DownloadTaskManager {
         })
     }
     /// 下载文件位置
-    private func downloadDestination() -> DownloadRequest.DownloadFileDestination {
+    ///
+    /// - Parameter fileName: 自定义文件名
+    /// - Returns: 下载位置
+    private func downloadDestination(_ fileName: String?) -> DownloadRequest.DownloadFileDestination {
         let destination: DownloadRequest.DownloadFileDestination = { _, response in
             let cachesURL = FileManager.default.urls(for: .cachesDirectory, in: .userDomainMask)[0]
-            let fileURL = cachesURL.appendingPathComponent(response.suggestedFilename ?? "")
-            self.saveFilePath(fileURL.absoluteString)
-            return (fileURL, [.removePreviousFile, .createIntermediateDirectories])
+            if let fileName = fileName {
+                let fileURL = cachesURL.appendingPathComponent(fileName)
+                self.saveFilePath(fileURL.absoluteString)
+                return (fileURL, [.removePreviousFile, .createIntermediateDirectories])
+            } else {
+                let fileURL = cachesURL.appendingPathComponent(response.suggestedFilename!)
+                self.saveFilePath(fileURL.absoluteString)
+                return (fileURL, [.removePreviousFile, .createIntermediateDirectories])
+            }
         }
         return destination
     }

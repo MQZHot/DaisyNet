@@ -80,17 +80,28 @@ public func removeObjectCache(_ url: String, params: [String: Any]? = nil, dynam
 
 // MARK: - 下载
 
-/// 下载
+/// 文件下载
+///
+/// - Parameters:
+///   - url: url
+///   - method: .get .post ... 默认.get
+///   - parameters: 参数
+///   - dynamicParams: 变化的参数，例如 时间戳-token 等
+///   - encoding: 编码方式
+///   - headers: 请求头
+///   - fileName: 自定义文件名，需要带文件扩展名
+/// - Returns: DownloadTaskManager
 public func download(
     _ url: String,
     method: HTTPMethod = .get,
     parameters: Parameters? = nil,
     dynamicParams: Parameters? = nil,
     encoding: ParameterEncoding = URLEncoding.default,
-    headers: HTTPHeaders? = nil)
+    headers: HTTPHeaders? = nil,
+    fileName: String? = nil)
     ->DownloadTaskManager
 {
-    return DownloadManager.default.download(url, method: method, parameters: parameters, dynamicParams: dynamicParams, encoding: encoding, headers: headers)
+    return DownloadManager.default.download(url, method: method, parameters: parameters, dynamicParams: dynamicParams, encoding: encoding, headers: headers, fileName: fileName)
 }
 
 /// 取消下载

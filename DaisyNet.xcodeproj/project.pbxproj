@@ -111,10 +111,10 @@
 			children = (
 				D63F09981FA605E300D15881 /* DaisyNet.swift */,
 				D63F099C1FA605E400D15881 /* RequestManager.swift */,
+				D63F099B1FA605E400D15881 /* DownloadManager.swift */,
 				D63F099A1FA605E300D15881 /* CacheManager.swift */,
 				D63F09971FA605E300D15881 /* DaisyLog.swift */,
 				D63F09991FA605E300D15881 /* DaisyValue.swift */,
-				D63F099B1FA605E400D15881 /* DownloadManager.swift */,
 				D63F09A91FA6131000D15881 /* CacheKey.swift */,
 			);
 			path = DaisyNet;
