@@ -110,11 +110,11 @@
 			isa = PBXGroup;
 			children = (
 				D63F09981FA605E300D15881 /* DaisyNet.swift */,
+				D63F099C1FA605E400D15881 /* RequestManager.swift */,
 				D63F099A1FA605E300D15881 /* CacheManager.swift */,
 				D63F09971FA605E300D15881 /* DaisyLog.swift */,
 				D63F09991FA605E300D15881 /* DaisyValue.swift */,
 				D63F099B1FA605E400D15881 /* DownloadManager.swift */,
-				D63F099C1FA605E400D15881 /* RequestManager.swift */,
 				D63F09A91FA6131000D15881 /* CacheKey.swift */,
 			);
 			path = DaisyNet;
@@ -141,7 +141,6 @@
 				D64291121F8CD40900B1CB61 /* Frameworks */,
 				D64291131F8CD40900B1CB61 /* Resources */,
 				55CB6B018E244431EFDD3B2C /* [CP] Embed Pods Frameworks */,
-				80FAB37A92521C5550AC06C3 /* [CP] Copy Pods Resources */,
 			);
 			buildRules = (
 			);
@@ -159,7 +158,7 @@
 			isa = PBXProject;
 			attributes = {
 				LastSwiftUpdateCheck = 0900;
-				LastUpgradeCheck = 0900;
+				LastUpgradeCheck = 0930;
 				ORGANIZATIONNAME = MQZHot;
 				TargetAttributes = {
 					D64291141F8CD40900B1CB61 = {
@@ -240,21 +239,6 @@
 			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-DaisyNet/Pods-DaisyNet-frameworks.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
-		80FAB37A92521C5550AC06C3 /* [CP] Copy Pods Resources */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputPaths = (
-			);
-			name = "[CP] Copy Pods Resources";
-			outputPaths = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-DaisyNet/Pods-DaisyNet-resources.sh\"\n";
-			showEnvVarsInLog = 0;
-		};
 /* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
@@ -313,6 +297,7 @@
 				CLANG_WARN_BOOL_CONVERSION = YES;
 				CLANG_WARN_COMMA = YES;
 				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
 				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
 				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
 				CLANG_WARN_EMPTY_BODY = YES;
@@ -320,6 +305,7 @@
 				CLANG_WARN_INFINITE_RECURSION = YES;
 				CLANG_WARN_INT_CONVERSION = YES;
 				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
 				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
 				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
@@ -371,6 +357,7 @@
 				CLANG_WARN_BOOL_CONVERSION = YES;
 				CLANG_WARN_COMMA = YES;
 				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
 				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
 				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
 				CLANG_WARN_EMPTY_BODY = YES;
@@ -378,6 +365,7 @@
 				CLANG_WARN_INFINITE_RECURSION = YES;
 				CLANG_WARN_INT_CONVERSION = YES;
 				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
 				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
 				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;

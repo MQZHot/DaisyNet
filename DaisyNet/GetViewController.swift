@@ -16,21 +16,15 @@ class GetViewController: UIViewController {
     
     let url = "http://api.travels.app887.com/api/Articles.action"
     let params = ["keyword" : "", "npc" : "0", "opc" : "20", "type" : "热门视频", "uid" : "2321"]
-    let dynamicParams = ["timestamp": "xxxx"]
-    
     override func viewDidLoad() {
         super.viewDidLoad()
         
-//        DaisyNet.request(url, params: params).cache(true).cacheJson { json in
-//            /// 缓存数据
-//            }.responseJson { response in
-//                /// response
-//        }
+        DaisyNet.openResultLog = false
         DaisyNet.timeoutIntervalForRequest(4)
-        DaisyNet.request(url, params: params, dynamicParams: dynamicParams).cache(true).responseCacheAndString { value in
+        DaisyNet.request(url, params: params).cache(true).responseCacheAndString { value in
             switch value.result {
             case .success(let string):
-
+                
                 if value.isCacheData {
                     self.cacheTextView.text = string
                 } else {
@@ -44,7 +38,7 @@ class GetViewController: UIViewController {
     }
     
     @IBAction func clearCache(_ sender: UIBarButtonItem) {
-        DaisyNet.removeObjectCache(url, params: params, dynamicParams: dynamicParams) { success in
+        DaisyNet.removeObjectCache(url, params: params) { success in
             switch success {
             case true:
                 self.cacheTextView.text = ""

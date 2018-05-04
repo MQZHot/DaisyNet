@@ -8,8 +8,8 @@
 
 import Foundation
 import Alamofire
-// MARK: - RequestManager
 
+// MARK: - RequestManager
 class RequestManager {
     static let `default` = RequestManager()
     private var requestTasks = [String: RequestTaskManager]()
@@ -74,7 +74,7 @@ class RequestManager {
 }
 
 // MARK: - 请求任务
-public class RequestTaskManager: RequestProtocol {
+public class RequestTaskManager {
     fileprivate var dataRequest: DataRequest?
     fileprivate var cache: Bool = false
     fileprivate var cacheKey: String!
@@ -114,7 +114,6 @@ public class RequestTaskManager: RequestProtocol {
         self.cache = cache
         return self
     }
-    
     /// 获取缓存Data
     @discardableResult
     public func cacheData(completion: @escaping (Data)->()) -> DaisyDataResponse {
@@ -186,19 +185,30 @@ public class DaisyResponse {
     fileprivate func responseCache<T>(response: DataResponse<T>, completion: @escaping (DaisyValue<T>)->()) {
         if completionClosure != nil { completionClosure!() }
         let result = DaisyValue(isCacheData: false, result: response.result, response: response.response)
-        DaisyLog("========================================")
+        if openResultLog {
+            DaisyLog("================请求数据=====================")
+        }
+        if openUrlLog {
+            DaisyLog(response.request?.url?.absoluteString ?? "")
+        }
         switch response.result {
-        case .success(let value): DaisyLog(value)
-        if self.cache {/// 写入缓存
-            CacheManager.default.setObject(response.data, forKey: self.cacheKey)
+        case .success(let value):
+            if openResultLog {
+                DaisyLog(value)
             }
-        case .failure(let error): DaisyLog(error.localizedDescription)
+            if self.cache {/// 写入缓存
+                CacheManager.default.setObject(response.data, forKey: self.cacheKey)
+            }
+        case .failure(let error):
+            if openResultLog {
+                DaisyLog(error.localizedDescription)
+            }
         }
         completion(result)
     }
 }
 // MARK: - DaisyJsonResponse
-public class DaisyJsonResponse: DaisyResponse , DaisyJsonResponseProtocol {
+public class DaisyJsonResponse: DaisyResponse {
     /// 响应JSON
     func responseJson(completion: @escaping (DaisyValue<Any>)->()) {
         dataRequest.responseJSON(completionHandler: { response in
@@ -214,6 +224,7 @@ public class DaisyJsonResponse: DaisyResponse , DaisyJsonResponseProtocol {
             self.responseCache(response: response, completion: completion)
         }
     }
+    /// 获取缓存json
     @discardableResult
     fileprivate func cacheJson(completion: @escaping (Any)->()) -> DaisyJsonResponse {
         CacheManager.default.object(ofType: Data.self, forKey: cacheKey) { (result) in
@@ -222,13 +233,17 @@ public class DaisyJsonResponse: DaisyResponse , DaisyJsonResponseProtocol {
                 case .value(let data):
                     if let json = try? JSONSerialization.jsonObject(with: data, options: []) {
                         DispatchQueue.main.async {/// 主线程
-                            DaisyLog("========================================")
-                            DaisyLog(json)
+                            if openResultLog {
+                                DaisyLog("=================缓存=====================")
+                                DaisyLog(json)
+                            }
                             completion(json)
                         }
                     }
                 case .error(_):
-                    DaisyLog("读取缓存失败")
+                    if openResultLog {
+                        DaisyLog("读取缓存失败")
+                    }
                 }
             }
         }
@@ -236,7 +251,7 @@ public class DaisyJsonResponse: DaisyResponse , DaisyJsonResponseProtocol {
     }
 }
 // MARK: - DaisyStringResponse
-public class DaisyStringResponse: DaisyResponse, DaisyStringResponseProtocol {
+public class DaisyStringResponse: DaisyResponse {
     /// 响应String
     func responseString(completion: @escaping (DaisyValue<String>)->()) {
         dataRequest.responseString(completionHandler: { response in
@@ -253,7 +268,9 @@ public class DaisyStringResponse: DaisyResponse, DaisyStringResponseProtocol {
                         completion(str)
                     }
                 case .error(_):
-                   DaisyLog("读取缓存失败")
+                    if openResultLog {
+                        DaisyLog("读取缓存失败")
+                    }
                 }
             }
         }
@@ -270,7 +287,7 @@ public class DaisyStringResponse: DaisyResponse, DaisyStringResponseProtocol {
     }
 }
 // MARK: - DaisyDataResponse
-public class DaisyDataResponse: DaisyResponse, DaisyDataResponseProtocol {
+public class DaisyDataResponse: DaisyResponse {
     /// 响应Data
     func responseData(completion: @escaping (DaisyValue<Data>)->()) {
         dataRequest.responseData(completionHandler: { response in
@@ -285,7 +302,9 @@ public class DaisyDataResponse: DaisyResponse, DaisyDataResponseProtocol {
                 case .value(let data):
                     completion(data)
                 case .error(_):
-                    DaisyLog("读取缓存失败")
+                    if openResultLog {
+                        DaisyLog("读取缓存失败")
+                    }
                 }
             }
         }

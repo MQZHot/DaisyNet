@@ -23,6 +23,7 @@ func cacheKey(_ url: String, _ params: Dictionary<String, Any>?, _ dynamicParams
             return MD5(url)
         }
     }
+    /// `params`中过滤掉`dynamicParams`中的参数
     let filterParams = params.filter { (key, _) -> Bool in
         return dynamicParams.contains(where: { (key1, _) -> Bool in
             return key != key1
