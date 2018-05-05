@@ -138,6 +138,13 @@ public class DownloadTaskManager {
     fileprivate var cccompletion: (()->())?
     var cacheDictionary = [String: Data]()
     private var key: String
+    
+    /// 初始化 --- 生成key
+    ///
+    /// - Parameters:
+    ///   - url: url
+    ///   - parameters: 参数
+    ///   - dynamicParams: 变化的参数，例如 时间戳-token 等
     init(_ url: String,
          parameters: Parameters? = nil,
          dynamicParams: Parameters? = nil) {
