@@ -45,9 +45,7 @@ class DownloadManager {
         let key = cacheKey(url, parameters, dynamicParams)
         let task = downloadTasks[key]
         task?.downloadRequest?.cancel()
-        task?.cancelCompletion = {
-            self.downloadTasks.removeValue(forKey: key)
-        }
+        NotificationCenter.default.post(name: NSNotification.Name("DaisyDownloadCancel"), object: nil)
     }
 
     // Cancel all tasks
@@ -149,6 +147,10 @@ public class DownloadTaskManager {
          parameters: Parameters? = nil,
          dynamicParams: Parameters? = nil) {
         key = cacheKey(url, parameters, dynamicParams)
+        NotificationCenter.default.addObserver(self, selector: #selector(downloadCancel), name: NSNotification.Name.init("DaisyDownloadCancel"), object: nil)
+    }
+    @objc fileprivate func downloadCancel() {
+        self.downloadStatus = .suspend
     }
     @discardableResult
     fileprivate func download(
@@ -241,6 +243,9 @@ public class DownloadTaskManager {
             cacheDictionary["filePath"] = filePathData
             CacheManager.default.setObject(cacheDictionary, forKey: key)
         }
+    }
+    deinit {
+        NotificationCenter.default.removeObserver(self)
     }
 }
 

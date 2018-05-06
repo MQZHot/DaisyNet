@@ -73,6 +73,7 @@ class DownloadTableViewController: UITableViewController {
             }
         case .downloading:  /// 暂停
             DaisyNet.downloadCancel(url)
+            print(DaisyNet.downloadStatus(url))
         case .suspend:      /// 下载
             /// hud
             DaisyNet.download(url, fileName: "\(indexPath.row)---.mp4").downloadProgress {[weak self] _ in
