@@ -42,7 +42,6 @@ class DownloadTableViewController: UITableViewController {
         let url = downloadUrls[indexPath.row]
         let status = DaisyNet.downloadStatus(url)
         let progress = DaisyNet.downloadPercent(url)
-        print(progress)
         let cell = tableView.dequeueReusableCell(withIdentifier: "downloadCell", for: indexPath) as! DownloadCell
         cell.indexPath = indexPath
         cell.updateCell(status, progress: progress)
@@ -53,7 +52,8 @@ class DownloadTableViewController: UITableViewController {
             self?.deleteAction($0)
         }
         /// 退出界面再进入，获取下载状态
-        DaisyNet.downloadProgress(url) {[weak self] _ in
+        DaisyNet.downloadProgress(url) {[weak self] in
+            print($0)
             self?.update(indexPath)
             }?.response(completion: { [weak self] _ in
                 self?.update(indexPath)
@@ -73,11 +73,11 @@ class DownloadTableViewController: UITableViewController {
             }
         case .downloading:  /// 暂停
             DaisyNet.downloadCancel(url)
-            print(DaisyNet.downloadStatus(url))
         case .suspend:      /// 下载
             /// hud
-            DaisyNet.download(url, fileName: "\(indexPath.row)---.mp4").downloadProgress {[weak self] _ in
+            DaisyNet.download(url, fileName: "\(indexPath.row)---.mp4").downloadProgress {[weak self] in
                 self?.update(indexPath)
+                print($0)
                 }.response {[weak self] _ in
                     self?.update(indexPath)
             }

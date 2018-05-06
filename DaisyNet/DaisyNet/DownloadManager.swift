@@ -148,6 +148,9 @@ public class DownloadTaskManager {
          dynamicParams: Parameters? = nil) {
         key = cacheKey(url, parameters, dynamicParams)
         NotificationCenter.default.addObserver(self, selector: #selector(downloadCancel), name: NSNotification.Name.init("DaisyDownloadCancel"), object: nil)
+        NotificationCenter.default.addObserver(forName: NSNotification.Name.UIApplicationWillResignActive, object: nil, queue: nil) { (_) in
+            self.downloadRequest?.cancel()
+        }
     }
     @objc fileprivate func downloadCancel() {
         self.downloadStatus = .suspend
