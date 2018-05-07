@@ -7,8 +7,6 @@
 
 依赖[Alamofire](https://github.com/Alamofire/Alamofire)和[Cache](https://github.com/hyperoslo/Cache)
 
-如有问题，欢迎提出，不足之处，欢迎纠正，欢迎star ✨✨✨✨✨✨✨✨✨✨✨✨✨✨✨✨✨✨✨✨
-
 <p align="center">
 <img src="https://github.com/MQZHot/DaisyNet/raw/master/Picture/get.gif">
 <img src="https://github.com/MQZHot/DaisyNet/raw/master/Picture/download.gif">
