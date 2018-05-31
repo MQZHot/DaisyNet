@@ -231,26 +231,18 @@ public class DaisyJsonResponse: DaisyResponse {
     /// 获取缓存json
     @discardableResult
     fileprivate func cacheJson(completion: @escaping (Any)->()) -> DaisyJsonResponse {
-        CacheManager.default.object(ofType: Data.self, forKey: cacheKey) { (result) in
-            DispatchQueue.main.async {
-                switch result {
-                case .value(let data):
-                    if let json = try? JSONSerialization.jsonObject(with: data, options: []) {
-                        DispatchQueue.main.async {/// 主线程
-                            if openResultLog {
-                                DaisyLog("=================缓存=====================")
-                                if let str = String(data: data, encoding: .utf8) {
-                                    DaisyLog(str)
-                                }
-                            }
-                            completion(json)
-                        }
-                    }
-                case .error(_):
-                    if openResultLog {
-                        DaisyLog("读取缓存失败")
-                    }
+        if let data = CacheManager.default.objectSync(ofType: Data.self, forKey: cacheKey),
+            let json = try? JSONSerialization.jsonObject(with: data, options: []) {
+            if openResultLog {
+                DaisyLog("=================缓存=====================")
+                if let str = String(data: data, encoding: .utf8) {
+                    DaisyLog(str)
                 }
+            }
+            completion(json)
+        } else {
+            if openResultLog {
+                DaisyLog("读取缓存失败")
             }
         }
         return self
@@ -266,18 +258,12 @@ public class DaisyStringResponse: DaisyResponse {
     }
     @discardableResult
     fileprivate func cacheString(completion: @escaping (String)->()) -> DaisyStringResponse {
-        CacheManager.default.object(ofType: Data.self, forKey: cacheKey) { (result) in
-            DispatchQueue.main.async {
-                switch result {
-                case .value(let data):
-                    if let str = String(data: data, encoding: .utf8) {
-                        completion(str)
-                    }
-                case .error(_):
-                    if openResultLog {
-                        DaisyLog("读取缓存失败")
-                    }
-                }
+        if let data = CacheManager.default.objectSync(ofType: Data.self, forKey: cacheKey),
+            let str = String(data: data, encoding: .utf8) {
+            completion(str)
+        } else {
+            if openResultLog {
+                DaisyLog("读取缓存失败")
             }
         }
         return self
@@ -302,16 +288,11 @@ public class DaisyDataResponse: DaisyResponse {
     }
     @discardableResult
     fileprivate func cacheData(completion: @escaping (Data)->()) -> DaisyDataResponse {
-        CacheManager.default.object(ofType: Data.self, forKey: cacheKey) { (result) in
-            DispatchQueue.main.async {
-                switch result {
-                case .value(let data):
-                    completion(data)
-                case .error(_):
-                    if openResultLog {
-                        DaisyLog("读取缓存失败")
-                    }
-                }
+        if let data = CacheManager.default.objectSync(ofType: Data.self, forKey: cacheKey) {
+            completion(data)
+        } else {
+            if openResultLog {
+                DaisyLog("读取缓存失败")
             }
         }
         return self
