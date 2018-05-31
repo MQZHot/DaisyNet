@@ -22,4 +22,3 @@ public struct DaisyValue<Value> {
         self.response = response
     }
 }
-

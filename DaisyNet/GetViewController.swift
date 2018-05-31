@@ -14,21 +14,26 @@ class GetViewController: UIViewController {
     @IBOutlet weak var textView: UITextView!
     @IBOutlet weak var cacheTextView: UITextView!
     
-    let url = "http://api.travels.app887.com/api/Articles.action"
-    let params = ["keyword" : "", "npc" : "0", "opc" : "20", "type" : "热门视频", "uid" : "2321"]
+//    let url = "http://api.travels.app887.com/api/Articles.action"
+//    let params = ["keyword" : "", "npc" : "0", "opc" : "20", "type" : "热门视频", "uid" : "2321"]
+
+    let url = "http://app.chatm.com/chatm-app/getADS?type=0"
+    let params : [String: Any] = [:]
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        DaisyNet.openResultLog = false
+//        DaisyNet.openResultLog = true
+        
         DaisyNet.timeoutIntervalForRequest(4)
-        DaisyNet.request(url, params: params).cache(true).responseCacheAndString { value in
+        DaisyNet.request(url, params: params).cache(true).responseCacheAndJson { value in
             switch value.result {
             case .success(let string):
                 
                 if value.isCacheData {
-                    self.cacheTextView.text = string
+//                    self.cacheTextView.text = string
                 } else {
-                    self.textView.text = string
+//                    self.textView.text = string
                 }
 
             case .failure(let error):

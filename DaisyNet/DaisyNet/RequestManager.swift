@@ -193,9 +193,12 @@ public class DaisyResponse {
             DaisyLog(response.request?.url?.absoluteString ?? "")
         }
         switch response.result {
-        case .success(let value):
+        case .success(_):
             if openResultLog {
-                DaisyLog(value)
+                if let data = response.data,
+                    let str = String(data: data, encoding: .utf8) {
+                    DaisyLog(str)
+                }
             }
             if self.cache {/// 写入缓存
                 CacheManager.default.setObject(response.data, forKey: self.cacheKey)
@@ -236,7 +239,9 @@ public class DaisyJsonResponse: DaisyResponse {
                         DispatchQueue.main.async {/// 主线程
                             if openResultLog {
                                 DaisyLog("=================缓存=====================")
-                                DaisyLog(json)
+                                if let str = String(data: data, encoding: .utf8) {
+                                    DaisyLog(str)
+                                }
                             }
                             completion(json)
                         }
