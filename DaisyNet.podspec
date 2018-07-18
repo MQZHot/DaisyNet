@@ -1,7 +1,7 @@
 
 Pod::Spec.new do |s|
   s.name         = "DaisyNet"
-  s.version      = "0.0.7"
+  s.version      = "0.0.8"
   s.summary      = "Alamofire与Cache封装, 更容易存储请求数据"
   s.homepage     = "https://github.com/MQZHot/DaisyNet"
   s.license      = "MIT"
