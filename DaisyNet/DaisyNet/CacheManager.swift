@@ -10,16 +10,24 @@
 import Foundation
 import Cache
 
+struct CacheModel: Codable {
+    var data: Data?
+    var dataDict: Dictionary<String, Data>?
+    init() {
+        
+    }
+}
+
 class CacheManager {
     static let `default` = CacheManager()
     /// Manage storage
-    private var storage: Storage?
+    private var storage: Storage<CacheModel>?
     /// init
     init() {
         let diskConfig = DiskConfig(name: "DaisyCache")
         let memoryConfig = MemoryConfig(expiry: .never)
         do {
-            storage = try Storage(diskConfig: diskConfig, memoryConfig: memoryConfig)
+            storage = try Storage(diskConfig: diskConfig, memoryConfig: memoryConfig, transformer: TransformerFactory.forCodable(ofType: CacheModel.self))
         } catch {
             DaisyLog(error)
         }
@@ -49,19 +57,19 @@ class CacheManager {
         })
     }
     /// 异步读取缓存
-    func object<T: Codable>(ofType type: T.Type, forKey key: String, completion: @escaping (Cache.Result<T>)->Void) {
-        storage?.async.object(ofType: type, forKey: key, completion: completion)
+    func object(forKey key: String, completion: @escaping (Cache.Result<CacheModel>)->Void) {
+        storage?.async.object(forKey: key, completion: completion)
     }
     /// 读取缓存
-    func objectSync<T: Codable>(ofType type: T.Type, forKey key: String) -> T? {
+    func objectSync(forKey key: String) -> CacheModel? {
         do {
-            return (try storage?.object(ofType: type, forKey: key)) ?? nil
+            return (try storage?.object(forKey: key)) ?? nil
         } catch {
             return nil
         }
     }
     /// 异步存储
-    func setObject<T: Codable>(_ object: T, forKey: String) {
+    func setObject(_ object: CacheModel, forKey: String) {
         storage?.async.setObject(object, forKey: forKey, completion: { _ in
         })
     }

@@ -201,7 +201,9 @@ public class DaisyResponse {
                 }
             }
             if self.cache {/// 写入缓存
-                CacheManager.default.setObject(response.data, forKey: self.cacheKey)
+                var model = CacheModel()
+                model.data = response.data
+                CacheManager.default.setObject(model, forKey: self.cacheKey)
             }
         case .failure(let error):
             if openResultLog {
@@ -231,7 +233,7 @@ public class DaisyJsonResponse: DaisyResponse {
     /// 获取缓存json
     @discardableResult
     fileprivate func cacheJson(completion: @escaping (Any)->()) -> DaisyJsonResponse {
-        if let data = CacheManager.default.objectSync(ofType: Data.self, forKey: cacheKey),
+        if let data = CacheManager.default.objectSync(forKey: cacheKey)?.data,
             let json = try? JSONSerialization.jsonObject(with: data, options: []) {
             if openResultLog {
                 DaisyLog("=================缓存=====================")
@@ -258,7 +260,7 @@ public class DaisyStringResponse: DaisyResponse {
     }
     @discardableResult
     fileprivate func cacheString(completion: @escaping (String)->()) -> DaisyStringResponse {
-        if let data = CacheManager.default.objectSync(ofType: Data.self, forKey: cacheKey),
+        if let data = CacheManager.default.objectSync(forKey: cacheKey)?.data,
             let str = String(data: data, encoding: .utf8) {
             completion(str)
         } else {
@@ -288,7 +290,7 @@ public class DaisyDataResponse: DaisyResponse {
     }
     @discardableResult
     fileprivate func cacheData(completion: @escaping (Data)->()) -> DaisyDataResponse {
-        if let data = CacheManager.default.objectSync(ofType: Data.self, forKey: cacheKey) {
+        if let data = CacheManager.default.objectSync(forKey: cacheKey)?.data {
             completion(data)
         } else {
             if openResultLog {

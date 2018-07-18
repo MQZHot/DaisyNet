@@ -1,54 +1,66 @@
 import Foundation
 
 /// Save objects to file on disk
-final class DiskStorage {
+final public class DiskStorage<T> {
   enum Error: Swift.Error {
     case fileEnumeratorFailed
   }
 
   /// File manager to read/write to the disk
-  fileprivate let fileManager: FileManager
+  public let fileManager: FileManager
   /// Configuration
   fileprivate let config: DiskConfig
   /// The computed path `directory+name`
-  let path: String
+  public let path: String
+
+  private let transformer: Transformer<T>
 
   // MARK: - Initialization
 
-  required init(config: DiskConfig, fileManager: FileManager = FileManager.default) throws {
-    self.config = config
-    self.fileManager = fileManager
-
+  public convenience init(config: DiskConfig, fileManager: FileManager = FileManager.default, transformer: Transformer<T>) throws {
     let url: URL
     if let directory = config.directory {
       url = directory
     } else {
       url = try fileManager.url(
-        for: .cachesDirectory, in: .userDomainMask, appropriateFor: nil, create: true
+        for: .cachesDirectory,
+        in: .userDomainMask,
+        appropriateFor: nil,
+        create: true
       )
     }
 
     // path
-    path = url.appendingPathComponent(config.name, isDirectory: true).path
+    let path = url.appendingPathComponent(config.name, isDirectory: true).path
+
+    self.init(config: config, fileManager: fileManager, path: path, transformer: transformer)
+
     try createDirectory()
 
     // protection
     #if os(iOS) || os(tvOS)
-      if let protectionType = config.protectionType {
-        try setDirectoryAttributes([
-          FileAttributeKey.protectionKey: protectionType
-        ])
-      }
+    if let protectionType = config.protectionType {
+      try setDirectoryAttributes([
+        FileAttributeKey.protectionKey: protectionType
+      ])
+    }
     #endif
+  }
+
+  public required init(config: DiskConfig, fileManager: FileManager = FileManager.default, path: String, transformer: Transformer<T>) {
+    self.config = config
+    self.fileManager = fileManager
+    self.path = path
+    self.transformer = transformer
   }
 }
 
 extension DiskStorage: StorageAware {
-  func entry<T: Codable>(ofType type: T.Type, forKey key: String) throws -> Entry<T> {
+  public func entry(forKey key: String) throws -> Entry<T> {
     let filePath = makeFilePath(for: key)
     let data = try Data(contentsOf: URL(fileURLWithPath: filePath))
     let attributes = try fileManager.attributesOfItem(atPath: filePath)
-    let object: T = try DataSerializer.deserialize(data: data)
+    let object = try transformer.fromData(data)
 
     guard let date = attributes[.modificationDate] as? Date else {
       throw StorageError.malformedFileAttributes
@@ -65,24 +77,24 @@ extension DiskStorage: StorageAware {
     )
   }
 
-  func setObject<T: Codable>(_ object: T, forKey key: String, expiry: Expiry? = nil) throws {
+  public func setObject(_ object: T, forKey key: String, expiry: Expiry? = nil) throws {
     let expiry = expiry ?? config.expiry
-    let data = try DataSerializer.serialize(object: object)
+    let data = try transformer.toData(object)
     let filePath = makeFilePath(for: key)
-    fileManager.createFile(atPath: filePath, contents: data, attributes: nil)
+    _ = fileManager.createFile(atPath: filePath, contents: data, attributes: nil)
     try fileManager.setAttributes([.modificationDate: expiry.date], ofItemAtPath: filePath)
   }
 
-  func removeObject(forKey key: String) throws {
+  public func removeObject(forKey key: String) throws {
     try fileManager.removeItem(atPath: makeFilePath(for: key))
   }
 
-  func removeAll() throws {
+  public func removeAll() throws {
     try fileManager.removeItem(atPath: path)
     try createDirectory()
   }
 
-  func removeExpiredObjects() throws {
+  public func removeExpiredObjects() throws {
     let storageURL = URL(fileURLWithPath: path)
     let resourceKeys: [URLResourceKey] = [
       .isDirectoryKey,
@@ -104,18 +116,18 @@ extension DiskStorage: StorageAware {
     }
 
     for url in urlArray {
-      let resourceValues = try (url as NSURL).resourceValues(forKeys: resourceKeys)
-      guard (resourceValues[.isDirectoryKey] as? NSNumber)?.boolValue == false else {
+      let resourceValues = try url.resourceValues(forKeys: Set(resourceKeys))
+      guard resourceValues.isDirectory != true else {
         continue
       }
 
-      if let expiryDate = resourceValues[.contentModificationDateKey] as? Date, expiryDate.inThePast {
+      if let expiryDate = resourceValues.contentModificationDate, expiryDate.inThePast {
         filesToDelete.append(url)
         continue
       }
 
-      if let fileSize = resourceValues[.totalFileAllocatedSizeKey] as? NSNumber {
-        totalSize += fileSize.uintValue
+      if let fileSize = resourceValues.totalFileAllocatedSize {
+        totalSize += UInt(fileSize)
         resourceObjects.append((url: url, resourceValues: resourceValues))
       }
     }
@@ -135,12 +147,12 @@ extension DiskStorage {
    Sets attributes on the disk cache folder.
    - Parameter attributes: Directory attributes
    */
-  func setDirectoryAttributes(_ attributes: [FileAttributeKey : Any]) throws {
+  func setDirectoryAttributes(_ attributes: [FileAttributeKey: Any]) throws {
     try fileManager.setAttributes(attributes, ofItemAtPath: path)
   }
 }
 
-typealias ResourceObject = (url: Foundation.URL, resourceValues: [AnyHashable: Any])
+typealias ResourceObject = (url: Foundation.URL, resourceValues: URLResourceValues)
 
 extension DiskStorage {
   /**
@@ -166,7 +178,7 @@ extension DiskStorage {
     var size: UInt64 = 0
     let contents = try fileManager.contentsOfDirectory(atPath: path)
     for pathComponent in contents {
-      let filePath = (path as NSString).appendingPathComponent(pathComponent)
+      let filePath = NSString(string: path).appendingPathComponent(pathComponent)
       let attributes = try fileManager.attributesOfItem(atPath: filePath)
       if let fileSize = attributes[.size] as? UInt64 {
         size += fileSize
@@ -198,9 +210,8 @@ extension DiskStorage {
     let targetSize = config.maxSize / 2
 
     let sortedFiles = objects.sorted {
-      let key = URLResourceKey.contentModificationDateKey
-      if let time1 = ($0.resourceValues[key] as? Date)?.timeIntervalSinceReferenceDate,
-        let time2 = ($1.resourceValues[key] as? Date)?.timeIntervalSinceReferenceDate {
+      if let time1 = $0.resourceValues.contentModificationDate?.timeIntervalSinceReferenceDate,
+        let time2 = $1.resourceValues.contentModificationDate?.timeIntervalSinceReferenceDate {
         return time1 > time2
       } else {
         return false
@@ -209,8 +220,8 @@ extension DiskStorage {
 
     for file in sortedFiles {
       try fileManager.removeItem(at: file.url)
-      if let fileSize = file.resourceValues[URLResourceKey.totalFileAllocatedSizeKey] as? NSNumber {
-        totalSize -= fileSize.uintValue
+      if let fileSize = file.resourceValues.totalFileAllocatedSize {
+        totalSize -= UInt(fileSize)
       }
       if totalSize < targetSize {
         break
@@ -228,5 +239,18 @@ extension DiskStorage {
     if let expiryDate = attributes[.modificationDate] as? Date, expiryDate.inThePast {
       try fileManager.removeItem(atPath: filePath)
     }
+  }
+}
+
+public extension DiskStorage {
+  func transform<U>(transformer: Transformer<U>) -> DiskStorage<U> {
+    let storage = DiskStorage<U>(
+      config: config,
+      fileManager: fileManager,
+      path: path,
+      transformer: transformer
+    )
+
+    return storage
   }
 }

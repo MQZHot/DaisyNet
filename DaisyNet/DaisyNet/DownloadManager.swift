@@ -232,19 +232,25 @@ public class DownloadTaskManager {
     func saveProgress(_ progress: Double) {
         if let progressData = "\(progress)".data(using: .utf8) {
             cacheDictionary["progress"] = progressData
-            CacheManager.default.setObject(cacheDictionary, forKey: key)
+            var model = CacheModel()
+            model.dataDict = cacheDictionary
+            CacheManager.default.setObject(model, forKey: key)
         }
     }
     
     func saveResumeData(_ data: Data?) {
         cacheDictionary["resumeData"] = data
-        CacheManager.default.setObject(cacheDictionary, forKey: key)
+        var model = CacheModel()
+        model.dataDict = cacheDictionary
+        CacheManager.default.setObject(model, forKey: key)
     }
     
     func saveFilePath(_ filePath: String?) {
         if let filePathData = filePath?.data(using: .utf8) {
             cacheDictionary["filePath"] = filePathData
-            CacheManager.default.setObject(cacheDictionary, forKey: key)
+            var model = CacheModel()
+            model.dataDict = cacheDictionary
+            CacheManager.default.setObject(model, forKey: key)
         }
     }
     deinit {
@@ -282,7 +288,7 @@ func getFilePath(_ url: String) -> String? {
 }
 
 func getDictionary(_ url: String) -> Dictionary<String, Data> {
-    if let dic = CacheManager.default.objectSync(ofType: Dictionary<String, Data>.self, forKey: url) {
+    if let dic = CacheManager.default.objectSync(forKey: url)?.dataDict {
         return dic
     }
     return [:]
