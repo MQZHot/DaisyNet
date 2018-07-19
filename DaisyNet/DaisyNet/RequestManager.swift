@@ -102,8 +102,8 @@ public class RequestTaskManager {
         -> RequestTaskManager
     {
         self.cacheKey = cacheKey
-        if sessionManager == nil {
-            sessionManager?.request(url, method: method, parameters: params, encoding: encoding, headers: headers)
+        if sessionManager != nil {
+            dataRequest = sessionManager?.request(url, method: method, parameters: params, encoding: encoding, headers: headers)
         } else {
             dataRequest = Alamofire.request(url, method: method, parameters: params, encoding: encoding, headers: headers)
         }
