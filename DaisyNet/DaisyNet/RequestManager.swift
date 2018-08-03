@@ -55,6 +55,44 @@ class RequestManager {
         return taskManager!
     }
     
+    func request(
+        urlRequest: URLRequestConvertible,
+        params: Parameters,
+        dynamicParams: Parameters? = nil)
+        -> RequestTaskManager? {
+            if let urlStr = urlRequest.urlRequest?.url?.absoluteString {
+                let components = urlStr.components(separatedBy: "?")
+                if components.count > 0 {
+                    let key = cacheKey(components.first!, params, dynamicParams)
+                    var taskManager : RequestTaskManager?
+                    if requestTasks[key] == nil {
+                        if timeoutIntervalForRequest != nil {
+                            taskManager = RequestTaskManager().timeoutIntervalForRequest(timeoutIntervalForRequest!)
+                        } else {
+                            taskManager = RequestTaskManager()
+                        }
+                        requestTasks[key] = taskManager
+                    } else {
+                        taskManager = requestTasks[key]
+                    }
+                    
+                    taskManager?.completionClosure = {
+                        self.requestTasks.removeValue(forKey: key)
+                    }
+                    var tempParam = params
+                    let dynamicTempParam = dynamicParams==nil ? [:] : dynamicParams!
+                    dynamicTempParam.forEach { (arg) in
+                        tempParam[arg.key] = arg.value
+                    }
+                    taskManager?.request(urlRequest: urlRequest, cacheKey: key)
+                    return taskManager!
+                }
+                return nil
+            }
+            return nil
+    }
+    
+    
     /// 取消请求
     func cancel(_ url: String, params: Parameters? = nil, dynamicParams: Parameters? = nil) {
         let key = cacheKey(url, params, dynamicParams)
@@ -110,6 +148,28 @@ public class RequestTaskManager {
         
         return self
     }
+    
+    
+    /// request
+    ///
+    /// - Parameters:
+    ///   - urlRequest: urlRequest
+    ///   - cacheKey: cacheKey
+    /// - Returns: RequestTaskManager
+    @discardableResult
+    fileprivate func request(
+        urlRequest: URLRequestConvertible,
+        cacheKey: String)
+        -> RequestTaskManager {
+            self.cacheKey = cacheKey
+            if sessionManager != nil {
+                dataRequest = sessionManager?.request(urlRequest)
+            } else {
+                dataRequest = Alamofire.request(urlRequest)
+            }
+        return self
+    }
+    
     /// 是否缓存数据
     public func cache(_ cache: Bool) -> RequestTaskManager {
         self.cache = cache

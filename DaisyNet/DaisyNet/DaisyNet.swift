@@ -50,6 +50,23 @@ public func request(
     return RequestManager.default.request(url, method: method, params: params, dynamicParams: dynamicParams, encoding: encoding, headers: headers)
 }
 
+/// urlRequest请求
+///
+/// - Parameters:
+///   - urlRequest: 自定义URLRequest
+///   - params: URLRequest中需要的参数，作为key区分缓存
+///   - dynamicParams: 变化的参数，例如 时间戳, `token` 等, 用来过滤`params`中的动态参数
+/// - Returns: RequestTaskManager?
+@discardableResult
+public func request(
+    urlRequest: URLRequestConvertible,
+    params: Parameters,
+    dynamicParams: Parameters? = nil)
+    -> RequestTaskManager?
+{
+    return RequestManager.default.request(urlRequest: urlRequest, params: params, dynamicParams: dynamicParams)
+}
+
 /// 取消请求
 ///
 /// - Parameters:
