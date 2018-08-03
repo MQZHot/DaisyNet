@@ -14,14 +14,14 @@ class GetViewController: UIViewController {
     @IBOutlet weak var textView: UITextView!
     @IBOutlet weak var cacheTextView: UITextView!
     
-    let url = "http://api.travels.app887.com/api/Articles.action"
+    let urlStr = "http://api.travels.app887.com/api/Articles.action"
     let params = ["keyword" : "", "npc" : "0", "opc" : "20", "type" : "热门视频", "uid" : "2321"]
     override func viewDidLoad() {
         super.viewDidLoad()
         
         DaisyNet.openResultLog = false
         DaisyNet.timeoutIntervalForRequest(4)
-        DaisyNet.request(url, params: params).cache(true).responseCacheAndString { value in
+        DaisyNet.request(urlStr, params: params).cache(true).responseCacheAndString { value in
             switch value.result {
             case .success(let string):
                 
@@ -38,7 +38,7 @@ class GetViewController: UIViewController {
     }
     
     @IBAction func clearCache(_ sender: UIBarButtonItem) {
-        DaisyNet.removeObjectCache(url, params: params) { success in
+        DaisyNet.removeObjectCache(urlStr, params: params) { success in
             switch success {
             case true:
                 self.cacheTextView.text = ""
