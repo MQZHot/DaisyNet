@@ -10,7 +10,7 @@ import UIKit
 import MediaPlayer
 class DownloadTableViewController: UITableViewController {
 
-    let downloadUrls = ["http://120.25.226.186:32812/resources/videos/minion_01.mp4",
+    let downloadUrls = ["https://hyjj-chatm.oss-cn-beijing.aliyuncs.com/looktm-eye-report/2018%20%E6%AF%8D%E5%A9%B4%20App%20%E8%A1%8C%E4%B8%9A%E5%88%86%E6%9E%90%E6%8A%A5%E5%91%8A.pdf",
                         "http://120.25.226.186:32812/resources/videos/minion_02.mp4",
                         "http://120.25.226.186:32812/resources/videos/minion_03.mp4",
                         "http://120.25.226.186:32812/resources/videos/minion_04.mp4",

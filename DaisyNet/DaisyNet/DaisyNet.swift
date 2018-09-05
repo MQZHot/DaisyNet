@@ -12,7 +12,14 @@ import UIKit
 import Alamofire
 import Cache
 
-// MARK: - 网络请求
+/// 配置缓存过期时间
+///
+/// - Parameters:
+///   - disk: disk expiry
+///   - memory: memory expiry
+public func cacheExpiryConfig(disk: DaisyExpiry, memory: DaisyExpiry) {
+    CacheManager.default.expiryConfiguration(disk: disk, memory: memory)
+}
 
 /// 统一设置超时时间
 ///
@@ -21,11 +28,12 @@ public func timeoutIntervalForRequest(_ timeInterval :TimeInterval) {
     RequestManager.default.timeoutIntervalForRequest(timeInterval)
 }
 
+// MARK: - 网络请求
+
 /// 开启/关闭请求url log
 public var openUrlLog: Bool = true
 /// 开启/关闭结果log
 public var openResultLog: Bool = true
-
 
 /// 网络请求
 ///

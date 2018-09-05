@@ -13,8 +13,27 @@ import Cache
 struct CacheModel: Codable {
     var data: Data?
     var dataDict: Dictionary<String, Data>?
-    init() {
-        
+    init() { }
+}
+
+public enum DaisyExpiry {
+    /// Object will be expired in the nearest future
+    case never
+    /// Object will be expired in the specified amount of seconds
+    case seconds(TimeInterval)
+    /// Object will be expired on the specified date
+    case date(Date)
+    
+    /// Returns the appropriate date object
+    public var expiry: Expiry {
+        switch self {
+        case .never:
+            return Expiry.never
+        case .seconds(let seconds):
+            return Expiry.seconds(seconds)
+        case .date(let date):
+            return Expiry.date(date)
+        }
     }
 }
 
@@ -24,8 +43,15 @@ class CacheManager {
     private var storage: Storage<CacheModel>?
     /// init
     init() {
-        let diskConfig = DiskConfig(name: "DaisyCache")
-        let memoryConfig = MemoryConfig(expiry: .never)
+        expiryConfiguration()
+    }
+    
+    func expiryConfiguration(disk: DaisyExpiry = .never, memory: DaisyExpiry = .never) {
+        let diskConfig = DiskConfig(
+            name: "DaisyCache",
+            expiry: disk.expiry
+        )
+        let memoryConfig = MemoryConfig(expiry: memory.expiry)
         do {
             storage = try Storage(diskConfig: diskConfig, memoryConfig: memoryConfig, transformer: TransformerFactory.forCodable(ofType: CacheModel.self))
         } catch {
