@@ -10,12 +10,6 @@
 import Foundation
 import Cache
 
-struct CacheModel: Codable {
-    var data: Data?
-    var dataDict: Dictionary<String, Data>?
-    init() { }
-}
-
 public enum DaisyExpiry {
     /// Object will be expired in the nearest future
     case never
@@ -37,14 +31,18 @@ public enum DaisyExpiry {
     }
 }
 
+struct CacheModel: Codable {
+    var data: Data?
+    var dataDict: Dictionary<String, Data>?
+    init() { }
+}
+
 class CacheManager {
     static let `default` = CacheManager()
     /// Manage storage
     private var storage: Storage<CacheModel>?
     /// init
-    init() {
-        expiryConfiguration()
-    }
+    init() { expiryConfiguration() }
     
     func expiryConfiguration(disk: DaisyExpiry = .never, memory: DaisyExpiry = .never) {
         let diskConfig = DiskConfig(
@@ -58,10 +56,11 @@ class CacheManager {
             DaisyLog(error)
         }
     }
+    
     /// 清除所有缓存
     ///
-    /// - Parameter completion: 完成闭包
-    func removeAllCache(completion: @escaping (Bool)->()) {
+    /// - Parameter completion: completion
+    func removeAllCache(completion: @escaping (_ isSuccess: Bool)->()) {
         storage?.async.removeAll(completion: { result in
             DispatchQueue.main.async {
                 switch result {
@@ -71,8 +70,13 @@ class CacheManager {
             }
         })
     }
+    
     /// 根据key值清除缓存
-    func removeObjectCache(_ cacheKey: String, completion: @escaping (Bool)->()) {
+    ///
+    /// - Parameters:
+    ///   - cacheKey: cacheKey
+    ///   - completion: completion
+    func removeObjectCache(_ cacheKey: String, completion: @escaping (_ isSuccess: Bool)->()) {
         storage?.async.removeObject(forKey: cacheKey, completion: { result in
             DispatchQueue.main.async {
                 switch result {
@@ -82,11 +86,11 @@ class CacheManager {
             }
         })
     }
-    /// 异步读取缓存
-    func object(forKey key: String, completion: @escaping (Cache.Result<CacheModel>)->Void) {
-        storage?.async.object(forKey: key, completion: completion)
-    }
+    
     /// 读取缓存
+    ///
+    /// - Parameter key: key
+    /// - Returns: model
     func objectSync(forKey key: String) -> CacheModel? {
         do {
             return (try storage?.object(forKey: key)) ?? nil
@@ -94,9 +98,20 @@ class CacheManager {
             return nil
         }
     }
-    /// 异步存储
-    func setObject(_ object: CacheModel, forKey: String) {
-        storage?.async.setObject(object, forKey: forKey, completion: { _ in
+    
+    /// 异步缓存
+    ///
+    /// - Parameters:
+    ///   - object: model
+    ///   - key: key
+    func setObject(_ object: CacheModel, forKey key: String) {
+        storage?.async.setObject(object, forKey: key, expiry: nil, completion: { (result) in
+            switch result {
+            case .value(_):
+                DaisyLog("缓存成功")
+            case .error(let error):
+                DaisyLog("缓存失败: \(error)")
+            }
         })
     }
 }
