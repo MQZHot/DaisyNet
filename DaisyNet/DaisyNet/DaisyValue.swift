@@ -22,3 +22,10 @@ public struct DaisyValue<Value> {
         self.response = response
     }
 }
+
+func getSystemTimestamp() -> Double {
+    let date = Date()
+    let time = String(format: "%.3f", date.timeIntervalSince1970)
+    let timeSp = time.replacingOccurrences(of: ".", with: "") as NSString
+    return timeSp.doubleValue
+}

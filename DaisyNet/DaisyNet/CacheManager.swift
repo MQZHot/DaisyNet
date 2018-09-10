@@ -29,6 +29,9 @@ public enum DaisyExpiry {
             return Expiry.date(date)
         }
     }
+    public var isExpired: Bool {
+        return expiry.isExpired
+    }
 }
 
 struct CacheModel: Codable {
@@ -37,19 +40,24 @@ struct CacheModel: Codable {
     init() { }
 }
 
-class CacheManager {
+class CacheManager: NSObject {
     static let `default` = CacheManager()
     /// Manage storage
     private var storage: Storage<CacheModel>?
     /// init
-    init() { expiryConfiguration() }
+    override init() {
+        super.init()
+        expiryConfiguration()
+    }
+    var expiry: DaisyExpiry = .never
     
-    func expiryConfiguration(disk: DaisyExpiry = .never, memory: DaisyExpiry = .never) {
+    func expiryConfiguration(expiry: DaisyExpiry = .never) {
+        self.expiry = expiry
         let diskConfig = DiskConfig(
             name: "DaisyCache",
-            expiry: disk.expiry
+            expiry: expiry.expiry
         )
-        let memoryConfig = MemoryConfig(expiry: memory.expiry)
+        let memoryConfig = MemoryConfig(expiry: expiry.expiry)
         do {
             storage = try Storage(diskConfig: diskConfig, memoryConfig: memoryConfig, transformer: TransformerFactory.forCodable(ofType: CacheModel.self))
         } catch {
@@ -93,7 +101,13 @@ class CacheManager {
     /// - Returns: model
     func objectSync(forKey key: String) -> CacheModel? {
         do {
-            return (try storage?.object(forKey: key)) ?? nil
+            if let isExpire = try storage?.isExpiredObject(forKey: key), isExpire {
+                removeObjectCache(key) { (_) in
+}
+                return nil
+            } else {
+                return (try storage?.object(forKey: key)) ?? nil
+            }
         } catch {
             return nil
         }

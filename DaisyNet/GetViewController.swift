@@ -20,6 +20,7 @@ class GetViewController: UIViewController {
         super.viewDidLoad()
         
         DaisyNet.openResultLog = false
+        DaisyNet.cacheExpiryConfig(expiry: DaisyExpiry.seconds(20))
         DaisyNet.timeoutIntervalForRequest(4)
         DaisyNet.request(urlStr, params: params).cache(true).responseCacheAndString { value in
             switch value.result {

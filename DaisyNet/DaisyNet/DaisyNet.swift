@@ -17,8 +17,8 @@ import Cache
 /// - Parameters:
 ///   - disk: disk expiry
 ///   - memory: memory expiry
-public func cacheExpiryConfig(disk: DaisyExpiry, memory: DaisyExpiry) {
-    CacheManager.default.expiryConfiguration(disk: disk, memory: memory)
+public func cacheExpiryConfig(expiry: DaisyExpiry) {
+    CacheManager.default.expiryConfiguration(expiry: expiry)
 }
 
 /// 统一设置超时时间
