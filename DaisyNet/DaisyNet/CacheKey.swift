@@ -13,28 +13,31 @@ import Cache
 
 /// 将参数字典转换成字符串后md5
 func cacheKey(_ url: String, _ params: Dictionary<String, Any>?, _ dynamicParams: Dictionary<String, Any>?) -> String {
-    guard let params = params else {
+    /// c参数重复, `params`中过滤掉`dynamicParams`中的参数
+    if let filterParams = params?.filter({ (key, _) -> Bool in
+        return dynamicParams?.contains(where: { (key1, _) -> Bool in
+            return key != key1
+        }) ?? false
+    }) {
+        let str = "\(url)" + "\(sort(filterParams))"
+        return MD5(str)
+    } else {
         return MD5(url)
     }
-    guard let dynamicParams = dynamicParams else {
-        if let stringData = try? JSONSerialization.data(withJSONObject: params, options: []),
-            let paramString = String(data: stringData, encoding: String.Encoding.utf8) {
-            let str = "\(url)" + "\(paramString)"
-            return MD5(str)
-        } else {
-            return MD5(url)
-        }
-    }
-    /// `params`中过滤掉`dynamicParams`中的参数
-    let filterParams = params.filter { (key, _) -> Bool in
-        return dynamicParams.contains(where: { (key1, _) -> Bool in
-            return key != key1
+}
+
+/// 参数排序生成字符串
+func sort(_ parameters: Dictionary<String, Any>?) -> String {
+    var sortParams = ""
+    if let params = parameters {
+        let sortArr = params.keys.sorted { return $0 < $1 }
+        sortArr.forEach({ (str) in
+            if let value = params[str] {
+                sortParams = sortParams.appending("\(str)=\(value)")
+            } else {
+                sortParams = sortParams.appending("\(str)=")
+            }
         })
     }
-    guard let stringData = try? JSONSerialization.data(withJSONObject: filterParams, options: []),
-        let paramString = String(data: stringData, encoding: String.Encoding.utf8) else {
-            return MD5(url)
-    }
-    let str = "\(url)" + "\(paramString)"
-    return MD5(str)
+    return sortParams
 }
