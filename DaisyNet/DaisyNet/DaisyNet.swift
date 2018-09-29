@@ -12,16 +12,14 @@ import UIKit
 import Alamofire
 import Cache
 
-/// 配置缓存过期时间
+/// 缓存过期时间
 ///
-/// - Parameters:
-///   - disk: disk expiry
-///   - memory: memory expiry
+/// - Parameter expiry: 参考 DaisyExpiry
 public func cacheExpiryConfig(expiry: DaisyExpiry) {
     CacheManager.default.expiryConfiguration(expiry: expiry)
 }
 
-/// 统一设置超时时间
+/// 超时时间
 ///
 /// - Parameter timeInterval: 超时时间
 public func timeoutIntervalForRequest(_ timeInterval :TimeInterval) {
@@ -39,7 +37,7 @@ public var openResultLog: Bool = true
 ///
 /// - Parameters:
 ///   - url: url
-///   - method: .get .post ... 默认.get
+///   - method: .get .post ...
 ///   - params: 参数字典
 ///   - dynamicParams: 变化的参数，例如 时间戳-token 等
 ///   - encoding: 编码方式

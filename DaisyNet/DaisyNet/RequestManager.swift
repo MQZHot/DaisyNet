@@ -10,7 +10,6 @@
 import Foundation
 import Alamofire
 
-// MARK: - RequestManager
 class RequestManager {
     static let `default` = RequestManager()
     private var requestTasks = [String: RequestTaskManager]()
@@ -123,7 +122,7 @@ public class RequestTaskManager {
     @discardableResult
     fileprivate func timeoutIntervalForRequest(_ timeInterval :TimeInterval) -> RequestTaskManager {
         let configuration = URLSessionConfiguration.default
-        configuration.timeoutIntervalForRequest = 10
+        configuration.timeoutIntervalForRequest = timeInterval
         let sessionManager = Alamofire.SessionManager(configuration: configuration)
         self.sessionManager = sessionManager
         return self

@@ -101,9 +101,9 @@ class CacheManager: NSObject {
     /// - Returns: model
     func objectSync(forKey key: String) -> CacheModel? {
         do {
+            ///过期清除缓存
             if let isExpire = try storage?.isExpiredObject(forKey: key), isExpire {
-                removeObjectCache(key) { (_) in
-}
+                removeObjectCache(key) { (_) in }
                 return nil
             } else {
                 return (try storage?.object(forKey: key)) ?? nil
