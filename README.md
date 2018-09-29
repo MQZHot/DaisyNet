@@ -1,11 +1,10 @@
 
 ## DaisyNet
 
-![image](https://travis-ci.org/MQZHot/DaisyNet.svg?branch=master)  ![](https://img.shields.io/badge/support-swift%204%2B-green.svg)   ![](https://img.shields.io/cocoapods/v/DaisyNet.svg?style=flat)
+![](https://img.shields.io/badge/support-swift%204%2B-green.svg)   ![](https://img.shields.io/cocoapods/v/DaisyNet.svg?style=flat)
 
-对Alamofire与Cache的封装实现对网络数据的缓存，可以存储JSON，String，Data，接口简单明了.
+对[Alamofire](https://github.com/Alamofire/Alamofire)与[Cache](https://github.com/hyperoslo/Cache)的封装实现对网络数据的缓存，可以存储JSON，String，Data.
 
-依赖[Alamofire](https://github.com/Alamofire/Alamofire)和[Cache](https://github.com/hyperoslo/Cache)
 
 <p align="center">
 <img src="https://github.com/MQZHot/DaisyNet/raw/master/Picture/get.gif">
