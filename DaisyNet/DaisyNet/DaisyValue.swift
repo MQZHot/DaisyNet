@@ -15,10 +15,10 @@ import Alamofire
 public struct DaisyValue<Value> {
     
     public let isCacheData: Bool
-    public let result: Alamofire.Result<Value>
+    public let result: Alamofire.AFResult<Value>
     public let response: HTTPURLResponse?
     
-    init(isCacheData: Bool, result: Alamofire.Result<Value>, response: HTTPURLResponse?) {
+    init(isCacheData: Bool, result: Alamofire.AFResult<Value>, response: HTTPURLResponse?) {
         self.isCacheData = isCacheData
         self.result = result
         self.response = response

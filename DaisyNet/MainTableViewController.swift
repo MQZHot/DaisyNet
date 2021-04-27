@@ -14,7 +14,7 @@ class MainTableViewController: UITableViewController {
         super.viewDidLoad()
 
         print(NSHomeDirectory())
-        Alamofire.upload(Data(), to: "").uploadProgress { (pro) in
+        AF.upload(Data(), to: "").uploadProgress { (pro) in
             
             }.responseJSON { (response) in
                 
