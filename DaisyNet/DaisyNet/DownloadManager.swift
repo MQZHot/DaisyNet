@@ -148,7 +148,7 @@ public class DownloadTaskManager {
          dynamicParams: Parameters? = nil) {
         key = cacheKey(url, parameters, dynamicParams)
         NotificationCenter.default.addObserver(self, selector: #selector(downloadCancel), name: NSNotification.Name.init("DaisyDownloadCancel"), object: nil)
-        NotificationCenter.default.addObserver(forName: NSNotification.Name.UIApplicationWillResignActive, object: nil, queue: nil) { (_) in
+        NotificationCenter.default.addObserver(forName: UIApplication.willResignActiveNotification, object: nil, queue: nil) { (_) in
             self.downloadRequest?.cancel()
         }
     }
@@ -176,11 +176,10 @@ public class DownloadTaskManager {
         return self
     }
     
-    lazy var manager: SessionManager = {
-//        let configuration = URLSessionConfiguration.background(withIdentifier: "com.\(key).app.background")
+    lazy var manager: Session = {
         let configuration = URLSessionConfiguration.default
-        configuration.httpAdditionalHeaders = SessionManager.defaultHTTPHeaders
-        return SessionManager(configuration: configuration)
+        configuration.headers = HTTPHeaders.default
+        return Session(configuration: configuration)
     }()
     
     /// 下载进度
@@ -193,19 +192,19 @@ public class DownloadTaskManager {
         return self
     }
     /// 响应
-    public func response(completion: @escaping (Alamofire.Result<String>)->()) {
+    public func response(completion: @escaping (Alamofire.AFResult<String>)->()) {
         downloadRequest?.responseData(completionHandler: { (response) in
             switch response.result {
             case .success:
                 self.downloadStatus = .complete
-                let str = response.destinationURL?.absoluteString
+                let str = response.fileURL?.absoluteString
                 if self.cancelCompletion != nil { self.cancelCompletion!() }
-                completion(Alamofire.Result.success(str!))
+                completion(Alamofire.AFResult.success(str!))
             case .failure(let error):
                 self.downloadStatus = .suspend
                 self.saveResumeData(response.resumeData)
                 if self.cancelCompletion != nil { self.cancelCompletion!() }
-                completion(Alamofire.Result.failure(error))
+                completion(Alamofire.AFResult.failure(error))
             }
         })
     }
@@ -213,8 +212,8 @@ public class DownloadTaskManager {
     ///
     /// - Parameter fileName: 自定义文件名
     /// - Returns: 下载位置
-    private func downloadDestination(_ fileName: String?) -> DownloadRequest.DownloadFileDestination {
-        let destination: DownloadRequest.DownloadFileDestination = { _, response in
+    private func downloadDestination(_ fileName: String?) -> DownloadRequest.Destination {
+        let destination: DownloadRequest.Destination = { _, response in
             let cachesURL = FileManager.default.urls(for: .cachesDirectory, in: .userDomainMask)[0]
             if let fileName = fileName {
                 let fileURL = cachesURL.appendingPathComponent(fileName)

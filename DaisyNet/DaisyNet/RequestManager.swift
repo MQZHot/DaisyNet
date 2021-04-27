@@ -116,14 +116,14 @@ public class RequestTaskManager {
     fileprivate var dataRequest: DataRequest?
     fileprivate var cache: Bool = false
     fileprivate var cacheKey: String!
-    fileprivate var sessionManager: SessionManager?
+    fileprivate var sessionManager: Session?
     fileprivate var completionClosure: (()->())?
     
     @discardableResult
     fileprivate func timeoutIntervalForRequest(_ timeInterval :TimeInterval) -> RequestTaskManager {
         let configuration = URLSessionConfiguration.default
         configuration.timeoutIntervalForRequest = timeInterval
-        let sessionManager = Alamofire.SessionManager(configuration: configuration)
+        let sessionManager = Alamofire.Session(configuration: configuration)
         self.sessionManager = sessionManager
         return self
     }
@@ -142,7 +142,7 @@ public class RequestTaskManager {
         if sessionManager != nil {
             dataRequest = sessionManager?.request(url, method: method, parameters: params, encoding: encoding, headers: headers)
         } else {
-            dataRequest = Alamofire.request(url, method: method, parameters: params, encoding: encoding, headers: headers)
+            dataRequest = AF.request(url, method: method, parameters: params, encoding: encoding, headers: headers)
         }
         
         return self
@@ -164,7 +164,7 @@ public class RequestTaskManager {
             if sessionManager != nil {
                 dataRequest = sessionManager?.request(urlRequest)
             } else {
-                dataRequest = Alamofire.request(urlRequest)
+                dataRequest = AF.request(urlRequest)
             }
         return self
     }
@@ -236,13 +236,13 @@ public class DaisyResponse {
         self.completionClosure = completionClosure
     }
     ///
-    fileprivate func response<T>(response: DataResponse<T>, completion: @escaping (DaisyValue<T>)->()) {
+    fileprivate func response<T>(response: AFDataResponse<T>, completion: @escaping (DaisyValue<T>)->()) {
         responseCache(response: response) { (result) in
             completion(result)
         }
     }
     /// isCacheData
-    fileprivate func responseCache<T>(response: DataResponse<T>, completion: @escaping (DaisyValue<T>)->()) {
+    fileprivate func responseCache<T>(response: AFDataResponse<T>, completion: @escaping (DaisyValue<T>)->()) {
         if completionClosure != nil { completionClosure!() }
         let result = DaisyValue(isCacheData: false, result: response.result, response: response.response)
         if openResultLog {
@@ -282,7 +282,7 @@ public class DaisyJsonResponse: DaisyResponse {
     }
     fileprivate func responseCacheAndJson(completion: @escaping (DaisyValue<Any>)->()) {
         if cache { cacheJson(completion: { (json) in
-            let res = DaisyValue(isCacheData: true, result: Alamofire.Result.success(json), response: nil)
+            let res = DaisyValue(isCacheData: true, result: Alamofire.AFResult.success(json), response: nil)
             completion(res)
         }) }
         dataRequest.responseJSON { (response) in
@@ -331,7 +331,7 @@ public class DaisyStringResponse: DaisyResponse {
     }
     fileprivate func responseCacheAndString(completion: @escaping (DaisyValue<String>)->()) {
         if cache { cacheString(completion: { str in
-            let res = DaisyValue(isCacheData: true, result: Alamofire.Result.success(str), response: nil)
+            let res = DaisyValue(isCacheData: true, result: Alamofire.AFResult.success(str), response: nil)
             completion(res)
         })}
         dataRequest.responseString { (response) in
@@ -360,7 +360,7 @@ public class DaisyDataResponse: DaisyResponse {
     }
     fileprivate func responseCacheAndData(completion: @escaping (DaisyValue<Data>)->()) {
         if cache { cacheData(completion: { (data) in
-            let res = DaisyValue(isCacheData: true, result: Alamofire.Result.success(data), response: nil)
+            let res = DaisyValue(isCacheData: true, result: Alamofire.AFResult.success(data), response: nil)
             completion(res)
         }) }
         dataRequest.responseData { (response) in
