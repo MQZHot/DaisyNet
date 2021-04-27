@@ -13,7 +13,6 @@ Pod::Spec.new do |s|
   s.requires_arc = true
   s.dependency 'Cache', '>= 5.0.0'
   s.dependency 'Alamofire', '>= 4.5.1'
-  s.source_files = "SuhyNetWorker/SuhyNetWorker/*.swift" 
   s.pod_target_xcconfig = { "SWIFT_VERSION" => "5.0" }
   s.swift_version = '5.0'
 end
