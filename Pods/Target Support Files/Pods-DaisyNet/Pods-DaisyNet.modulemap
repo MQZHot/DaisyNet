@@ -1,6 +1,0 @@
-framework module Pods_DaisyNet {
-  umbrella header "Pods-DaisyNet-umbrella.h"
-
-  export *
-  module * { export * }
-}
