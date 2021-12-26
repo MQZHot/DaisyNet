@@ -1,0 +1,7 @@
+platform :ios, '10.0'
+
+use_frameworks!
+
+target 'DaisyNetExample' do
+   pod 'DaisyNet', :path => "../"
+end
