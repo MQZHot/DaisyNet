@@ -44,14 +44,12 @@ public var openResultLog: Bool = true
 ///   - headers: 请求头
 /// - Returns:
 @discardableResult
-public func request(
-    _ url: String,
-    method: HTTPMethod = .get,
-    params: Parameters? = nil,
-    dynamicParams: Parameters? = nil,
-    encoding: ParameterEncoding = URLEncoding.default,
-    headers: HTTPHeaders? = nil)
-    -> RequestTaskManager
+public func request(_ url: String,
+                    method: HTTPMethod = .get,
+                    params: Parameters? = nil,
+                    dynamicParams: Parameters? = nil,
+                    encoding: ParameterEncoding = URLEncoding.default,
+                    headers: HTTPHeaders? = nil) -> RequestTaskManager
 {
     return RequestManager.default.request(url, method: method, params: params, dynamicParams: dynamicParams, encoding: encoding, headers: headers)
 }
@@ -64,11 +62,9 @@ public func request(
 ///   - dynamicParams: 变化的参数，例如 时间戳, `token` 等, 用来过滤`params`中的动态参数
 /// - Returns: RequestTaskManager?
 @discardableResult
-public func request(
-    urlRequest: URLRequestConvertible,
-    params: Parameters,
-    dynamicParams: Parameters? = nil)
-    -> RequestTaskManager?
+public func request(urlRequest: URLRequestConvertible,
+                    params: Parameters,
+                    dynamicParams: Parameters? = nil) -> RequestTaskManager?
 {
     return RequestManager.default.request(urlRequest: urlRequest, params: params, dynamicParams: dynamicParams)
 }
@@ -97,6 +93,10 @@ public func removeAllCache(completion: @escaping (Bool) -> ()) {
 ///   - params: 参数
 ///   - dynamicParams: 变化的参数，例如 时间戳-token 等
 ///   - completion: 完成回调
-public func removeObjectCache(_ url: String, params: [String: Any]? = nil, dynamicParams: Parameters? = nil, completion: @escaping (Bool) -> ()) {
+public func removeObjectCache(_ url: String,
+                              params: [String: Any]? = nil,
+                              dynamicParams: Parameters? = nil,
+                              completion: @escaping (Bool) -> ())
+{
     RequestManager.default.removeObjectCache(url, params: params, dynamicParams: dynamicParams, completion: completion)
 }

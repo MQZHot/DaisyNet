@@ -14,12 +14,12 @@ class GetViewController: UIViewController {
     @IBOutlet var textView: UITextView!
     @IBOutlet var cacheTextView: UITextView!
 
-    let urlStr = "http://api.travels.app887.com/api/Articles.action"
-    let params = ["keyword": "", "npc": "0", "opc": "20", "type": "热门视频", "uid": "2321"]
+    let urlStr = "https://api.snaptubebrowser.com/surf-api/content/guide/v2"
+    let params: [String: Any] = [:]
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        DaisyNet.openResultLog = false
+        DaisyNet.openResultLog = true
         /// 20s过期
         DaisyNet.cacheExpiryConfig(expiry: DaisyExpiry.seconds(20))
         /// 10s超时
