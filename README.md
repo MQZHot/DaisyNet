@@ -8,12 +8,9 @@
 
 <p align="center">
 <img src="https://github.com/MQZHot/DaisyNet/raw/master/Picture/get.gif">
-<img src="https://github.com/MQZHot/DaisyNet/raw/master/Picture/download.gif">
 </p>
 
 ## 使用
-
-### 1. 网络请求
 
 ***注意： 如果你的参数中带有时间戳、token等变化的参数，这些参数需要写在`dynamicParams`参数中，避免无法读取缓存***
 ```swift
@@ -90,53 +87,6 @@ DaisyNet.cancel(url, params: params)
 func removeAllCache(completion: @escaping (Bool)->())
 /// 根据url和params清除缓存
 func removeObjectCache(_ url: String, params: [String: Any]? = nil, completion: @escaping (Bool)->())
-```
-
-### 2. 下载
-
-```swift
-DaisyNet.download(url).downloadProgress { progress in
-        /// 下载进度
-    }.response { response in
-    /// 下载完成
-}
-```
-* 如果正在下载中退出当前界面，再次进入时可以通过以下方法获取下载进度，并改变UI
-```swift
-DaisyNet.downloadProgress(url) {
-        print($0)
-    }?.response(completion: { _ in
-    print("下载完成")
-})
-```
-* 获取下载状态
-```swift
-DaisyNet.downloadStatus(url)
-```
-
-* 获取下载百分比
-```swift
-DaisyNet.downloadPercent(url)
-```
-
-* 获取下载完成后文件所在位置
-```swift
-DDaisyNet.downloadFilePath(url)
-```
-
-* 删除某个下载
-```swift
-DaisyNet.downloadDelete(url)
-```
-
-* 取消某个下载
-```swift
-DaisyNet.downloadCancel(url)
-```
-
-* 取消所有下载
-```swift
-DaisyNet.downloadCancelAll()
 ```
 
 ## Install
