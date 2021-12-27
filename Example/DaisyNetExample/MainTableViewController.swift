@@ -20,5 +20,6 @@ class MainTableViewController: UITableViewController {
         DaisyNet.removeAllCache { result in
             print(result ? "清理成功" : "清理失败")
         }
+        
     }
 }

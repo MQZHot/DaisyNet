@@ -14,12 +14,12 @@ class RequestManager {
     static let `default` = RequestManager()
     private var requestTasks = [String: RequestTaskManager]()
     private var timeoutIntervalForRequest: TimeInterval? /// 超时时间
-    
+
     func timeoutIntervalForRequest(_ timeInterval: TimeInterval) {
         timeoutIntervalForRequest = timeInterval
         RequestManager.default.timeoutIntervalForRequest = timeoutIntervalForRequest
     }
-    
+
     func request(
         _ url: String,
         method: HTTPMethod = .get,
@@ -41,7 +41,7 @@ class RequestManager {
         } else {
             taskManager = requestTasks[key]
         }
-        
+
         taskManager?.completionClosure = {
             self.requestTasks.removeValue(forKey: key)
         }
@@ -53,7 +53,7 @@ class RequestManager {
         taskManager?.request(url, method: method, params: tempParam, cacheKey: key, encoding: encoding, headers: headers)
         return taskManager!
     }
-    
+
     func request(
         urlRequest: URLRequestConvertible,
         params: Parameters,
@@ -75,7 +75,7 @@ class RequestManager {
                 } else {
                     taskManager = requestTasks[key]
                 }
-                    
+
                 taskManager?.completionClosure = {
                     self.requestTasks.removeValue(forKey: key)
                 }
@@ -91,19 +91,19 @@ class RequestManager {
         }
         return nil
     }
-    
+
     /// 取消请求
     func cancel(_ url: String, params: Parameters? = nil, dynamicParams: Parameters? = nil) {
         let key = cacheKey(url, params, dynamicParams)
         let taskManager = requestTasks[key]
         taskManager?.dataRequest?.cancel()
     }
-    
+
     /// 清除所有缓存
     func removeAllCache(completion: @escaping (Bool)->()) {
         CacheManager.default.removeAllCache(completion: completion)
     }
-    
+
     /// 根据key值清除缓存
     func removeObjectCache(_ url: String, params: [String: Any]? = nil, dynamicParams: Parameters? = nil, completion: @escaping (Bool)->()) {
         let key = cacheKey(url, params, dynamicParams)
@@ -119,7 +119,7 @@ public class RequestTaskManager {
     fileprivate var cacheKey: String!
     fileprivate var sessionManager: Session?
     fileprivate var completionClosure: (()->())?
-    
+
     @discardableResult
     fileprivate func timeoutIntervalForRequest(_ timeInterval: TimeInterval)->RequestTaskManager {
         let configuration = URLSessionConfiguration.default
@@ -128,7 +128,7 @@ public class RequestTaskManager {
         self.sessionManager = sessionManager
         return self
     }
-    
+
     @discardableResult
     fileprivate func request(
         _ url: String,
@@ -145,10 +145,10 @@ public class RequestTaskManager {
         } else {
             dataRequest = AF.request(url, method: method, parameters: params, encoding: encoding, headers: headers)
         }
-        
+
         return self
     }
-    
+
     /// request
     ///
     /// - Parameters:
@@ -169,7 +169,13 @@ public class RequestTaskManager {
         }
         return self
     }
-    
+
+    /// 缓存data是否存在
+    public func cacheDataIsExist()->Bool {
+        let data = CacheManager.default.objectSync(forKey: cacheKey)?.data
+        return data != nil
+    }
+
     /// 是否缓存数据
     public func cache(_ cache: Bool)->RequestTaskManager {
         self.cache = cache
@@ -178,9 +184,9 @@ public class RequestTaskManager {
 
     /// 获取缓存Data
     @discardableResult
-    public func cacheData(completion: @escaping (Data)->())->DaisyDataResponse {
+    public func cacheData()->Data? {
         let dataResponse = DaisyDataResponse(dataRequest: dataRequest!, cache: cache, cacheKey: cacheKey, completionClosure: completionClosure)
-        return dataResponse.cacheData(completion: completion)
+        return dataResponse.cacheData()
     }
 
     /// 响应Data
@@ -197,9 +203,9 @@ public class RequestTaskManager {
 
     /// 获取缓存String
     @discardableResult
-    public func cacheString(completion: @escaping (String)->())->DaisyStringResponse {
+    public func cacheString()->String? {
         let stringResponse = DaisyStringResponse(dataRequest: dataRequest!, cache: cache, cacheKey: cacheKey, completionClosure: completionClosure)
-        return stringResponse.cacheString(completion: completion)
+        return stringResponse.cacheString()
     }
 
     /// 响应String
@@ -216,9 +222,9 @@ public class RequestTaskManager {
 
     /// 获取缓存JSON
     @discardableResult
-    public func cacheJson(completion: @escaping (Any)->())->DaisyJsonResponse {
+    public func cacheJson()->Any? {
         let jsonResponse = DaisyJsonResponse(dataRequest: dataRequest!, cache: cache, cacheKey: cacheKey, completionClosure: completionClosure)
-        return jsonResponse.cacheJson(completion: completion)
+        return jsonResponse.cacheJson()
     }
 
     /// 响应JSON
@@ -299,10 +305,12 @@ public class DaisyJsonResponse: DaisyResponse {
     }
 
     fileprivate func responseCacheAndJson(completion: @escaping (DaisyValue<Any>)->()) {
-        if cache { cacheJson(completion: { json in
-            let res = DaisyValue(isCacheData: true, result: Alamofire.AFResult.success(json), response: nil)
-            completion(res)
-        }) }
+        if cache {
+            if let json = cacheJson() {
+                let res = DaisyValue(isCacheData: true, result: Alamofire.AFResult.success(json), response: nil)
+                completion(res)
+            }
+        }
         dataRequest.responseJSON { response in
             self.responseCache(response: response, completion: completion)
         }
@@ -310,7 +318,7 @@ public class DaisyJsonResponse: DaisyResponse {
 
     /// 获取缓存json
     @discardableResult
-    fileprivate func cacheJson(completion: @escaping (Any)->())->DaisyJsonResponse {
+    fileprivate func cacheJson()->Any? {
         if let data = CacheManager.default.objectSync(forKey: cacheKey)?.data,
            let json = try? JSONSerialization.jsonObject(with: data, options: [])
         {
@@ -320,13 +328,13 @@ public class DaisyJsonResponse: DaisyResponse {
                     DaisyLog(str)
                 }
             }
-            completion(json)
+            return json
         } else {
             if openResultLog {
                 DaisyLog("读取缓存失败")
             }
+            return nil
         }
-        return self
     }
 }
 
@@ -341,24 +349,26 @@ public class DaisyStringResponse: DaisyResponse {
     }
 
     @discardableResult
-    fileprivate func cacheString(completion: @escaping (String)->())->DaisyStringResponse {
+    fileprivate func cacheString()->String? {
         if let data = CacheManager.default.objectSync(forKey: cacheKey)?.data,
            let str = String(data: data, encoding: .utf8)
         {
-            completion(str)
+            return str
         } else {
             if openResultLog {
                 DaisyLog("读取缓存失败")
             }
+            return nil
         }
-        return self
     }
 
     fileprivate func responseCacheAndString(completion: @escaping (DaisyValue<String>)->()) {
-        if cache { cacheString(completion: { str in
-            let res = DaisyValue(isCacheData: true, result: Alamofire.AFResult.success(str), response: nil)
-            completion(res)
-        }) }
+        if cache {
+            if let str = cacheString() {
+                let res = DaisyValue(isCacheData: true, result: Alamofire.AFResult.success(str), response: nil)
+                completion(res)
+            }
+        }
         dataRequest.responseString { response in
             self.responseCache(response: response, completion: completion)
         }
@@ -376,22 +386,24 @@ public class DaisyDataResponse: DaisyResponse {
     }
 
     @discardableResult
-    fileprivate func cacheData(completion: @escaping (Data)->())->DaisyDataResponse {
+    fileprivate func cacheData()->Data? {
         if let data = CacheManager.default.objectSync(forKey: cacheKey)?.data {
-            completion(data)
+            return data
         } else {
             if openResultLog {
                 DaisyLog("读取缓存失败")
             }
+            return nil
         }
-        return self
     }
 
     fileprivate func responseCacheAndData(completion: @escaping (DaisyValue<Data>)->()) {
-        if cache { cacheData(completion: { data in
-            let res = DaisyValue(isCacheData: true, result: Alamofire.AFResult.success(data), response: nil)
-            completion(res)
-        }) }
+        if cache {
+            if let data = cacheData() {
+                let res = DaisyValue(isCacheData: true, result: Alamofire.AFResult.success(data), response: nil)
+                completion(res)
+            }
+        }
         dataRequest.responseData { response in
             self.responseCache(response: response, completion: completion)
         }
