@@ -13,12 +13,20 @@ import Foundation
 
 /// 将参数字典转换成字符串后md5
 func cacheKey(_ url: String, _ params: [String: Any]?, _ dynamicParams: [String: Any]?) -> String {
-    /// c参数重复, `params`中过滤掉`dynamicParams`中的参数
-    if let filterParams = params?.filter({ key, _ -> Bool in
-        dynamicParams?.contains(where: { key1, _ -> Bool in
-            key != key1
-        }) ?? false
-    }) {
+    /// #29 参数过滤bug
+    /// 参数重复, `params`中过滤掉`dynamicParams`中的参数
+    let params = params ?? [:]
+    let dynamicParams = dynamicParams ?? [:]
+    var filterParams: [String: Any] = [:]
+    
+    for param in params {
+        let commonParam = dynamicParams.first(where: { $0.key == param.key })
+        if commonParam == nil {
+            filterParams[param.key] = param.value
+        }
+    }
+    
+    if filterParams.keys.count > 0 {
         let str = "\(url)" + "\(sort(filterParams))"
         return MD5(str)
     } else {
