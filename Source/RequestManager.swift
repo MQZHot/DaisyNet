@@ -190,15 +190,15 @@ public class RequestTaskManager {
     }
 
     /// 响应Data
-    public func responseData(completion: @escaping (DaisyValue<Data>)->()) {
+    public func responseData(queue: DispatchQueue = .main, completion: @escaping (DaisyValue<Data>)->()) {
         let dataResponse = DaisyDataResponse(dataRequest: dataRequest!, cache: cache, cacheKey: cacheKey, completionClosure: completionClosure)
-        dataResponse.responseData(completion: completion)
+        dataResponse.responseData(queue: queue, completion: completion)
     }
 
     /// 先获取Data缓存，再响应Data
-    public func responseCacheAndData(completion: @escaping (DaisyValue<Data>)->()) {
+    public func responseCacheAndData(queue: DispatchQueue = .main, completion: @escaping (DaisyValue<Data>)->()) {
         let dataResponse = DaisyDataResponse(dataRequest: dataRequest!, cache: cache, cacheKey: cacheKey, completionClosure: completionClosure)
-        dataResponse.responseCacheAndData(completion: completion)
+        dataResponse.responseCacheAndData(queue: queue, completion: completion)
     }
 
     /// 获取缓存String
@@ -209,15 +209,15 @@ public class RequestTaskManager {
     }
 
     /// 响应String
-    public func responseString(completion: @escaping (DaisyValue<String>)->()) {
+    public func responseString(queue: DispatchQueue = .main, completion: @escaping (DaisyValue<String>)->()) {
         let stringResponse = DaisyStringResponse(dataRequest: dataRequest!, cache: cache, cacheKey: cacheKey, completionClosure: completionClosure)
-        stringResponse.responseString(completion: completion)
+        stringResponse.responseString(queue: queue, completion: completion)
     }
 
     /// 先获取缓存String,再响应String
-    public func responseCacheAndString(completion: @escaping (DaisyValue<String>)->()) {
+    public func responseCacheAndString(queue: DispatchQueue = .main, completion: @escaping (DaisyValue<String>)->()) {
         let stringResponse = DaisyStringResponse(dataRequest: dataRequest!, cache: cache, cacheKey: cacheKey, completionClosure: completionClosure)
-        stringResponse.responseCacheAndString(completion: completion)
+        stringResponse.responseCacheAndString(queue: queue, completion: completion)
     }
 
     /// 获取缓存JSON
@@ -228,15 +228,15 @@ public class RequestTaskManager {
     }
 
     /// 响应JSON
-    public func responseJson(completion: @escaping (DaisyValue<Any>)->()) {
+    public func responseJson(queue: DispatchQueue = .main, completion: @escaping (DaisyValue<Any>)->()) {
         let jsonResponse = DaisyJsonResponse(dataRequest: dataRequest!, cache: cache, cacheKey: cacheKey, completionClosure: completionClosure)
-        jsonResponse.responseJson(completion: completion)
+        jsonResponse.responseJson(queue: queue, completion: completion)
     }
 
     /// 先获取缓存JSON，再响应JSON
-    public func responseCacheAndJson(completion: @escaping (DaisyValue<Any>)->()) {
+    public func responseCacheAndJson(queue: DispatchQueue = .main, completion: @escaping (DaisyValue<Any>)->()) {
         let jsonResponse = DaisyJsonResponse(dataRequest: dataRequest!, cache: cache, cacheKey: cacheKey, completionClosure: completionClosure)
-        jsonResponse.responseCacheAndJson(completion: completion)
+        jsonResponse.responseCacheAndJson(queue: queue, completion: completion)
     }
 }
 
@@ -298,20 +298,22 @@ public class DaisyResponse {
 
 public class DaisyJsonResponse: DaisyResponse {
     /// 响应JSON
-    func responseJson(completion: @escaping (DaisyValue<Any>)->()) {
-        dataRequest.responseJSON(completionHandler: { response in
+    func responseJson(queue: DispatchQueue, completion: @escaping (DaisyValue<Any>)->()) {
+        dataRequest.responseJSON(queue: queue, completionHandler: { response in
             self.response(response: response, completion: completion)
         })
     }
 
-    fileprivate func responseCacheAndJson(completion: @escaping (DaisyValue<Any>)->()) {
+    fileprivate func responseCacheAndJson(queue: DispatchQueue, completion: @escaping (DaisyValue<Any>)->()) {
         if cache {
             if let json = cacheJson() {
                 let res = DaisyValue(isCacheData: true, result: Alamofire.AFResult.success(json), response: nil)
-                completion(res)
+                queue.async {
+                    completion(res)
+                }
             }
         }
-        dataRequest.responseJSON { response in
+        dataRequest.responseJSON(queue: queue) { response in
             self.responseCache(response: response, completion: completion)
         }
     }
@@ -342,8 +344,8 @@ public class DaisyJsonResponse: DaisyResponse {
 
 public class DaisyStringResponse: DaisyResponse {
     /// 响应String
-    func responseString(completion: @escaping (DaisyValue<String>)->()) {
-        dataRequest.responseString(completionHandler: { response in
+    func responseString(queue: DispatchQueue, completion: @escaping (DaisyValue<String>)->()) {
+        dataRequest.responseString(queue: queue, completionHandler: { response in
             self.response(response: response, completion: completion)
         })
     }
@@ -362,14 +364,16 @@ public class DaisyStringResponse: DaisyResponse {
         }
     }
 
-    fileprivate func responseCacheAndString(completion: @escaping (DaisyValue<String>)->()) {
+    fileprivate func responseCacheAndString(queue: DispatchQueue, completion: @escaping (DaisyValue<String>)->()) {
         if cache {
             if let str = cacheString() {
                 let res = DaisyValue(isCacheData: true, result: Alamofire.AFResult.success(str), response: nil)
-                completion(res)
+                queue.async {
+                    completion(res)
+                }
             }
         }
-        dataRequest.responseString { response in
+        dataRequest.responseString(queue: queue) { response in
             self.responseCache(response: response, completion: completion)
         }
     }
@@ -379,8 +383,8 @@ public class DaisyStringResponse: DaisyResponse {
 
 public class DaisyDataResponse: DaisyResponse {
     /// 响应Data
-    func responseData(completion: @escaping (DaisyValue<Data>)->()) {
-        dataRequest.responseData(completionHandler: { response in
+    func responseData(queue: DispatchQueue, completion: @escaping (DaisyValue<Data>)->()) {
+        dataRequest.responseData(queue: queue, completionHandler: { response in
             self.response(response: response, completion: completion)
         })
     }
@@ -397,14 +401,16 @@ public class DaisyDataResponse: DaisyResponse {
         }
     }
 
-    fileprivate func responseCacheAndData(completion: @escaping (DaisyValue<Data>)->()) {
+    fileprivate func responseCacheAndData(queue: DispatchQueue, completion: @escaping (DaisyValue<Data>)->()) {
         if cache {
             if let data = cacheData() {
                 let res = DaisyValue(isCacheData: true, result: Alamofire.AFResult.success(data), response: nil)
-                completion(res)
+                queue.async {
+                    completion(res)
+                }
             }
         }
-        dataRequest.responseData { response in
+        dataRequest.responseData(queue: queue) { response in
             self.responseCache(response: response, completion: completion)
         }
     }
