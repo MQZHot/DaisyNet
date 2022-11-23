@@ -1,3 +1,4 @@
+#if canImport(UIKit)
 import UIKit
 
 /// Helper UIImage extension.
@@ -23,7 +24,8 @@ extension UIImage {
   /// Convert to data
   func cache_toData() -> Data? {
     return hasAlpha
-      ? UIImagePNGRepresentation(self)
-      : UIImageJPEGRepresentation(self, 1.0)
+      ? pngData()
+      : jpegData(compressionQuality: 1.0)
   }
 }
+#endif

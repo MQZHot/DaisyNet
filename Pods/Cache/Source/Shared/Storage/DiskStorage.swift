@@ -1,7 +1,7 @@
 import Foundation
 
 /// Save objects to file on disk
-final public class DiskStorage<T> {
+final public class DiskStorage<Key: Hashable, Value> {
   enum Error: Swift.Error {
     case fileEnumeratorFailed
   }
@@ -9,15 +9,17 @@ final public class DiskStorage<T> {
   /// File manager to read/write to the disk
   public let fileManager: FileManager
   /// Configuration
-  fileprivate let config: DiskConfig
+  private let config: DiskConfig
   /// The computed path `directory+name`
   public let path: String
+  /// The closure to be called when single file has been removed
+  var onRemove: ((String) -> Void)?
 
-  private let transformer: Transformer<T>
+  private let transformer: Transformer<Value>
+  private let hasher = Hasher.constantAccrossExecutions()
 
   // MARK: - Initialization
-
-  public convenience init(config: DiskConfig, fileManager: FileManager = FileManager.default, transformer: Transformer<T>) throws {
+  public convenience init(config: DiskConfig, fileManager: FileManager = FileManager.default, transformer: Transformer<Value>) throws {
     let url: URL
     if let directory = config.directory {
       url = directory
@@ -47,7 +49,7 @@ final public class DiskStorage<T> {
     #endif
   }
 
-  public required init(config: DiskConfig, fileManager: FileManager = FileManager.default, path: String, transformer: Transformer<T>) {
+  public required init(config: DiskConfig, fileManager: FileManager = FileManager.default, path: String, transformer: Transformer<Value>) {
     self.config = config
     self.fileManager = fileManager
     self.path = path
@@ -56,7 +58,7 @@ final public class DiskStorage<T> {
 }
 
 extension DiskStorage: StorageAware {
-  public func entry(forKey key: String) throws -> Entry<T> {
+  public func entry(forKey key: Key) throws -> Entry<Value> {
     let filePath = makeFilePath(for: key)
     let data = try Data(contentsOf: URL(fileURLWithPath: filePath))
     let attributes = try fileManager.attributesOfItem(atPath: filePath)
@@ -66,18 +68,14 @@ extension DiskStorage: StorageAware {
       throw StorageError.malformedFileAttributes
     }
 
-    let meta: [String: Any] = [
-      "filePath": filePath
-    ]
-
     return Entry(
       object: object,
       expiry: Expiry.date(date),
-      meta: meta
+      filePath: filePath
     )
   }
 
-  public func setObject(_ object: T, forKey key: String, expiry: Expiry? = nil) throws {
+  public func setObject(_ object: Value, forKey key: Key, expiry: Expiry? = nil) throws {
     let expiry = expiry ?? config.expiry
     let data = try transformer.toData(object)
     let filePath = makeFilePath(for: key)
@@ -85,8 +83,10 @@ extension DiskStorage: StorageAware {
     try fileManager.setAttributes([.modificationDate: expiry.date], ofItemAtPath: filePath)
   }
 
-  public func removeObject(forKey key: String) throws {
-    try fileManager.removeItem(atPath: makeFilePath(for: key))
+  public func removeObject(forKey key: Key) throws {
+    let filePath = makeFilePath(for: key)
+    try fileManager.removeItem(atPath: filePath)
+    onRemove?(filePath)
   }
 
   public func removeAll() throws {
@@ -135,6 +135,7 @@ extension DiskStorage: StorageAware {
     // Remove expired objects
     for url in filesToDelete {
       try fileManager.removeItem(at: url)
+      onRemove?(url.path)
     }
 
     // Remove objects if storage size exceeds max size
@@ -160,8 +161,22 @@ extension DiskStorage {
    - Parameter key: Unique key to identify the object in the cache
    - Returns: A md5 string
    */
-  func makeFileName(for key: String) -> String {
-    return MD5(key)
+  func makeFileName(for key: Key) -> String {
+    if let key = key as? String {
+        let fileExtension = URL(fileURLWithPath: key).pathExtension
+        let fileName = MD5(key)
+
+        switch fileExtension.isEmpty {
+        case true:
+          return fileName
+        case false:
+          return "\(fileName).\(fileExtension)"
+        }
+    }
+
+    var hasher = self.hasher
+    key.hash(into: &hasher)
+    return String(hasher.finalize())
   }
 
   /**
@@ -169,7 +184,7 @@ extension DiskStorage {
    - Parameter key: Unique key to identify the object in the cache
    - Returns: A string path based on key
    */
-  func makeFilePath(for key: String) -> String {
+  func makeFilePath(for key: Key) -> String {
     return "\(path)/\(makeFileName(for: key))"
   }
 
@@ -220,9 +235,12 @@ extension DiskStorage {
 
     for file in sortedFiles {
       try fileManager.removeItem(at: file.url)
+      onRemove?(file.url.path)
+
       if let fileSize = file.resourceValues.totalFileAllocatedSize {
         totalSize -= UInt(fileSize)
       }
+
       if totalSize < targetSize {
         break
       }
@@ -233,18 +251,19 @@ extension DiskStorage {
    Removes the object from the cache if it's expired.
    - Parameter key: Unique key to identify the object in the cache
    */
-  func removeObjectIfExpired(forKey key: String) throws {
+  func removeObjectIfExpired(forKey key: Key) throws {
     let filePath = makeFilePath(for: key)
     let attributes = try fileManager.attributesOfItem(atPath: filePath)
     if let expiryDate = attributes[.modificationDate] as? Date, expiryDate.inThePast {
       try fileManager.removeItem(atPath: filePath)
+      onRemove?(filePath)
     }
   }
 }
 
 public extension DiskStorage {
-  func transform<U>(transformer: Transformer<U>) -> DiskStorage<U> {
-    let storage = DiskStorage<U>(
+  func transform<U>(transformer: Transformer<U>) -> DiskStorage<Key, U> {
+    let storage = DiskStorage<Key, U>(
       config: config,
       fileManager: fileManager,
       path: path,

@@ -43,7 +43,7 @@ struct CacheModel: Codable {
 class CacheManager: NSObject {
     static let `default` = CacheManager()
     /// Manage storage
-    private var storage: Storage<CacheModel>?
+    private var storage: Storage<String,CacheModel>?
     /// init
     override init() {
         super.init()

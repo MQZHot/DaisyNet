@@ -1,10 +1,10 @@
 PODS:
-  - Alamofire (5.4.3)
-  - Cache (5.0.0)
+  - Alamofire (5.6.2)
+  - Cache (6.0.0)
 
 DEPENDENCIES:
-  - Alamofire (~> 5.4.3)
-  - Cache (~> 5.0.0)
+  - Alamofire (= 5.6.2)
+  - Cache (= 6.0.0)
 
 SPEC REPOS:
   trunk:
@@ -12,9 +12,9 @@ SPEC REPOS:
     - Cache
 
 SPEC CHECKSUMS:
-  Alamofire: e447a2774a40c996748296fa2c55112fdbbc42f9
-  Cache: fae4826ba52d7a5d9a3a0ad6fe73e3501a82964f
+  Alamofire: d368e1ff8a298e6dde360e35a3e68e6c610e7204
+  Cache: 4ca7e00363fca5455f26534e5607634c820ffc2d
 
-PODFILE CHECKSUM: cfbd20a994f84efc959f5fa3212e917ac14808ec
+PODFILE CHECKSUM: b8fdaa025aa32828ea77613d8f4767042aeed803
 
-COCOAPODS: 1.10.1
+COCOAPODS: 1.11.3
