@@ -8,7 +8,7 @@ Pod::Spec.new do |s|
   s.license      = { :type => "MIT", :file => "LICENSE" }
   s.author       = { "MQZHot" => "mqz1228@163.com" }
   s.platform     = :ios, "11.0"
-  s.source       = { :git => "https://github.com/MQZHot/DaisyNet.git", :tag => s.version }
+  s.source       = { :git => "https://github.com/alucardulad/DaisyNet.git", :tag => s.version }
   s.source_files = "DaisyNet/DaisyNet", "DaisyNet/DaisyNet/*.swift"
   s.requires_arc = true
   s.dependency 'Cache', '>= 5.6.2'
