@@ -11,8 +11,8 @@ Pod::Spec.new do |s|
   s.source       = { :git => "https://github.com/alucardulad/DaisyNet.git", :tag => s.version }
   s.source_files = "DaisyNet/DaisyNet", "DaisyNet/DaisyNet/*.swift"
   s.requires_arc = true
-  s.dependency 'Cache', '>= 5.6.2'
-  s.dependency 'Alamofire', '>= 6.0.0'
+  s.dependency 'Cache', '>= 6.0.0'
+  s.dependency 'Alamofire', '>= 5.6.2'
   s.pod_target_xcconfig = { "SWIFT_VERSION" => "5.0" }
   s.swift_version = '5.0'
 end
