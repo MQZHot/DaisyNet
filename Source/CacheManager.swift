@@ -36,9 +36,10 @@ public enum DaisyExpiry {
 }
 
 struct CacheModel: Codable {
-    var data: Data?
-    var dataDict: [String: Data]?
-    init() {}
+    var data: Data
+    init(data: Data) {
+        self.data = data
+    }
 }
 
 class CacheManager: NSObject {
@@ -104,13 +105,18 @@ class CacheManager: NSObject {
     func objectSync(forKey key: String) -> CacheModel? {
         do {
             /// 过期清除缓存
-            if let isExpire = try storage?.isExpiredObject(forKey: key), isExpire {
+            if let isExpire = try storage?.isExpiredObject(forKey: key), 
+                isExpire
+            {
                 removeObjectCache(key) { _ in }
+                DaisyLog("读取缓存失败： - 缓存过期")
                 return nil
             } else {
-                return (try storage?.object(forKey: key)) ?? nil
+                DaisyLog("读取缓存成功")
+                return try storage?.object(forKey: key)
             }
         } catch {
+            DaisyLog("读取缓存失败：- 无缓存")
             return nil
         }
     }
