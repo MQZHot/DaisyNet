@@ -36,10 +36,7 @@ public enum DaisyExpiry {
 }
 
 struct CacheModel: Codable {
-    var data: Data
-    init(data: Data) {
-        self.data = data
-    }
+    let data: Data
 }
 
 class CacheManager: NSObject {

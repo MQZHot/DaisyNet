@@ -20,8 +20,6 @@ public class DaisyNet: NSObject {
         CacheManager.default.expiryConfiguration(expiry: expiry)
     }
 
-    // MARK: - 网络请求
-
     /// 开启/关闭请求url log
     public static var log_url: Bool = true
     /// 开启/关闭结果log
@@ -61,16 +59,6 @@ public class DaisyNet: NSObject {
                                dynamicParams: Parameters? = nil) -> RequestTaskManager?
     {
         return RequestManager.default.request(urlRequest: urlRequest, params: params, dynamicParams: dynamicParams)
-    }
-
-    /// 取消请求
-    ///
-    /// - Parameters:
-    ///   - url: url
-    ///   - params: 参数
-    ///   - dynamicParams: 变化的参数，例如 时间戳-token 等
-    public static func cancel(_ url: String, params: Parameters? = nil, dynamicParams: Parameters? = nil) {
-        RequestManager.default.cancel(url, params: params, dynamicParams: dynamicParams)
     }
 
     /// 清除所有缓存

@@ -14,11 +14,9 @@ class DaisyResponse {
     var dataRequest: DataRequest
     var cache: Bool
     var cacheKey: String
-    var completionClosure: (()->())?
-    init(dataRequest: DataRequest, cache: Bool, cacheKey: String, completionClosure: (()->())?) {
+    init(dataRequest: DataRequest, cache: Bool, cacheKey: String) {
         self.dataRequest = dataRequest
         self.cache = cache
         self.cacheKey = cacheKey
-        self.completionClosure = completionClosure
     }
 }

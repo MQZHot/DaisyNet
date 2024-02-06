@@ -19,20 +19,18 @@ class GetViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        DaisyNet.openResultLog = true
+        DaisyNet.log_result = true
         /// 20s过期
         DaisyNet.cacheExpiryConfig(expiry: DaisyExpiry.seconds(20))
-        /// 10s超时
-        DaisyNet.timeoutIntervalForRequest(10)
 
         DaisyNet.request(urlStr, params: params).cache(true).responseCacheAndString(queue: .main) { value in
-            switch value.result {
-            case .success(let string):
+            switch value {
+            case .success(let result):
                 print(Thread.current)
-                if value.isCacheData {
-                    self.cacheTextView.text = string
+                if result.isCacheData {
+                    self.cacheTextView.text = result.value
                 } else {
-                    self.textView.text = string
+                    self.textView.text = result.value
                 }
 
             case .failure(let error):

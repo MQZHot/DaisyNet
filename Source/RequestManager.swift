@@ -12,7 +12,6 @@ import Foundation
 
 class RequestManager {
     static let `default` = RequestManager()
-    private var requestTasks = [String: RequestTaskManager]()
 
     func request(
         _ url: String,
@@ -30,17 +29,8 @@ class RequestManager {
         }
 
         let key = cacheKey(url, params, dynamicParams)
-        var taskManager: RequestTaskManager?
-        if let __taskManager = requestTasks[key] {
-            taskManager = __taskManager
-        } else {
-            taskManager = RequestTaskManager(url: url, method: method, params: tempParam, cacheKey: key, encoding: encoding, headers: headers)
-            requestTasks[key] = taskManager
-        }
-        taskManager?.completionClosure = {
-            self.requestTasks.removeValue(forKey: key)
-        }
-        return taskManager!
+        let taskManager = RequestTaskManager(url: url, method: method, params: tempParam, cacheKey: key, encoding: encoding, headers: headers)
+        return taskManager
     }
 
     func request(
@@ -57,24 +47,8 @@ class RequestManager {
             return nil
         }
         let key = cacheKey(components.first!, params, dynamicParams)
-        var taskManager: RequestTaskManager?
-        if let __taskManager = requestTasks[key] {
-            taskManager = __taskManager
-        } else {
-            taskManager = RequestTaskManager(urlRequest: urlRequest, cacheKey: key)
-            requestTasks[key] = taskManager
-        }
-        taskManager?.completionClosure = { [weak self] in
-            self?.requestTasks[key] = nil
-        }
-        return taskManager!
-    }
-
-    /// 取消请求
-    func cancel(_ url: String, params: Parameters? = nil, dynamicParams: Parameters? = nil) {
-        let key = cacheKey(url, params, dynamicParams)
-        let taskManager = requestTasks[key]
-        taskManager?.dataRequest.cancel()
+        let taskManager = RequestTaskManager(urlRequest: urlRequest, cacheKey: key)
+        return taskManager
     }
 
     /// 清除所有缓存

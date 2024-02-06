@@ -39,8 +39,6 @@ class DaisyDataResponse: DaisyResponse {
                 }
                 completion(.failure(error))
             }
-            self.completionClosure?()
-            self.completionClosure = nil
         })
     }
 
