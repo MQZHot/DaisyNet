@@ -47,6 +47,14 @@ public class RequestTaskManager: NSObject {
         return self
     }
 
+    
+    @discardableResult
+    /// 重定向
+    public func redirect(using handler: RedirectHandler) -> RequestTaskManager {
+        dataRequest.redirect(using: handler)
+        return self
+    }
+    
     /// 获取缓存Data
     @discardableResult
     public func cacheData()->Data? {
