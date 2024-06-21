@@ -26,11 +26,13 @@ class GetViewController: UIViewController {
         /// 缓存存在
 //        DaisyNet.cacheDataIsExist(with: <#T##String?#>)
         
+        /// 缓存标识
         let identifier = "home"
         
         /// 读取缓存
         let cacheString = DaisyNet.cacheString(with: identifier)
-        cacheTextView.text = cacheString
+        let cacheData = DaisyNet.cacheData(with: identifier)
+        let cacheJson = DaisyNet.cacheJson(with: identifier)
         
         /// 网络请求
         DaisyNet.request(urlStr, params: params).cacheIdentifier(identifier).responseString(queue: .main) { result in
