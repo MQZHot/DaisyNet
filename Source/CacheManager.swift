@@ -66,43 +66,34 @@ class CacheManager: NSObject {
     }
     
     /// 清除所有缓存
-    ///
-    /// - Parameter completion: completion
-    func removeAllCache(completion: @escaping (_ isSuccess: Bool) -> ()) {
+    func removeAllCache(completion: ((_ isSuccess: Bool) -> ())? = nil) {
         storage?.async.removeAll(completion: { result in
             DispatchQueue.main.async {
                 switch result {
-                case .value: completion(true)
-                case .error: completion(false)
+                case .value: completion?(true)
+                case .error: completion?(false)
                 }
             }
         })
     }
     
     /// 根据key值清除缓存
-    ///
-    /// - Parameters:
-    ///   - cacheKey: cacheKey
-    ///   - completion: completion
-    func removeObjectCache(_ cacheKey: String, completion: @escaping (_ isSuccess: Bool) -> ()) {
+    func removeObjectCache(_ cacheKey: String, completion: ((_ isSuccess: Bool) -> ())? = nil) {
         storage?.async.removeObject(forKey: cacheKey, completion: { result in
             DispatchQueue.main.async {
                 switch result {
-                case .value: completion(true)
-                case .error: completion(false)
+                case .value: completion?(true)
+                case .error: completion?(false)
                 }
             }
         })
     }
     
-    /// 读取缓存
-    ///
-    /// - Parameter key: key
-    /// - Returns: model
+    /// 读取
     func objectSync(forKey key: String) -> CacheModel? {
-        do {
+        if let model = try? storage?.object(forKey: key) {
             /// 过期清除缓存
-            if let isExpire = try storage?.isExpiredObject(forKey: key), 
+            if let isExpire = try? storage?.isExpiredObject(forKey: key),
                 isExpire
             {
                 removeObjectCache(key) { _ in }
@@ -110,19 +101,15 @@ class CacheManager: NSObject {
                 return nil
             } else {
                 DaisyLog("读取缓存成功")
-                return try storage?.object(forKey: key)
+                return model
             }
-        } catch {
+        } else {
             DaisyLog("读取缓存失败：- 无缓存")
             return nil
         }
     }
     
-    /// 异步缓存
-    ///
-    /// - Parameters:
-    ///   - object: model
-    ///   - key: key
+    /// 存储
     func setObject(_ object: CacheModel, forKey key: String) {
         storage?.async.setObject(object, forKey: key, expiry: nil, completion: { result in
             switch result {

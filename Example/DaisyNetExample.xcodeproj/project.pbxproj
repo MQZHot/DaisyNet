@@ -7,20 +7,19 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		9AF7A06E9C6209A8617E85D1 /* Pods_DaisyNetExample.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 74E5219713964C20F0789E8B /* Pods_DaisyNetExample.framework */; };
 		D64291191F8CD40900B1CB61 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = D64291181F8CD40900B1CB61 /* AppDelegate.swift */; };
 		D642911B1F8CD40900B1CB61 /* GetViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D642911A1F8CD40900B1CB61 /* GetViewController.swift */; };
 		D642911E1F8CD40900B1CB61 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = D642911C1F8CD40900B1CB61 /* Main.storyboard */; };
 		D64291201F8CD40900B1CB61 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = D642911F1F8CD40900B1CB61 /* Assets.xcassets */; };
 		D64291231F8CD40900B1CB61 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = D64291211F8CD40900B1CB61 /* LaunchScreen.storyboard */; };
 		D66459BA1F8E0232005D20AE /* MainTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D66459B91F8E0232005D20AE /* MainTableViewController.swift */; };
+		E10882C443E8B9E8BF993462 /* Pods_DaisyNetExample.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FED4D0EE2271D88A2C2DC2F5 /* Pods_DaisyNetExample.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
-		1E3E7032327A80A1223BE8A1 /* Pods-DaisyNetExample.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-DaisyNetExample.debug.xcconfig"; path = "Target Support Files/Pods-DaisyNetExample/Pods-DaisyNetExample.debug.xcconfig"; sourceTree = "<group>"; };
-		73B4ED2CE8C5534690FA486B /* Pods-DaisyNetExample.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-DaisyNetExample.release.xcconfig"; path = "Target Support Files/Pods-DaisyNetExample/Pods-DaisyNetExample.release.xcconfig"; sourceTree = "<group>"; };
-		74E5219713964C20F0789E8B /* Pods_DaisyNetExample.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_DaisyNetExample.framework; sourceTree = BUILT_PRODUCTS_DIR; };
-		D64291151F8CD40900B1CB61 /* DaisyNetExample.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = DaisyNetExample.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		01F4A7F47F86F02787C62415 /* Pods-DaisyNetExample.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-DaisyNetExample.release.xcconfig"; path = "Target Support Files/Pods-DaisyNetExample/Pods-DaisyNetExample.release.xcconfig"; sourceTree = "<group>"; };
+		192DCF712C2589B10018B97E /* DaisyNetExample.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = DaisyNetExample.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		20204F5DC40E49A34180832C /* Pods-DaisyNetExample.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-DaisyNetExample.debug.xcconfig"; path = "Target Support Files/Pods-DaisyNetExample/Pods-DaisyNetExample.debug.xcconfig"; sourceTree = "<group>"; };
 		D64291181F8CD40900B1CB61 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		D642911A1F8CD40900B1CB61 /* GetViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GetViewController.swift; sourceTree = "<group>"; };
 		D642911D1F8CD40900B1CB61 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
@@ -28,6 +27,7 @@
 		D64291221F8CD40900B1CB61 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		D64291241F8CD40900B1CB61 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		D66459B91F8E0232005D20AE /* MainTableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainTableViewController.swift; sourceTree = "<group>"; };
+		FED4D0EE2271D88A2C2DC2F5 /* Pods_DaisyNetExample.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_DaisyNetExample.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -35,18 +35,18 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				9AF7A06E9C6209A8617E85D1 /* Pods_DaisyNetExample.framework in Frameworks */,
+				E10882C443E8B9E8BF993462 /* Pods_DaisyNetExample.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
-		C0AA3CDE902D62BBD6C65DE1 /* Pods */ = {
+		9BC12B3E367B07C758AD118E /* Pods */ = {
 			isa = PBXGroup;
 			children = (
-				1E3E7032327A80A1223BE8A1 /* Pods-DaisyNetExample.debug.xcconfig */,
-				73B4ED2CE8C5534690FA486B /* Pods-DaisyNetExample.release.xcconfig */,
+				20204F5DC40E49A34180832C /* Pods-DaisyNetExample.debug.xcconfig */,
+				01F4A7F47F86F02787C62415 /* Pods-DaisyNetExample.release.xcconfig */,
 			);
 			path = Pods;
 			sourceTree = "<group>";
@@ -55,18 +55,10 @@
 			isa = PBXGroup;
 			children = (
 				D64291171F8CD40900B1CB61 /* DaisyNetExample */,
-				D64291161F8CD40900B1CB61 /* Products */,
-				C0AA3CDE902D62BBD6C65DE1 /* Pods */,
-				E62E595C15C200F06AE5DC70 /* Frameworks */,
+				9BC12B3E367B07C758AD118E /* Pods */,
+				F31977A32C8FCF1C6794666A /* Frameworks */,
+				192DCF712C2589B10018B97E /* DaisyNetExample.app */,
 			);
-			sourceTree = "<group>";
-		};
-		D64291161F8CD40900B1CB61 /* Products */ = {
-			isa = PBXGroup;
-			children = (
-				D64291151F8CD40900B1CB61 /* DaisyNetExample.app */,
-			);
-			name = Products;
 			sourceTree = "<group>";
 		};
 		D64291171F8CD40900B1CB61 /* DaisyNetExample */ = {
@@ -83,10 +75,10 @@
 			path = DaisyNetExample;
 			sourceTree = "<group>";
 		};
-		E62E595C15C200F06AE5DC70 /* Frameworks */ = {
+		F31977A32C8FCF1C6794666A /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
-				74E5219713964C20F0789E8B /* Pods_DaisyNetExample.framework */,
+				FED4D0EE2271D88A2C2DC2F5 /* Pods_DaisyNetExample.framework */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -98,11 +90,11 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = D64291271F8CD40900B1CB61 /* Build configuration list for PBXNativeTarget "DaisyNetExample" */;
 			buildPhases = (
-				3BABB803B7A83E44B09F6F70 /* [CP] Check Pods Manifest.lock */,
+				4AE557364EEE0E96E52C6D50 /* [CP] Check Pods Manifest.lock */,
 				D64291111F8CD40900B1CB61 /* Sources */,
 				D64291121F8CD40900B1CB61 /* Frameworks */,
 				D64291131F8CD40900B1CB61 /* Resources */,
-				9367EB3BADBD283254D65D19 /* [CP] Embed Pods Frameworks */,
+				A08B40DE4ECE9E7B8347F4E0 /* [CP] Embed Pods Frameworks */,
 			);
 			buildRules = (
 			);
@@ -110,7 +102,7 @@
 			);
 			name = DaisyNetExample;
 			productName = DaisyNetExample;
-			productReference = D64291151F8CD40900B1CB61 /* DaisyNetExample.app */;
+			productReference = 192DCF712C2589B10018B97E /* DaisyNetExample.app */;
 			productType = "com.apple.product-type.application";
 		};
 /* End PBXNativeTarget section */
@@ -144,7 +136,7 @@
 				Base,
 			);
 			mainGroup = D642910C1F8CD40900B1CB61;
-			productRefGroup = D64291161F8CD40900B1CB61 /* Products */;
+			productRefGroup = D642910C1F8CD40900B1CB61;
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
@@ -167,7 +159,7 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXShellScriptBuildPhase section */
-		3BABB803B7A83E44B09F6F70 /* [CP] Check Pods Manifest.lock */ = {
+		4AE557364EEE0E96E52C6D50 /* [CP] Check Pods Manifest.lock */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -189,7 +181,7 @@
 			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
 			showEnvVarsInLog = 0;
 		};
-		9367EB3BADBD283254D65D19 /* [CP] Embed Pods Frameworks */ = {
+		A08B40DE4ECE9E7B8347F4E0 /* [CP] Embed Pods Frameworks */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -361,13 +353,13 @@
 		};
 		D64291281F8CD40900B1CB61 /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 1E3E7032327A80A1223BE8A1 /* Pods-DaisyNetExample.debug.xcconfig */;
+			baseConfigurationReference = 20204F5DC40E49A34180832C /* Pods-DaisyNetExample.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
-				DEVELOPMENT_TEAM = "";
+				DEVELOPMENT_TEAM = PK89J4P7C8;
 				INFOPLIST_FILE = DaisyNetExample/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 14;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
@@ -383,12 +375,12 @@
 		};
 		D64291291F8CD40900B1CB61 /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 73B4ED2CE8C5534690FA486B /* Pods-DaisyNetExample.release.xcconfig */;
+			baseConfigurationReference = 01F4A7F47F86F02787C62415 /* Pods-DaisyNetExample.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_STYLE = Automatic;
-				DEVELOPMENT_TEAM = A5NPR6GCJJ;
+				DEVELOPMENT_TEAM = PK89J4P7C8;
 				INFOPLIST_FILE = DaisyNetExample/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 14;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";

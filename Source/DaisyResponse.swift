@@ -5,18 +5,19 @@
 //  Created by pro big on 2024/2/1.
 //
 
-import UIKit
 import Alamofire
+import UIKit
 
 // MARK: - DaisyBaseResponse
 
 class DaisyResponse {
     var dataRequest: DataRequest
-    var cache: Bool
-    var cacheKey: String
-    init(dataRequest: DataRequest, cache: Bool, cacheKey: String) {
+    var cacheKey: String?
+    
+    init(dataRequest: DataRequest, cacheKey: String?) {
         self.dataRequest = dataRequest
-        self.cache = cache
-        self.cacheKey = cacheKey
+        if let cacheKey = cacheKey, cacheKey.isEmpty == false {
+            self.cacheKey = cacheKey
+        }
     }
 }

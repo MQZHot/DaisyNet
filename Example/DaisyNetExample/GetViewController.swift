@@ -14,25 +14,30 @@ class GetViewController: UIViewController {
     @IBOutlet var textView: UITextView!
     @IBOutlet var cacheTextView: UITextView!
 
-    let urlStr = "https://api.snaptubebrowser.com/surf-api/content/guide/v2"
+    let urlStr = "https://www.youtube.com"
     let params: [String: Any] = [:]
     override func viewDidLoad() {
         super.viewDidLoad()
 
         DaisyNet.log_result = true
         /// 20s过期
-        DaisyNet.cacheExpiryConfig(expiry: DaisyExpiry.seconds(20))
+//        DaisyNet.cacheExpiryConfig(expiry: DaisyExpiry.seconds(20))
 
-        DaisyNet.request(urlStr, params: params).cache(true).responseCacheAndString(queue: .main) { value in
-            switch value {
-            case .success(let result):
+        /// 缓存存在
+//        DaisyNet.cacheDataIsExist(with: <#T##String?#>)
+        
+        let identifier = "home"
+        
+        /// 读取缓存
+        let cacheString = DaisyNet.cacheString(with: identifier)
+        cacheTextView.text = cacheString
+        
+        /// 网络请求
+        DaisyNet.request(urlStr, params: params).cacheIdentifier(identifier).responseString(queue: .main) { result in
+            switch result {
+            case .success(let string):
+                self.textView.text = string
                 print(Thread.current)
-                if result.isCacheData {
-                    self.cacheTextView.text = result.value
-                } else {
-                    self.textView.text = result.value
-                }
-
             case .failure(let error):
                 print(error)
             }
@@ -40,7 +45,7 @@ class GetViewController: UIViewController {
     }
 
     @IBAction func clearCache(_ sender: UIBarButtonItem) {
-        DaisyNet.removeObjectCache(urlStr, params: params) { success in
+        DaisyNet.removeCache(with: "home") { success in
             switch success {
             case true:
                 self.cacheTextView.text = ""

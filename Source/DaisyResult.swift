@@ -10,20 +10,8 @@
 import Alamofire
 import Foundation
 
-//// MARK: - Result
-
-public struct DaisySuccessResult<Value> {
-    public let isCacheData: Bool
-    public let value: Value
-
-    init(isCacheData: Bool, value: Value) {
-        self.isCacheData = isCacheData
-        self.value = value
-    }
-}
-
 public enum DaisyResult<Value> {
-    case success(DaisySuccessResult<Value>)
+    case success(Value)
     case failure(AFError)
 }
 

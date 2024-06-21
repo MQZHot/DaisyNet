@@ -9,7 +9,6 @@
 //
 
 import Alamofire
-import Cache
 import UIKit
 
 public class DaisyNet: NSObject {
@@ -25,61 +24,77 @@ public class DaisyNet: NSObject {
     /// 开启/关闭结果log
     public static var log_result: Bool = false
 
-    /// 网络请求
-    ///
-    /// - Parameters:
-    ///   - url: url
-    ///   - method: .get .post ...
-    ///   - params: 参数字典
-    ///   - dynamicParams: 变化的参数，例如 时间戳-token 等
-    ///   - encoding: 编码方式
-    ///   - headers: 请求头
-    /// - Returns:
+    /// url请求
     @discardableResult
     public static func request(_ url: String,
                                method: HTTPMethod = .get,
                                params: Parameters? = nil,
-                               dynamicParams: Parameters? = nil,
                                encoding: ParameterEncoding = URLEncoding.default,
                                headers: HTTPHeaders? = nil) -> RequestTaskManager
     {
-        return RequestManager.default.request(url, method: method, params: params, dynamicParams: dynamicParams, encoding: encoding, headers: headers)
+        return RequestTaskManager(url: url, method: method, params: params, encoding: encoding, headers: headers)
     }
 
     /// urlRequest请求
-    ///
-    /// - Parameters:
-    ///   - urlRequest: 自定义URLRequest
-    ///   - params: URLRequest中需要的参数，作为key区分缓存
-    ///   - dynamicParams: 变化的参数，例如 时间戳, `token` 等, 用来过滤`params`中的动态参数
-    /// - Returns: RequestTaskManager?
     @discardableResult
-    public static func request(urlRequest: URLRequestConvertible,
-                               params: Parameters,
-                               dynamicParams: Parameters? = nil) -> RequestTaskManager?
-    {
-        return RequestManager.default.request(urlRequest: urlRequest, params: params, dynamicParams: dynamicParams)
+    public static func request(urlRequest: URLRequestConvertible) -> RequestTaskManager? {
+        return RequestTaskManager(urlRequest: urlRequest)
+    }
+}
+
+public extension DaisyNet {
+    /// 缓存Data
+    static func cacheData(with identifier: String) -> Data? {
+        if let cacheKey = CacheKey.with(identifier),
+           let data = CacheManager.default.objectSync(forKey: cacheKey)?.data
+        {
+            return data
+        }
+        return nil
+    }
+
+    /// 缓存String
+    static func cacheString(with identifier: String) -> String? {
+        if let cacheKey = CacheKey.with(identifier),
+           let data = CacheManager.default.objectSync(forKey: cacheKey)?.data,
+           let str = String(data: data, encoding: .utf8)
+        {
+            return str
+        }
+        return nil
+    }
+
+    /// 获取缓存json
+    static func cacheJson(with identifier: String) -> Any? {
+        if let cacheKey = CacheKey.with(identifier),
+           let data = CacheManager.default.objectSync(forKey: cacheKey)?.data,
+           let json = try? JSONSerialization.jsonObject(with: data, options: [])
+        {
+            return json
+        }
+        return nil
+    }
+
+    /// 缓存data是否存在
+    static func cacheDataIsExist(with identifier: String?) -> Bool {
+        if let key = CacheKey.with(identifier) {
+            let data = CacheManager.default.objectSync(forKey: key)?.data
+            return data != nil
+        }
+        return false
     }
 
     /// 清除所有缓存
-    ///
-    /// - Parameter completion: 完成回调
-    public static func removeAllCache(completion: @escaping (Bool) -> ()) {
-        RequestManager.default.removeAllCache(completion: completion)
+    static func removeAllCache(completion: ((_ isSuccess: Bool) -> ())? = nil) {
+        CacheManager.default.removeAllCache(completion: completion)
     }
 
-    /// 根据url和params清除缓存
-    ///
-    /// - Parameters:
-    ///   - url: url
-    ///   - params: 参数
-    ///   - dynamicParams: 变化的参数，例如 时间戳-token 等
-    ///   - completion: 完成回调
-    public static func removeObjectCache(_ url: String,
-                                         params: [String: Any]? = nil,
-                                         dynamicParams: Parameters? = nil,
-                                         completion: @escaping (Bool) -> ())
-    {
-        RequestManager.default.removeObjectCache(url, params: params, dynamicParams: dynamicParams, completion: completion)
+    /// 根据identifier清除缓存
+    static func removeCache(with identifier: String?, completion: ((_ isSuccess: Bool) -> ())? = nil) {
+        if let key = CacheKey.with(identifier) {
+            CacheManager.default.removeObjectCache(key, completion: completion)
+        } else {
+            completion?(false)
+        }
     }
 }
