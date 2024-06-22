@@ -44,7 +44,35 @@ public class DaisyNet: NSObject {
 
 public extension DaisyNet {
     /// 缓存Data
-    static func cacheData(with identifier: String) -> Data? {
+    static func setCacheData(with data: Data, identifier: String?) {
+        if let cacheKey = CacheKey.with(identifier) {
+            let model = CacheModel(data: data)
+            CacheManager.default.setObject(model, forKey: cacheKey)
+        }
+    }
+
+    /// 缓存String
+    static func setCacheString(with string: String, identifier: String?) {
+        if let cacheKey = CacheKey.with(identifier),
+           let data = string.data(using: .utf8)
+        {
+            let model = CacheModel(data: data)
+            CacheManager.default.setObject(model, forKey: cacheKey)
+        }
+    }
+
+    /// 获取缓存json
+    static func setCacheJson(with json: Any, identifier: String?) {
+        if let cacheKey = CacheKey.with(identifier),
+           let data = try? JSONSerialization.data(withJSONObject: json)
+        {
+            let model = CacheModel(data: data)
+            CacheManager.default.setObject(model, forKey: cacheKey)
+        }
+    }
+
+    /// 获取缓存Data
+    static func cacheData(with identifier: String?) -> Data? {
         if let cacheKey = CacheKey.with(identifier),
            let data = CacheManager.default.objectSync(forKey: cacheKey)?.data
         {
@@ -53,8 +81,8 @@ public extension DaisyNet {
         return nil
     }
 
-    /// 缓存String
-    static func cacheString(with identifier: String) -> String? {
+    /// 获取缓存String
+    static func cacheString(with identifier: String?) -> String? {
         if let cacheKey = CacheKey.with(identifier),
            let data = CacheManager.default.objectSync(forKey: cacheKey)?.data,
            let str = String(data: data, encoding: .utf8)
@@ -65,7 +93,7 @@ public extension DaisyNet {
     }
 
     /// 获取缓存json
-    static func cacheJson(with identifier: String) -> Any? {
+    static func cacheJson(with identifier: String?) -> Any? {
         if let cacheKey = CacheKey.with(identifier),
            let data = CacheManager.default.objectSync(forKey: cacheKey)?.data,
            let json = try? JSONSerialization.jsonObject(with: data, options: [])
