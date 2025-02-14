@@ -1,7 +1,7 @@
 
 Pod::Spec.new do |s|
   s.name         = "DaisyNet"
-  s.version      = "1.1.1"
+  s.version      = "1.1.2"
   s.summary      = "Alamofire与Cache封装, 更容易存储请求数据"
   s.homepage     = "https://github.com/MQZHot/DaisyNet"
   s.license      = "MIT"
@@ -15,5 +15,5 @@ Pod::Spec.new do |s|
   s.swift_versions = ['5.0', '5.1', '5.2']
   
   s.dependency 'Cache',       '~> 6.0.0'
-  s.dependency 'Alamofire',   '~> 5.9.1'
+  s.dependency 'Alamofire',   '~> 5.10.1'
 end
